@@ -12,9 +12,14 @@ Long-form guides describing how we approach a discipline, what "good" looks like
 
 | Playbook | What it covers |
 |----------|----------------|
+| [API design review](docs/playbooks/api-design-review.md) | REST and GraphQL contract design, error shape, idempotency, versioning, and backwards-compatibility risk. |
+| [Code review](docs/playbooks/code-review.md) | Sigma's posture, severity-ordered rubric, and Conventional Comments convention for PR review and pre-PR self-review. |
 | [Database review](docs/playbooks/database-review.md) | Schema design, online-safe migrations, and query/index performance review for relational databases. |
 | [Documentation review](docs/playbooks/documentation-review.md) | Standards and checks for technical documentation quality, structure, and accuracy. |
+| [Frontend accessibility review](docs/playbooks/frontend-accessibility-review.md) | WCAG 2.2 AA review of web frontends — semantic HTML, ARIA, keyboard, screen reader, contrast, forms, motion, i18n. |
 | [GitHub Actions review](docs/playbooks/github-actions-review.md) | Workflow design, security, and reliability practices for CI/CD pipelines. |
+| [Incident postmortem](docs/playbooks/incident-postmortem.md) | Blameless postmortem template, drafting and review rubric for post-incident reviews. |
+| [Web performance](docs/playbooks/web-performance.md) | Core Web Vitals audit, lab-vs-field discipline, and quick-win optimisations for web applications. |
 | [Web security](docs/playbooks/web-security.md) | Threat model, hardening checklist, and review procedure for web applications. |
 | [Web SRE](docs/playbooks/web-sre.md) | Reliability, observability, and incident-response practices for web services. |
 
@@ -24,9 +29,14 @@ Each playbook has a paired prompt designed to be handed to an LLM (Claude, ChatG
 
 | Prompt | Pairs with |
 |--------|------------|
+| [API design review](docs/prompts/api-design-review.md) | [API design review playbook](docs/playbooks/api-design-review.md) |
+| [Code review](docs/prompts/code-review.md) | [Code review playbook](docs/playbooks/code-review.md) |
 | [Database review](docs/prompts/database-review.md) | [Database review playbook](docs/playbooks/database-review.md) |
 | [Documentation review](docs/prompts/documentation-review.md) | [Documentation review playbook](docs/playbooks/documentation-review.md) |
+| [Frontend accessibility review](docs/prompts/frontend-accessibility-review.md) | [Frontend accessibility review playbook](docs/playbooks/frontend-accessibility-review.md) |
 | [GitHub Actions review](docs/prompts/github-actions-review.md) | [GitHub Actions review playbook](docs/playbooks/github-actions-review.md) |
+| [Incident postmortem](docs/prompts/incident-postmortem.md) | [Incident postmortem playbook](docs/playbooks/incident-postmortem.md) |
+| [Web performance](docs/prompts/web-performance.md) | [Web performance playbook](docs/playbooks/web-performance.md) |
 | [Web security](docs/prompts/web-security.md) | [Web security playbook](docs/playbooks/web-security.md) |
 | [Web SRE](docs/prompts/web-sre.md) | [Web SRE playbook](docs/playbooks/web-sre.md) |
 
@@ -45,9 +55,4 @@ Each playbook has a paired prompt designed to be handed to an LLM (Claude, ChatG
 
 ## Roadmap
 
-Disciplines we plan to cover next:
-
-- API design review
-- Frontend accessibility review
-- Code review (general)
-- Incident postmortem template
+The initial set of disciplines is shipped. Open an issue or PR to suggest a new playbook (e.g., observability and alerting, on-call handoff, data pipeline review, mobile release).
