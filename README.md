@@ -14,7 +14,9 @@ Long-form guides describing how we approach a discipline, what "good" looks like
 |----------|----------------|
 | [API design review](docs/playbooks/api-design-review.md) | REST and GraphQL contract design, error shape, idempotency, versioning, and backwards-compatibility risk. |
 | [Documentation review](docs/playbooks/documentation-review.md) | Standards and checks for technical documentation quality, structure, and accuracy. |
+| [Frontend accessibility review](docs/playbooks/frontend-accessibility-review.md) | WCAG 2.2 AA review of web frontends — semantic HTML, ARIA, keyboard, screen reader, contrast, forms, motion, i18n. |
 | [GitHub Actions review](docs/playbooks/github-actions-review.md) | Workflow design, security, and reliability practices for CI/CD pipelines. |
+| [Web performance](docs/playbooks/web-performance.md) | Core Web Vitals audit, lab-vs-field discipline, and quick-win optimisations for web applications. |
 | [Web security](docs/playbooks/web-security.md) | Threat model, hardening checklist, and review procedure for web applications. |
 | [Web SRE](docs/playbooks/web-sre.md) | Reliability, observability, and incident-response practices for web services. |
 
@@ -26,7 +28,9 @@ Each playbook has a paired prompt designed to be handed to an LLM (Claude, ChatG
 |--------|------------|
 | [API design review](docs/prompts/api-design-review.md) | [API design review playbook](docs/playbooks/api-design-review.md) |
 | [Documentation review](docs/prompts/documentation-review.md) | [Documentation review playbook](docs/playbooks/documentation-review.md) |
+| [Frontend accessibility review](docs/prompts/frontend-accessibility-review.md) | [Frontend accessibility review playbook](docs/playbooks/frontend-accessibility-review.md) |
 | [GitHub Actions review](docs/prompts/github-actions-review.md) | [GitHub Actions review playbook](docs/playbooks/github-actions-review.md) |
+| [Web performance](docs/prompts/web-performance.md) | [Web performance playbook](docs/playbooks/web-performance.md) |
 | [Web security](docs/prompts/web-security.md) | [Web security playbook](docs/playbooks/web-security.md) |
 | [Web SRE](docs/prompts/web-sre.md) | [Web SRE playbook](docs/playbooks/web-sre.md) |
 
@@ -48,6 +52,5 @@ Each playbook has a paired prompt designed to be handed to an LLM (Claude, ChatG
 Disciplines we plan to cover next:
 
 - Database schema and migration review
-- Frontend accessibility review
 - Code review (general)
 - Incident postmortem template
