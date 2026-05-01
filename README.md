@@ -14,6 +14,7 @@ Long-form guides describing how we approach a discipline, what "good" looks like
 |----------|----------------|
 | [Documentation review](docs/playbooks/documentation-review.md) | Standards and checks for technical documentation quality, structure, and accuracy. |
 | [GitHub Actions review](docs/playbooks/github-actions-review.md) | Workflow design, security, and reliability practices for CI/CD pipelines. |
+| [Incident postmortem](docs/playbooks/incident-postmortem.md) | Blameless postmortem template, drafting and review rubric for post-incident reviews. |
 | [Web security](docs/playbooks/web-security.md) | Threat model, hardening checklist, and review procedure for web applications. |
 | [Web SRE](docs/playbooks/web-sre.md) | Reliability, observability, and incident-response practices for web services. |
 
@@ -25,6 +26,7 @@ Each playbook has a paired prompt designed to be handed to an LLM (Claude, ChatG
 |--------|------------|
 | [Documentation review](docs/prompts/documentation-review.md) | [Documentation review playbook](docs/playbooks/documentation-review.md) |
 | [GitHub Actions review](docs/prompts/github-actions-review.md) | [GitHub Actions review playbook](docs/playbooks/github-actions-review.md) |
+| [Incident postmortem](docs/prompts/incident-postmortem.md) | [Incident postmortem playbook](docs/playbooks/incident-postmortem.md) |
 | [Web security](docs/prompts/web-security.md) | [Web security playbook](docs/playbooks/web-security.md) |
 | [Web SRE](docs/prompts/web-sre.md) | [Web SRE playbook](docs/playbooks/web-sre.md) |
 
@@ -49,4 +51,3 @@ Disciplines we plan to cover next:
 - Database schema and migration review
 - Frontend accessibility review
 - Code review (general)
-- Incident postmortem template
