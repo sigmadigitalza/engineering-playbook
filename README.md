@@ -12,6 +12,7 @@ Long-form guides describing how we approach a discipline, what "good" looks like
 
 | Playbook | What it covers |
 |----------|----------------|
+| [API design review](docs/playbooks/api-design-review.md) | REST and GraphQL contract design, error shape, idempotency, versioning, and backwards-compatibility risk. |
 | [Documentation review](docs/playbooks/documentation-review.md) | Standards and checks for technical documentation quality, structure, and accuracy. |
 | [GitHub Actions review](docs/playbooks/github-actions-review.md) | Workflow design, security, and reliability practices for CI/CD pipelines. |
 | [Web security](docs/playbooks/web-security.md) | Threat model, hardening checklist, and review procedure for web applications. |
@@ -23,6 +24,7 @@ Each playbook has a paired prompt designed to be handed to an LLM (Claude, ChatG
 
 | Prompt | Pairs with |
 |--------|------------|
+| [API design review](docs/prompts/api-design-review.md) | [API design review playbook](docs/playbooks/api-design-review.md) |
 | [Documentation review](docs/prompts/documentation-review.md) | [Documentation review playbook](docs/playbooks/documentation-review.md) |
 | [GitHub Actions review](docs/prompts/github-actions-review.md) | [GitHub Actions review playbook](docs/playbooks/github-actions-review.md) |
 | [Web security](docs/prompts/web-security.md) | [Web security playbook](docs/playbooks/web-security.md) |
@@ -45,7 +47,6 @@ Each playbook has a paired prompt designed to be handed to an LLM (Claude, ChatG
 
 Disciplines we plan to cover next:
 
-- API design review
 - Database schema and migration review
 - Frontend accessibility review
 - Code review (general)
