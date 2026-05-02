@@ -1,0 +1,20 @@
+{
+  "name": "sigma-engineering-playbook",
+  "owner": {
+    "name": "Sigma Digital",
+    "url": "https://github.com/sigmadigitalza"
+  },
+  "plugins": [
+    {
+      "name": "sigma-engineering",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/sigmadigitalza/engineering-playbook.git",
+        "path": "plugins/sigma-engineering"
+      },
+      "description": "Engineering review skills for the Sigma Digital team — security, SRE, CI/CD, documentation, and more.",
+      "category": "engineering",
+      "keywords": ["code-review", "playbook", "engineering"]
+    }
+  ]
+}

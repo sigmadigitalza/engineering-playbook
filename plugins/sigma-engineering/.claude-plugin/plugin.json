@@ -1,0 +1,28 @@
+{
+  "name": "sigma-engineering",
+  "version": "0.1.0",
+  "description": "Sigma Digital's engineering playbook — review skills covering API design, code review, database schema and migrations, documentation, frontend accessibility, GitHub Actions, incident postmortems, web performance, web security, and web SRE.",
+  "author": {
+    "name": "Sigma Digital",
+    "url": "https://github.com/sigmadigitalza"
+  },
+  "homepage": "https://github.com/sigmadigitalza/engineering-playbook",
+  "repository": "https://github.com/sigmadigitalza/engineering-playbook",
+  "license": "MIT",
+  "keywords": [
+    "engineering",
+    "code-review",
+    "playbook",
+    "sigma-digital",
+    "api-design",
+    "database",
+    "documentation",
+    "accessibility",
+    "github-actions",
+    "ci-cd",
+    "incident-postmortem",
+    "web-performance",
+    "web-security",
+    "sre"
+  ]
+}
