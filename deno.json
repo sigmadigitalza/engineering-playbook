@@ -7,7 +7,7 @@
   "tasks": {
     "lume": "echo \"import 'lume/cli.ts'\" | deno run -A -",
     "build": "deno task lume",
-    "serve": "deno task lume -s",
+    "serve": "LUME_DEV=1 deno task lume -s",
     "clean": "rm -rf dist dist.tar.gz",
     "package": "deno task build && tar -czf dist.tar.gz -C dist .",
     "build:skills": "deno run --allow-read --allow-write scripts/build-skills.ts",
@@ -24,6 +24,7 @@
     "include": [
       "_config.ts",
       "_data.json",
+      "copy.js",
       "deno.json",
       "scripts/"
     ]

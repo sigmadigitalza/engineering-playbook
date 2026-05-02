@@ -3,10 +3,11 @@ import base_path from "lume/plugins/base_path.ts";
 import code_highlight from "lume/plugins/code_highlight.ts";
 import nav from "lume/plugins/nav.ts";
 
-// `deno task serve` passes `-s` to the Lume CLI; detect it so we can keep
-// root-relative paths unprefixed during local development (the dev server
-// mounts at `/`, not `/engineering-playbook/`).
-const isServing = Deno.args.includes("-s") || Deno.args.includes("--serve");
+// `deno task serve` sets LUME_DEV=1 so we can keep root-relative paths
+// unprefixed during local development (the dev server mounts at `/`, not
+// `/engineering-playbook/`). We can't sniff Deno.args for `-s` here because
+// the Lume CLI consumes its own flags before this config file loads.
+const isServing = Deno.env.get("LUME_DEV") === "1";
 
 const site = lume({
   src: ".",
@@ -51,8 +52,9 @@ site.ignore(
 // can override.
 site.data("layout", "layouts/page.vto");
 
-// Static asset: the single stylesheet.
+// Static assets: the stylesheet and the small copy-to-clipboard script.
 site.add("styles.css");
+site.add("copy.js");
 
 // Pull the H1 of each markdown file into `title` so layouts can render it in
 // <title> and breadcrumbs without us editing the canonical docs.

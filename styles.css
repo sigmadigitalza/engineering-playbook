@@ -228,7 +228,8 @@ main.wrap {
   background: var(--bg-code);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  overflow-x: auto;
+  overflow: auto;
+  max-height: 32rem;
   font-size: 0.875rem;
   line-height: 1.55;
 }
@@ -237,6 +238,50 @@ main.wrap {
   border: 0;
   padding: 0;
   font-size: inherit;
+}
+
+/* ─── Copy-to-clipboard button (injected by copy.js) ──────────────────────── */
+
+.code-block {
+  position: relative;
+}
+.code-block > pre {
+  /* The wrapper carries the outer margin so the button sits flush with the
+     pre's border, not the surrounding paragraph spacing. The extra top
+     padding leaves room for the absolutely-positioned copy button without
+     overlapping the first line of code. */
+  margin: 0;
+  padding-top: 2.6rem;
+}
+.prose > .code-block {
+  margin: 1.5rem 0;
+}
+.copy-btn {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  padding: 0.3rem 0.6rem;
+  font: 500 0.75rem/1 var(--font-sans);
+  color: var(--fg-muted);
+  background: color-mix(in srgb, var(--bg-elevated) 85%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.code-block:hover .copy-btn,
+.copy-btn:focus-visible {
+  opacity: 1;
+}
+.copy-btn:hover {
+  color: var(--fg);
+  border-color: var(--accent);
+}
+.copy-btn.is-copied {
+  color: var(--accent);
+  border-color: var(--accent);
+  opacity: 1;
 }
 
 /* ─── Tables ──────────────────────────────────────────────────────────────── */
