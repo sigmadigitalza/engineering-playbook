@@ -1,0 +1,42 @@
+---
+title: Engineering Playbook
+layout: layouts/base.vto
+url: /
+---
+<article class="prose home">
+  <header class="hero">
+    <h1>{{ site.title }}</h1>
+    <p class="lede">{{ site.subtitle }}</p>
+    <p class="meta">
+      Pairs human-readable <strong>playbooks</strong> with LLM-ready <strong>prompts</strong> for running reviews and audits with an AI assistant. Also distributed as a <a href="https://github.com/sigmadigitalza/engineering-playbook#install-as-a-claude-code-plugin">Claude Code plugin</a>.
+    </p>
+  </header>
+
+  <section id="playbooks">
+    <h2>Playbooks</h2>
+    <p class="section-lede">Long-form guides describing how we approach a discipline, what "good" looks like, and the specific checks and procedures we run.</p>
+    <ul class="entry-list">
+      {{ for entry of search.pages("section=playbooks", "title=asc") }}
+      <li>
+        <a href="{{ entry.url }}">
+          <span class="entry-title">{{ entry.title }}</span>
+        </a>
+      </li>
+      {{ /for }}
+    </ul>
+  </section>
+
+  <section id="prompts">
+    <h2>Prompts</h2>
+    <p class="section-lede">Each playbook has a paired prompt designed to be handed to an LLM to run the review autonomously against a codebase, PR, or artefact.</p>
+    <ul class="entry-list">
+      {{ for entry of search.pages("section=prompts", "title=asc") }}
+      <li>
+        <a href="{{ entry.url }}">
+          <span class="entry-title">{{ entry.title }}</span>
+        </a>
+      </li>
+      {{ /for }}
+    </ul>
+  </section>
+</article>
