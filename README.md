@@ -4,9 +4,13 @@ Guides, prompts, and technical reference material for the engineering team at [S
 
 This repo is the canonical home for how we build, review, and operate software. It pairs human-readable **playbooks** (the principles, checklists, and procedures we follow) with matching **prompts** (the LLM-ready versions of those playbooks, designed to run reviews and audits with an AI assistant).
 
-## Install as a Claude Code plugin
+## Use in your AI assistant
 
-The playbooks and prompts in this repo are also packaged as a Claude Code plugin. Skills auto-activate when you ask Claude to do relevant work — for example, "review this PR for security issues" will fire the `web-security` skill automatically.
+The playbooks ship in two formats so the same review prompts auto-activate regardless of which assistant you're using. Both are generated from the canonical `docs/` tree by [`scripts/build-skills.ts`](scripts/build-skills.ts) — `deno task build:skills` regenerates everything in place.
+
+### Claude Code and Claude Desktop
+
+Both apps install the same plugin marketplace. Skills auto-activate based on description matching — "review this PR for security issues" fires the `web-security` skill automatically.
 
 ```bash
 /plugin marketplace add sigmadigitalza/engineering-playbook
@@ -14,7 +18,27 @@ The playbooks and prompts in this repo are also packaged as a Claude Code plugin
 /reload-plugins
 ```
 
-The same skills work with GitHub Copilot — copy any folder from `plugins/sigma-engineering/skills/` into your repo's `.github/skills/` directory, or into `~/.copilot/skills/` for personal scope. The `SKILL.md` format is a cross-vendor open standard.
+The plugin source is checked in at [`plugins/sigma-engineering/`](plugins/sigma-engineering) — no build step required to install.
+
+### GitHub Copilot
+
+Each skill is also published as a Copilot custom-instructions file at [`.github/instructions/<name>.instructions.md`](.github/instructions). These are read by Copilot Chat (in your editor), Copilot Code Review, and Copilot Coding Agent, with description- and `applyTo`-based triggering.
+
+To use them in your own repo, copy the relevant files into your repo's `.github/instructions/` directory:
+
+```bash
+# Pull a single skill
+curl -sLo .github/instructions/web-security.instructions.md \
+  https://raw.githubusercontent.com/sigmadigitalza/engineering-playbook/main/.github/instructions/web-security.instructions.md
+
+# Or sync the whole set
+gh repo clone sigmadigitalza/engineering-playbook /tmp/eng-pb
+cp -r /tmp/eng-pb/.github/instructions/. .github/instructions/
+```
+
+For org-wide rollout, mirror the directory via a sync action or include it in your repo template. There is no "marketplace" for Copilot instructions — distribution is per-repo.
+
+> The `SKILL.md` format used by Claude and the `*.instructions.md` format used by Copilot are different file conventions, but the prompt body is identical between them. The generator keeps them in sync.
 
 ## Contents
 
