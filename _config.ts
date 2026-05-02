@@ -1,11 +1,19 @@
 import lume from "lume/mod.ts";
+import base_path from "lume/plugins/base_path.ts";
 import code_highlight from "lume/plugins/code_highlight.ts";
 import nav from "lume/plugins/nav.ts";
 
 const site = lume({
   src: ".",
   dest: "dist",
-  location: new URL("https://sigmadigitalza.github.io/engineering-playbook/"),
+  // GitHub Pages serves this site at https://sigmadigital.io/engineering-playbook/
+  // (the org's sigmadigitalza.github.io repo has a CNAME for sigmadigital.io,
+  // and GitHub serves all org-owned repos under that custom domain at the
+  // /<repo-name>/ subpath). The base_path plugin reads the pathname from
+  // `location` and rewrites every absolute href/src/srcset to prepend it,
+  // so /styles.css in templates becomes /engineering-playbook/styles.css in
+  // the rendered output.
+  location: new URL("https://sigmadigital.io/engineering-playbook/"),
   prettyUrls: true,
 });
 
@@ -62,5 +70,7 @@ site.preprocess([".md"], (pages) => {
 
 site.use(code_highlight());
 site.use(nav());
+// base_path must come last so it sees the URLs that other plugins emitted.
+site.use(base_path());
 
 export default site;
