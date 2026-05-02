@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Sigma Digital engineering playbook — static docs site built with Lume.",
   "imports": {
     "lume/": "https://deno.land/x/lume@v3.2.4/"
@@ -15,7 +15,9 @@
     "release:version": "deno run -A jsr:@sigmadigitalza/rational-release@^1 read-version deno.json"
   },
   "compilerOptions": {
-    "types": ["lume/types.ts"]
+    "types": [
+      "lume/types.ts"
+    ]
   },
   "lock": false,
   "fmt": {
