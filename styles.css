@@ -322,8 +322,8 @@ main.wrap {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
 }
 .entry-list li { margin: 0; }
