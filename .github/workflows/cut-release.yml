@@ -24,7 +24,7 @@ jobs:
     # so non-release PRs don't even start the reusable workflow's
     # bootstrap steps.
     if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/v')
-    uses: sigmadigitalza/rational-release/.github/workflows/cut-release.yml@v1.4.0
+    uses: sigmadigitalza/rational-release/.github/workflows/cut-release.yml@v1
     with:
       artefact-task: deno task package
       artefact-paths: dist.tar.gz

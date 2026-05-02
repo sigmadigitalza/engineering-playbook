@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   validate:
-    uses: sigmadigitalza/rational-release/.github/workflows/validate-pr.yml@v1.4.0
+    uses: sigmadigitalza/rational-release/.github/workflows/validate-pr.yml@v1
     with:
       gate: true
       validate-commits: true
