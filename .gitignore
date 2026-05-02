@@ -3,3 +3,10 @@
 *.swo
 .idea/
 .vscode/
+
+# Lume
+dist/
+_cache/
+
+# Deno
+.deno/

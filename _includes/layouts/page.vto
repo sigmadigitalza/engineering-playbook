@@ -1,0 +1,9 @@
+---
+layout: layouts/base.vto
+---
+<article class="prose">
+  {{ if section }}
+  <p class="eyebrow"><a href="/#{{ section }}">{{ section }}</a></p>
+  {{ /if }}
+  {{ content |> safe }}
+</article>
