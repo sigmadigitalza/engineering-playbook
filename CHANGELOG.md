@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Removed
+
+## [0.2.0] - 2026-05-02
+
+### Added
+
 - frontend accessibility review playbook and prompt (#1 by @Pushplaybang)
 - web performance playbook and prompt (#2 by @Pushplaybang)
 - incident postmortem playbook and prompt (#3 by @Pushplaybang)
