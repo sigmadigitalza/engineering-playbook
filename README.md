@@ -4,6 +4,18 @@ Guides, prompts, and technical reference material for the engineering team at [S
 
 This repo is the canonical home for how we build, review, and operate software. It pairs human-readable **playbooks** (the principles, checklists, and procedures we follow) with matching **prompts** (the LLM-ready versions of those playbooks, designed to run reviews and audits with an AI assistant).
 
+## Install as a Claude Code plugin
+
+The playbooks and prompts in this repo are also packaged as a Claude Code plugin. Skills auto-activate when you ask Claude to do relevant work — for example, "review this PR for security issues" will fire the `web-security` skill automatically.
+
+```bash
+/plugin marketplace add sigmadigitalza/engineering-playbook
+/plugin install sigma-engineering@sigma-engineering-playbook
+/reload-plugins
+```
+
+The same skills work with GitHub Copilot — copy any folder from `plugins/sigma-engineering/skills/` into your repo's `.github/skills/` directory, or into `~/.copilot/skills/` for personal scope. The `SKILL.md` format is a cross-vendor open standard.
+
 ## Contents
 
 ### Playbooks — [`docs/playbooks`](docs/playbooks)
