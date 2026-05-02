@@ -1,6 +1,6 @@
 ---
 name: github-actions-review
-description: Reviews GitHub Actions workflows for security, reliability, supply-chain risk, and cost — pinned actions, secrets handling, permissions scoping, runner choice, timeouts, caching. Use this whenever the user is adding, modifying, or auditing a .github/workflows/*.yml file, evaluating a third-party action, tightening repo CI permissions, or asks about CI security or workflow design.
+description: Reviews GitHub Actions workflows for security, reliability, supply-chain risk, and cost — pinned actions, secret hygiene, OIDC, environment protection, runner choice, permissions scoping, and CI tooling. Anchored to the GitHub Actions Secure Use Reference. Use this whenever the user is adding, modifying, or auditing a .github/workflows/*.yml file, evaluating a third-party action, tightening repo CI permissions, or asks about CI security or workflow design.
 ---
 
 **Reference**: The full Sigma Digital playbook is in `playbook.md` next to this file. Load it for the complete checklist, threat model, and rationale behind each check.
@@ -57,16 +57,57 @@ For each finding, record: file path, line range, severity (Critical/High/Medium/
 
 ## Security — expert-level critical review
 
-- **Action pinning.** Third-party actions MUST be pinned to a full commit SHA, with a comment noting the version tag. Official `actions/*` and verified-creator actions may use major tags, but SHA is preferred. Any unpinned third-party action is at minimum a High finding.
-- **`permissions:` block.** Every workflow should declare minimum permissions. A workflow without one is a Medium finding (defaults vary by org but tend toward write-all).
-- **`pull_request_target` + checkout of PR head.** Classic RCE vector. Flag as Critical.
-- **Script injection.** Any `${{ github.event.* }}`, `${{ github.head_ref }}`, `${{ inputs.* }}` or user-controllable input interpolated directly into a `run:` block is a High finding. Fix: pass via env var and reference `"$VAR"`.
-- **Secret handling.** `echo` of secrets, secrets in log output, secrets in `if:` expressions where they may print.
-- **`workflow_run` trigger.** Verify it does not run with elevated privileges against untrusted PR code.
-- **`persist-credentials: true`** on checkout when the job does not push — flag.
-- **Third-party action supply chain.** Unknown publishers? Unverified? Archived repos? Recent maintainer changes?
-- **`GITHUB_TOKEN` scope** vs what the job actually needs.
-- **Cache poisoning.** PR-writable caches used by trusted workflows.
+Anchor every finding to the [GitHub Actions Secure Use Reference](https://docs.github.com/en/actions/reference/security/secure-use). The rubric below is grouped by the same themes that doc uses; cite the doc plus the specific line/file for every finding. Where relevant, also map the finding to an OWASP Top 10 CI/CD risk or an OpenSSF Scorecard check.
+
+### Action pinning & third-party supply chain
+- **Action pinning.** Third-party actions MUST be pinned to a full commit SHA with a comment noting the version tag (`uses: org/action@<40-char-sha> # v1.2.3`). Per the GitHub doc, SHA pinning is "currently the only way to use an action as an immutable release" — tag pinning is bypassable by repo compromise (tags can be moved or deleted). Any unpinned third-party action is at minimum a High finding. The [tj-actions/changed-files compromise (March 2025)](https://www.stepsecurity.io/blog/harden-runner-detection-tj-actions-changed-files-action-is-compromised) is the canonical case for why this matters.
+- **Verify the SHA.** Confirm the pinned SHA is from the action's canonical repository, not a fork.
+- **Official vs third-party.** Official `actions/*` and verified-creator actions may use major tags, but SHA is preferred even for those.
+- **Reusable workflows.** Same supply-chain rules apply — pin remote `uses: org/repo/.github/workflows/foo.yml@<sha>`.
+- **Provenance signals.** Unknown publishers, unverified authors, archived repos, recent maintainer changes, low star/install counts on a security-sensitive action — flag as concerns even when otherwise pinned.
+- **Dependabot for actions.** `.github/dependabot.yml` should include `package-ecosystem: github-actions`. Note: Dependabot only opens version-update PRs for semver-pinned actions — SHA-pinned actions don't generate Dependabot alerts. Mitigation is the SHA-with-version-comment pattern (Dependabot updates the comment along with the SHA).
+- **Dependency review on PRs.** PRs touching `.github/` should run `actions/dependency-review-action` to flag vulnerable transitive action versions before merge.
+
+### Secret hygiene
+- **Plaintext secrets in workflow files.** Hardcoded credentials or tokens in YAML are Critical. Use repo / org / environment secrets.
+- **Structured data as a single secret is broken.** JSON, XML, YAML blobs encapsulating multiple values cause log redaction to fail (redaction is exact-string match). Per the GitHub doc, split into individual secrets per sensitive value. Flag any secret whose name suggests a blob (`*_JSON`, `*_CONFIG`, `*_BUNDLE`).
+- **Generated/derived secrets must be re-masked.** When a workflow derives a value from a secret (signed JWT, base64-re-encoded key, OAuth code exchange, decrypted blob), register the derived value with `echo "::add-mask::$VALUE"` before the next step uses it. Otherwise it leaks in logs.
+- **`echo` of secrets** (even temporarily, even in a debugging step left behind) is a Critical finding. Same for unredacted secrets in step outputs, error messages, or environment dumps.
+- **Secrets in `if:` expressions.** Expressions evaluate before redaction and can leak via the workflow run UI. Flag any `if:` referencing `secrets.*`.
+- **Exposure response.** If unredacted secrets appeared in any prior run's logs, the secret is compromised — delete the log and rotate. Note this as the documented response procedure, not a maybe.
+- **Environment-scoped secrets with required reviewers.** Sensitive secrets (production deploy keys, signing keys, third-party API keys with destructive scope) should live in environment-scoped secrets with required reviewers and deployment-branch restrictions, not as repo or org secrets. Flag prod-deploy workflows that use repo secrets directly.
+
+### Workflow code injection
+- **Script injection via `${{ ... }}` interpolation.** Any `${{ github.event.* }}`, `${{ github.head_ref }}`, `${{ inputs.* }}`, `${{ github.event.pull_request.title }}`, `${{ github.event.comment.body }}`, `${{ github.event.issue.title }}` (or any other user-controllable context value) interpolated directly into a `run:` block is a High finding (Critical if the workflow has elevated permissions or runs on `pull_request_target`). Fix per the GitHub doc: pass via an `env:` mapping and reference `"$VAR"` (double-quoted), with `set -euo pipefail` upstream. Better still, use a JavaScript or composite action that takes the value as an argument.
+- **`pull_request_target` + checkout of PR head.** Classic RCE vector — `pull_request_target` runs with write permissions and access to repo secrets, and a malicious PR can inject code that runs in that context. **Critical.**
+- **`workflow_run` trigger.** Verify it does not execute untrusted PR code with elevated privileges from the triggering workflow's context.
+- **`persist-credentials: true`** on `actions/checkout` when the job does not push — leaves the `GITHUB_TOKEN` on disk and reachable from any subsequent step or composite action. Set to `false` unless explicitly needed for `git push`.
+- **Cache poisoning.** PR-writable caches (`actions/cache` keyed on PR-controllable values) consumed by trusted workflows can be poisoned by an attacker PR. Scope cache keys to the trigger; never let a PR run write a cache key that a `main` run or a privileged workflow reads.
+
+### Permissions, OIDC, and access surface
+- **`permissions:` block.** Every workflow should declare minimum permissions explicitly at the workflow or job level. A workflow without one is a Medium finding (org defaults vary but historically default to write-all). Recommend `permissions: contents: read` as the workflow-level default and elevate per-job only where needed.
+- **`GITHUB_TOKEN` scope vs need.** Common over-grants: `contents: write` on read-only test jobs, `pull-requests: write` on jobs that don't comment, `id-token: write` outside an OIDC step. Tighten per-job.
+- **OIDC for cloud authentication.** Long-lived cloud credentials (AWS access keys, GCP service-account JSON, Azure SPN secrets) stored as repo secrets is a Medium finding when the provider supports OIDC — recommend the official OIDC integrations (`aws-actions/configure-aws-credentials`, `google-github-actions/auth`, `azure/login` with federated credentials) with `permissions: id-token: write` scoped to the deploy job. OIDC eliminates the standing credential entirely.
+- **Environments + required reviewers.** Production deployment workflows should target an environment (`environment: production`) with required reviewers and deployment-branch restrictions configured in repo Settings. Workflows that deploy to prod without environment-gated approval are at minimum Medium.
+- **CODEOWNERS for `.github/workflows/`.** The `.github/workflows/` directory should be owned in `CODEOWNERS` by the platform/security team and protected by branch-protection-required-review. Without this, anyone with repo write access can modify CI to exfiltrate secrets. Medium finding if missing on a repo with non-trivial secrets.
+- **Disable Actions creating/approving PRs.** Org or repo setting "Allow GitHub Actions to create and approve pull requests" should be off unless an automation explicitly requires it. Self-approving CI bots are a known privilege-escalation vector.
+- **Audit log for Actions changes.** Recommend periodic review of `org.update_actions_secret`, `repo.actions_enabled`, and runner registration events. Note as a recommendation if not already covered by the org's security tooling.
+
+### Runner risks
+- **GitHub-hosted runners** are ephemeral and isolated — the default safe choice. Per-image SBOMs are published at `actions/runner-images/releases` for supply-chain review.
+- **Self-hosted runners** are persistent unless explicitly ephemeral. Per the GitHub doc: **never use self-hosted runners on public repositories** — any user can open a PR that compromises the runner host. Internal/private repos still require care because forks and PRs from anyone with read access execute on the runner. Flag any self-hosted runner on a public repo as Critical.
+- **JIT (Just-In-Time) ephemeral runners.** If self-hosted is required, prefer the JIT REST API pattern (`POST /repos/{owner}/{repo}/actions/runners/generate-jitconfig`) that creates a single-job, self-destroying runner. Note the caveat: hardware reuse for JIT runners can leak between jobs unless automation provides a clean environment each time.
+- **Runner groups.** Multi-repo / org-level self-hosted runners must be partitioned into runner groups with explicit repo allowlists. A runner group accessible to many repos is a cross-tenant compromise vector.
+- **Runner host hygiene.** Self-hosted runners with cloud-instance metadata access (AWS IMDSv2, GCP metadata service) are a credential-exfiltration risk if any workflow runs untrusted code. Lock down with IAM, IMDSv2-only, and `harden-runner` egress policies.
+
+### Detection & tooling
+Recommend concrete additions to CI when gaps are found:
+- **`zizmor`** ([woodruffw/zizmor](https://github.com/woodruffw/zizmor)) — static analyzer specifically for GitHub Actions security. Catches script injection, dangerous triggers, permissions over-grants, and many of the items above. Recommend as a CI step or pre-commit hook.
+- **`actionlint`** ([rhysd/actionlint](https://github.com/rhysd/actionlint)) — syntactic linter with shellcheck integration for `run:` blocks. Complement to zizmor (correctness, not security).
+- **`step-security/harden-runner`** — egress filtering and audit for what each workflow contacts at runtime. Recommended for repos with elevated permissions or sensitive secrets.
+- **`actions/dependency-review-action`** — PR-time dependency vulnerability gate.
+- **OpenSSF Scorecard** ([scorecard.dev](https://scorecard.dev/) / [scorecard-action](https://github.com/ossf/scorecard-action)) — automated check suite covering pinned-actions, token-permissions, dangerous-workflow, and several other items in this rubric. Recommend especially for repos that publish actions or have high supply-chain exposure.
+- **Repository security advisories.** For repos that publish actions consumed by others: enable private vulnerability reporting and use repository security advisories.
 
 ## Maintainability
 
