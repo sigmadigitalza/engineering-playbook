@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   prepare:
-    uses: sigmadigitalza/rational-release/.github/workflows/prepare-release.yml@v1.4.0
+    uses: sigmadigitalza/rational-release/.github/workflows/prepare-release.yml@v1
     with:
       # Treat `feat!:` as minor while we're still 0.x. Bumps to 1.0.0 are
       # opt-in via a manual major-bump commit later.
