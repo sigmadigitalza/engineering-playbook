@@ -317,7 +317,8 @@ main.wrap {
   max-width: 40em;
 }
 
-.entry-list {
+.entry-list,
+.prose .entry-list {
   list-style: none;
   padding: 0;
   margin: 0;
