@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+## [0.2.1] - 2026-05-02
+
 ### Fixed
 
 - prefix asset URLs with /engineering-playbook/ (#15 by @Pushplaybang)
