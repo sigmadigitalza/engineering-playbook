@@ -1,0 +1,39 @@
+{
+  "$schema": "./skills-meta.schema.json",
+  "_comment": "Source of truth for per-skill metadata. The build-skills.ts generator reads this and emits both the Claude plugin (plugins/sigma-engineering/skills/<name>/) and the GitHub Copilot instructions (.github/instructions/<name>.instructions.md). The body of every skill comes from docs/prompts/<name>.md; this file only owns the description and (optional) Copilot applyTo override.",
+
+  "skills": {
+    "api-design-review": {
+      "description": "Reviews REST and GraphQL API designs for contract quality, error shape, idempotency, versioning, pagination, and backwards-compatibility risk. Use this whenever the user is designing a new API, modifying an existing endpoint, reviewing an OpenAPI or GraphQL schema diff, or asks for an API design review — even if they don't explicitly mention 'the API design playbook'."
+    },
+    "code-review": {
+      "description": "Reviews code changes for defects, design issues, and codebase coherence using a severity-ordered rubric and Conventional Comments. Use this whenever the user asks for a code review, a PR review, a pre-PR self-review, or wants feedback on a diff or branch — even when they only say 'review this' or 'look at this PR'."
+    },
+    "database-review": {
+      "description": "Reviews relational database work — schema design for new tables and relationships, online-safe migrations (locks, backfills, expand/contract, rollback), and query/index performance under load. Postgres-biased with explicit MySQL and SQLite call-outs. Use this whenever the user is reviewing a migration file, designing a new table, debugging a slow query, asking about indexes, or modifying schema — even if they don't say 'database review'."
+    },
+    "documentation-review": {
+      "description": "Reviews technical documentation for clarity, accuracy, structure, and agent-readability while preserving the author's voice. Use this whenever the user is reviewing a README, design doc, runbook, ADR, contributor guide, or any markdown documentation — or asks for feedback on docs — even if they don't say 'documentation review'.",
+      "applyTo": "**/*.md,**/README*,**/CLAUDE.md,**/AGENTS.md"
+    },
+    "frontend-accessibility-review": {
+      "description": "Reviews web frontends for WCAG 2.2 Level AA accessibility — semantic HTML, ARIA, keyboard interaction, screen reader experience, color contrast, forms, motion, and internationalization. Use this whenever the user is reviewing a UI component, building a form, auditing a page for a11y, asks about ARIA or screen readers, or asks for an accessibility review — even if they don't explicitly mention WCAG."
+    },
+    "github-actions-review": {
+      "description": "Reviews GitHub Actions workflows for security, reliability, supply-chain risk, and cost — pinned actions, secret hygiene, OIDC, environment protection, runner choice, permissions scoping, and CI tooling. Anchored to the GitHub Actions Secure Use Reference. Use this whenever the user is adding, modifying, or auditing a .github/workflows/*.yml file, evaluating a third-party action, tightening repo CI permissions, or asks about CI security or workflow design.",
+      "applyTo": ".github/**"
+    },
+    "incident-postmortem": {
+      "description": "Drafts and reviews blameless post-incident reviews from incident artifacts (chat exports, alert history, deployment timeline) using Sigma's rubric — contributing factors, action items, learning. Use this whenever the user is writing a postmortem, reviewing a draft postmortem, conducting a post-incident review, or asks 'what should the writeup look like' — even if they only say 'PIR' or 'PMR'."
+    },
+    "web-performance": {
+      "description": "Audits web applications against Core Web Vitals (LCP, INP, CLS) and adjacent metrics, identifies quick wins, and predicts the impact of recommended changes. Use this whenever the user is investigating slow page loads, optimizing performance, reviewing a Lighthouse or PSI report, asks about LCP/INP/CLS, or asks for a performance audit — even if they don't say 'web performance'."
+    },
+    "web-security": {
+      "description": "Reviews a web application for frontend security issues including XSS, CSP, client-side auth, browser storage, supply-chain risk, framework-specific footguns, and the frontend/server trust boundary. Use this whenever the user mentions auditing a web app, reviewing a security-sensitive PR, hardening a deployment, or asks for a security review — even if they don't explicitly mention 'the web security playbook'."
+    },
+    "web-sre": {
+      "description": "Reviews release readiness, verifies post-release deployments, and diagnoses production incidents for web services with hypothesis-driven, approval-gated probing and upstream-status-first checks. Use this whenever the user is shipping a release, verifying a deploy, investigating a production issue, asks 'is something broken in production', or asks for an SRE or incident review — even if they only describe symptoms like '5xx spiked'."
+    }
+  }
+}

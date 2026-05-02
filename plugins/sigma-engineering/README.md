@@ -4,9 +4,13 @@ A Claude Code plugin packaging Sigma Digital's engineering review skills. Each s
 
 ## How it works
 
-Skills auto-activate based on what the user is doing. Claude reads each skill's `description` field and matches it against the current request — so asking "review this PR for security issues" fires `web-security` automatically without anyone naming it. Each skill points Claude at the paired `playbook.md` for the full checklist and rationale when it needs to go deeper.
+Skills auto-activate based on what the user is doing. Claude Code (and Claude Desktop) reads each skill's `description` field and matches it against the current request — so asking "review this PR for security issues" fires `web-security` automatically without anyone naming it. Each skill points Claude at the paired `playbook.md` for the full checklist and rationale when it needs to go deeper.
 
-The `SKILL.md` format is a cross-vendor open standard, so the same folders also work as GitHub Copilot skills (drop into `.github/skills/` or `~/.copilot/skills/`).
+## GitHub Copilot
+
+The same review prompts are also published in GitHub Copilot's custom-instructions format at [`.github/instructions/`](../../.github/instructions) at the repo root. Copilot uses a different filename convention (`<name>.instructions.md`) and a different frontmatter schema (`description` + `applyTo` glob), but the prompt body is the same. Both trees are regenerated from `docs/prompts/` by `deno task build:skills` and stay in sync.
+
+If you're using Copilot, copy from `.github/instructions/`, not from this directory. See the [repo README](../../README.md#use-in-your-ai-assistant) for instructions.
 
 ## Available skills
 

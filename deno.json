@@ -9,6 +9,8 @@
     "build": "deno task lume",
     "serve": "deno task lume -s",
     "clean": "rm -rf dist",
+    "build:skills": "deno run --allow-read --allow-write scripts/build-skills.ts",
+    "build:skills:check": "deno run --allow-read scripts/build-skills.ts --check",
     "release:version": "deno run -A jsr:@sigmadigitalza/rational-release@^1 read-version deno.json"
   },
   "compilerOptions": {
