@@ -1,5 +1,5 @@
 {
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Sigma Digital engineering playbook — static docs site built with Lume.",
   "imports": {
     "lume/": "https://deno.land/x/lume@v3.2.4/"
