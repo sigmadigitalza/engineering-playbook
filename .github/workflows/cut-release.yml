@@ -1,0 +1,30 @@
+name: Cut Release
+
+# Fires when a release/vX.Y.Z PR is merged into main. The reusable
+# workflow finalises the changelog ([Unreleased] → [X.Y.Z] - date),
+# tags vX.Y.Z, runs the artefact-task to build the site, and creates a
+# GitHub Release with the changelog section as the body and dist.tar.gz
+# attached.
+#
+# Reusable workflow source: https://github.com/sigmadigitalza/rational-release
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  cut:
+    # The reusable workflow gates on `merged == true` and the
+    # release/v branch prefix internally; this `if:` is belt-and-braces
+    # so non-release PRs don't even start the reusable workflow's
+    # bootstrap steps.
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/v')
+    uses: sigmadigitalza/rational-release/.github/workflows/cut-release.yml@v1.4.0
+    with:
+      artefact-task: deno task package
+      artefact-paths: dist.tar.gz

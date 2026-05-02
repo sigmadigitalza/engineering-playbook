@@ -1,0 +1,22 @@
+name: Validate PR
+
+# Validates PR title and commit messages against Conventional Commits.
+# Gated (fails the workflow on non-conformance) so the rational-release
+# downstream workflows can rely on the convention being clean.
+#
+# Reusable workflow source: https://github.com/sigmadigitalza/rational-release
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  validate:
+    uses: sigmadigitalza/rational-release/.github/workflows/validate-pr.yml@v1.4.0
+    with:
+      gate: true
+      validate-commits: true

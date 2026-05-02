@@ -1,0 +1,45 @@
+name: CI
+
+# Runs on every PR. Checks formatting, that generated artefacts are in
+# sync with their source-of-truth, and that the Lume site still builds.
+# Required to pass before merge (configure as a required check in repo
+# Settings → Branches once this lands).
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: fmt + skills-in-sync + build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: deno fmt --check
+        run: deno fmt --check
+
+      - name: Skills generator in sync with docs/
+        # Fails if docs/prompts/ or scripts/skills-meta.json has changed
+        # without re-running `deno task build:skills`.
+        run: deno task build:skills:check
+
+      - name: Lume build smoke test
+        run: deno task build

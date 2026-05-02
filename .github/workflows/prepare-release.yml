@@ -1,0 +1,31 @@
+name: Prepare Release
+
+# Fires on every push to main. Computes the next semver from
+# Conventional Commit subjects since the previous tag, regenerates the
+# [Unreleased] section of CHANGELOG.md from merged PR titles, applies
+# the version bump to deno.json, force-pushes a release/vX.Y.Z branch,
+# and opens/updates a "Release vX.Y.Z" PR.
+#
+# Reusable workflow source: https://github.com/sigmadigitalza/rational-release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  prepare:
+    uses: sigmadigitalza/rational-release/.github/workflows/prepare-release.yml@v1.4.0
+    with:
+      # Treat `feat!:` as minor while we're still 0.x. Bumps to 1.0.0 are
+      # opt-in via a manual major-bump commit later.
+      pre1-cap: true
+      # Pre-release gates: skills must be in sync, site must build.
+      # Failure here means no release PR opens — gives the team a chance
+      # to fix the underlying problem before the changelog is regenerated.
+      pre-tasks: |
+        deno task build:skills:check
+        deno task build

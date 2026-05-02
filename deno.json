@@ -8,7 +8,8 @@
     "lume": "echo \"import 'lume/cli.ts'\" | deno run -A -",
     "build": "deno task lume",
     "serve": "deno task lume -s",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist dist.tar.gz",
+    "package": "deno task build && tar -czf dist.tar.gz -C dist .",
     "build:skills": "deno run --allow-read --allow-write scripts/build-skills.ts",
     "build:skills:check": "deno run --allow-read scripts/build-skills.ts --check",
     "release:version": "deno run -A jsr:@sigmadigitalza/rational-release@^1 read-version deno.json"
@@ -18,6 +19,11 @@
   },
   "lock": false,
   "fmt": {
-    "exclude": ["dist", "docs", "plugins"]
+    "include": [
+      "_config.ts",
+      "_data.json",
+      "deno.json",
+      "scripts/"
+    ]
   }
 }
