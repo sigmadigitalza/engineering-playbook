@@ -1,0 +1,67 @@
+name: Deploy to GitHub Pages
+
+# Builds the Lume site and deploys to GitHub Pages on every push to
+# main. Decoupled from the release cut so doc updates ship as soon as
+# they merge — release tags still get a downloadable dist.tar.gz on
+# the GitHub Release (see cut-release.yml).
+#
+# Repo settings required (one-time, in GitHub UI):
+#   Settings → Pages → Source = "GitHub Actions"
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Don't cancel an in-flight Pages deploy. Deploys are idempotent but
+# cancelling mid-publish can leave a partial state.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build
+        run: deno task build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    name: Deploy to Pages
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

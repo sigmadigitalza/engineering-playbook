@@ -6,6 +6,7 @@
 
 # Lume
 dist/
+dist.tar.gz
 _cache/
 
 # Deno
