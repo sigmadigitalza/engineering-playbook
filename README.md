@@ -8,9 +8,11 @@ This repo is the canonical home for how we build, review, and operate software. 
 
 The playbooks ship in two formats so the same review prompts auto-activate regardless of which assistant you're using. Both are generated from the canonical `docs/` tree by [`scripts/build-skills.ts`](scripts/build-skills.ts) — `deno task build:skills` regenerates everything in place.
 
-### Claude Code and Claude Desktop
+In every install path below, skills auto-activate by description match — say "review this PR for security issues" and the `web-security` skill fires automatically.
 
-Both apps install the same plugin marketplace. Skills auto-activate based on description matching — "review this PR for security issues" fires the `web-security` skill automatically.
+### Claude Code (the CLI)
+
+Install as a plugin via our marketplace:
 
 ```bash
 /plugin marketplace add sigmadigitalza/engineering-playbook
@@ -19,6 +21,19 @@ Both apps install the same plugin marketplace. Skills auto-activate based on des
 ```
 
 The plugin source is checked in at [`plugins/sigma-engineering/`](plugins/sigma-engineering) — no build step required to install.
+
+### Claude Desktop and Claude.ai
+
+Claude Desktop and Claude.ai don't have the `/plugin` command, but they read skills from `~/.claude/skills/` directly. Install with one shell command:
+
+```bash
+mkdir -p ~/.claude/skills && \
+  git clone --depth 1 https://github.com/sigmadigitalza/engineering-playbook /tmp/sigma-eng-pb && \
+  cp -R /tmp/sigma-eng-pb/plugins/sigma-engineering/skills/. ~/.claude/skills/ && \
+  rm -rf /tmp/sigma-eng-pb
+```
+
+Restart Claude Desktop after the copy. To upgrade later, re-run the same command — `cp -R` overwrites in place.
 
 ### GitHub Copilot
 
