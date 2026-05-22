@@ -1,7 +1,7 @@
 {
   "name": "sigma-engineering",
   "version": "0.1.0",
-  "description": "Sigma Digital's engineering playbook — review skills covering API design, code review, database schema and migrations, documentation, frontend accessibility, GitHub Actions, incident postmortems, web performance, web security, and web SRE.",
+  "description": "Sigma Digital's engineering playbook — review skills covering API design, code review, database schema and migrations, documentation, frontend accessibility, GitHub Actions, incident postmortems, repo setup and configuration, web performance, web security, and web SRE.",
   "author": {
     "name": "Sigma Digital",
     "url": "https://github.com/sigmadigitalza"
@@ -21,6 +21,11 @@
     "github-actions",
     "ci-cd",
     "incident-postmortem",
+    "repo-setup",
+    "branch-protection",
+    "rulesets",
+    "codeowners",
+    "supply-chain-security",
     "web-performance",
     "web-security",
     "sre"

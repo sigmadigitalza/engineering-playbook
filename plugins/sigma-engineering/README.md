@@ -21,6 +21,7 @@ If you're using Copilot, copy from `.github/instructions/`, not from this direct
 - **frontend-accessibility-review** — WCAG 2.2 Level AA audit of web frontends
 - **github-actions-review** — workflow security, reliability, supply-chain risk, cost
 - **incident-postmortem** — drafting and reviewing blameless post-incident reviews
+- **repo-setup-review** — GitHub repo configuration audit (branch/tag rulesets, CODEOWNERS, collaborators, token scope, secret scanning); companion to `github-actions-review`
 - **web-performance** — Core Web Vitals audit, quick wins, change-impact prediction
 - **web-security** — frontend security review (XSS, CSP, auth, supply chain, framework footguns)
 - **web-sre** — release readiness, post-release verification, incident diagnosis

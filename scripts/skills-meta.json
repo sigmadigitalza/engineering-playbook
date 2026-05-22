@@ -26,6 +26,9 @@
     "incident-postmortem": {
       "description": "Drafts and reviews blameless post-incident reviews from incident artifacts (chat exports, alert history, deployment timeline) using Sigma's rubric — contributing factors, action items, learning. Use this whenever the user is writing a postmortem, reviewing a draft postmortem, conducting a post-incident review, or asks 'what should the writeup look like' — even if they only say 'PIR' or 'PMR'."
     },
+    "repo-setup-review": {
+      "description": "Reviews or sets up a GitHub repo's configuration surface — branch and tag rulesets, CODEOWNERS, collaborator and admin roles, default GITHUB_TOKEN scope, Action SHA-pinning enforcement, secret scanning, contribution gates, and merge settings. Posture-aware (open-source / distribution-only / private-team / personal). Companion to github-actions-review. Use this whenever the user is setting up a new repo, auditing an existing repo's settings, configuring branch protection, adding CODEOWNERS, tightening rulesets, locking down a public repo, reviewing tag protection on a repo that publishes reusable workflows or actions via floating major tags, or asks 'how should this repo be configured' — even if they only say 'repo setup', 'lock this down', 'review repo settings', or 'harden this repo'."
+    },
     "web-performance": {
       "description": "Audits web applications against Core Web Vitals (LCP, INP, CLS) and adjacent metrics, identifies quick wins, and predicts the impact of recommended changes. Use this whenever the user is investigating slow page loads, optimizing performance, reviewing a Lighthouse or PSI report, asks about LCP/INP/CLS, or asks for a performance audit — even if they don't say 'web performance'."
     },
