@@ -22,14 +22,20 @@ Do NOT review the YAML inside `.github/workflows/` — that's the job of the `gi
 
 # PHASE 0 — POSTURE DETECTION
 
-Ask the user which posture applies. Do not assume from the visibility flag alone.
+Ask the user **two** questions. Do not assume from the visibility flag alone.
+
+**1. Which posture applies?**
 
 1. **Public, open-source.** Visible, contributions welcome, drive-by PRs expected.
 2. **Public, distribution-only.** Visible because consumers need to read/pin/fork, but contributions not solicited; only personal-friends-or-team collaboration.
 3. **Private team.** Read-restricted, team-shared.
 4. **Private personal.** Single-owner.
 
-If unclear, ask. The same setting can be a critical finding under one posture and a no-op under another.
+**2. Is there effectively one active human maintainer, or a meaningful team?**
+
+This second question is independent of visibility and changes the approval-gate recommendation entirely. GitHub forbids users from submitting approving reviews on their own PRs, so `required_approving_review_count: ≥1` deadlocks a solo maintainer on their own work.
+
+If unclear, ask both. The same setting can be a critical finding under one posture and a no-op under another.
 
 # PHASE 1 — RECONNAISSANCE
 
@@ -66,26 +72,34 @@ For each finding, record: setting/endpoint, severity (Critical/High/Medium/Low/N
 - **SAFE** — pure config, no behavior change, can be applied via single `gh api` call.
 - **JUDGMENT** — posture decision, collaborator role change, or has downstream consequences.
 - **SECURITY** — security finding.
-- **UI-ONLY** — requires manual web UI step because the public API doesn't expose the necessary actor type (most common case: github-actions bypass on rulesets).
+- **WORKFLOW REDESIGN** — cannot be solved with `gh api` alone; needs a custom GitHub App, a PAT, or restructuring a workflow. Most common case: the release bot needs to bypass a rule but `github-actions[bot]` isn't a valid bypass actor.
 
 ## Branch protection / rulesets — default branch
 
 Anchor to the [GitHub branch protection rules reference](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches) and [Rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets).
 
-- **Pull request required to merge.** `pull_request` rule on the default branch. Without it, anyone with push access can push directly. Critical for any non-personal posture. Required parameters to grade:
-  - `required_approving_review_count` (≥1)
-  - `dismiss_stale_reviews_on_push` (true)
-  - `require_code_owner_review` (true if CODEOWNERS exists)
-  - `require_last_push_approval` (true — closes the "approve, then push more" gap)
-  - `required_review_thread_resolution` (true)
-  - `allowed_merge_methods` (squash-only for changelog-from-PR-title repos)
+- **Pull request required to merge.** `pull_request` rule on the default branch. Without it, anyone with push access can push directly. Critical for any non-personal posture. **Parameter recommendations are posture-aware:**
+  - **Multi-person teams**:
+    - `required_approving_review_count: 1` (or higher for sensitive repos)
+    - `require_code_owner_review: true` (paired with a CODEOWNERS file)
+    - `require_last_push_approval: true` (closes the "approve, then push more" gap)
+    - `dismiss_stale_reviews_on_push: true`
+    - `required_review_thread_resolution: true`
+    - `allowed_merge_methods: ["squash"]` (clean history; mandatory for changelog-from-PR-title repos)
+  - **Solo-maintainer repos** — apply the same `pull_request` rule but with the approval gates dropped (GitHub blocks self-approval; any positive `required_approving_review_count` deadlocks the maintainer on their own PRs):
+    - `required_approving_review_count: 0`
+    - `require_code_owner_review: false`
+    - `require_last_push_approval: false`
+    - `required_review_thread_resolution: false` (or `true` if you want to enforce resolving Copilot comments before merge)
+    - `allowed_merge_methods: ["squash"]`
+    - The rule still enforces "must go through a PR" (no direct push to main) and restricts merge methods. `required_status_checks` still gates merges on CI passing. Only the approval *gate* is removed.
 - **Required status checks.** `required_status_checks` rule. Pull the actual context names from the most recent successful PR and check they're listed. Generic "CI" is not enough — name the specific contexts. `strict_required_status_checks_policy: true` requires the branch to be up to date before merging (good practice, adds friction).
 - **Linear history.** `required_linear_history` rule (or implicit via squash-only merge method). Recommended.
 - **Force-push protection.** `non_fast_forward` rule. Almost always wanted on the default branch.
 - **Deletion protection.** `deletion` rule. Always wanted.
 - **CODEOWNERS-gated review.** Combine `require_code_owner_review: true` with a CODEOWNERS file covering at least `.github/` and security-sensitive paths.
 - **Apply-to-administrators / no exemption.** For rulesets: `bypass_actors: []` (no bypass) or only the release bot. For classic branch protection: `enforce_admins.enabled = true`. Without this, admins silently sidestep every rule.
-- **Bypass actors for the release bot.** If a release workflow pushes to default branch directly (e.g., a "finalise changelog" commit), the github-actions[bot] needs explicit bypass. ⚠️ UI-ONLY for built-in github-actions app — the public API rejects `actor_type: Integration, actor_id: 15368` with `"Actor GitHub Actions integration must be part of the ruleset source or owner organization"`. Flag any ruleset finding that requires this bypass as UI-ONLY and provide the click path.
+- **Bypass actors for the release bot — `github-actions[bot]` cannot be one.** If a release workflow pushes to the default branch directly (a "finalise changelog" commit) or force-updates a floating tag (`v1`), it needs to bypass the relevant rules. `github-actions[bot]` is **not a valid bypass actor** — neither in the UI's bypass picker nor via the REST API (the API rejects `actor_type: Integration, actor_id: 15368` with "must be part of the ruleset source or owner organization"). Real options: (a) restructure the release flow to PR the finalise commit instead of direct-pushing; (b) install a custom GitHub App, add it to `bypass_actors`, and mint its token via `actions/create-github-app-token` in the workflow; (c) use a PAT under a service-account user. Flag any ruleset rule that the release bot needs to bypass as a **WORKFLOW REDESIGN** finding rather than a config-level fix — it cannot be solved with a single `gh api` call.
 
 ## Tag protection / rulesets
 
@@ -157,9 +171,9 @@ Posture choices, collaborator role demotions, contribution-surface changes. Do N
 
 Ordered by severity. For each: setting/endpoint, description, exploit/failure scenario, recommended fix (API call if possible, manual UI step if not), and posture-tagged severity rationale.
 
-## Section D — UI-only steps
+## Section D — Workflow redesign required
 
-Rules and settings that require the GitHub Web UI because the public REST API doesn't expose the necessary actor type. Almost always the github-actions[bot] bypass on rulesets. For each: where to click, what to add, what to verify after.
+Findings that cannot be applied with a `gh api` call alone. Most commonly: the release bot needs to bypass a ruleset rule, but `github-actions[bot]` is not a valid bypass actor — neither in the UI's bypass picker nor via the REST API. For each finding here, propose the redesign path explicitly: restructure the release flow to PR the change, install a custom GitHub App, or use a PAT. Do not describe a UI walkthrough for the github-actions case — there isn't one.
 
 ## Section E — Summary
 
@@ -174,7 +188,7 @@ After presenting the report, ASK whether to proceed with Section A changes. If a
 
 Do nothing from Sections B, C, or D without an explicit new request.
 
-For Section D items, output a copy-paste UI walkthrough: "Settings → … → click X → search for Y → tick Z → Save."
+For Section D items, output a concrete redesign sketch (e.g., "Install a `release-bot` GitHub App in the org, scope: contents:write + pull-requests:write; mint its token in cut-release.yml via `actions/create-github-app-token`; add the App to `bypass_actors` on the main ruleset"). Do not describe a UI walkthrough for `github-actions[bot]` bypass — the option does not exist in the picker.
 
 # CONSTRAINTS
 
@@ -183,7 +197,8 @@ For Section D items, output a copy-paste UI walkthrough: "Settings → … → c
 - Do not delete or downgrade collaborator roles without confirming with the user.
 - Do not assume a setting just because the web UI shows it — query the API.
 - Quote the exact `gh api` endpoint and JSON field for every finding.
-- When recommending bypass actors, default to `bypass_mode: "always"` for release bots and `bypass_mode: "pull_request"` only when the bypass is for merge-without-review (not direct push).
-- For the github-actions[bot] bypass on rulesets, do NOT attempt the REST API call — it fails with `"Actor GitHub Actions integration must be part of the ruleset source or owner organization"`. Mark these UI-ONLY and provide the click path.
+- When recommending bypass actors, default to `bypass_mode: "always"` for release bots (custom GitHub App / PAT identities — not `github-actions[bot]`) and `bypass_mode: "pull_request"` only when the bypass is for merge-without-review (not direct push).
+- `github-actions[bot]` is **not a valid bypass actor** for rulesets (neither API nor UI). Do NOT try `actor_type: Integration, actor_id: 15368` — it fails with "must be part of the ruleset source or owner organization". Do NOT recommend a UI walkthrough for it either — the option isn't there. Mark findings that require this bypass as **WORKFLOW REDESIGN** and propose a custom App, a PAT, or restructuring the release flow.
+- For solo-maintainer postures, do NOT recommend `required_approving_review_count: ≥1` or `require_code_owner_review: true` on the default branch — GitHub's product blocks self-approval, so the rule deadlocks the maintainer's own PRs. The `pull_request` rule is still useful (forces PRs, restricts merge methods), just with the approval gates disabled.
 - Always check both classic branch protection AND rulesets. Never declare "unprotected" based on one endpoint.
 - Always check both default-branch AND tag protection. For distribution repos pinned via floating tags, tag protection is the higher-impact category.
