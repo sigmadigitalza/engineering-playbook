@@ -39,4 +39,18 @@ url: /
       {{ /for }}
     </ul>
   </section>
+
+  <section id="standards">
+    <h2>Engineering standards</h2>
+    <p class="section-lede">The normative spine — what we hold ourselves, and any AI agent in our repos, to — with per-language appendices.</p>
+    <ul class="entry-list">
+      {{ for entry of search.pages("section=standards", "order") }}
+      <li>
+        <a href="{{ entry.url }}">
+          <span class="entry-title">{{ entry.title }}</span>
+        </a>
+      </li>
+      {{ /for }}
+    </ul>
+  </section>
 </article>
