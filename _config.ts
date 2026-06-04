@@ -46,6 +46,11 @@ site.ignore(
   "deno.jsonc",
   "deno.lock",
   "dist",
+  // Engineering standards live in the repo as canonical markdown, but are not
+  // yet wired into the rendered site: their inter-doc `.md` cross-links need a
+  // link-rewriter to survive prettyUrls, and GDScript isn't in the bundled
+  // highlighter. Exclude until that site work is done deliberately.
+  "docs/standards",
 );
 
 // Default layout for every markdown page. Per-directory or per-page frontmatter

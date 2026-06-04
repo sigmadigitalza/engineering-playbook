@@ -93,6 +93,19 @@ Each playbook has a paired prompt designed to be handed to an LLM (Claude, ChatG
 | [Web security](docs/prompts/web-security.md) | [Web security playbook](docs/playbooks/web-security.md) |
 | [Web SRE](docs/prompts/web-sre.md) | [Web SRE playbook](docs/playbooks/web-sre.md) |
 
+### Engineering standards — [`docs/standards`](docs/standards)
+
+The normative spine — what we hold ourselves, and any AI agent in our repos, to. Stack appendices translate the principles into per-language idioms.
+
+| Document | What it covers |
+|----------|----------------|
+| [Sigma Engineering Standards](docs/standards/sigma-engineering-standards.md) | The spine: the Sigma Ten, security / resilience / supply-chain baselines, maturity tiers, and AI-agent rules. |
+| [JavaScript / TypeScript appendix](docs/standards/appendix-javascript-typescript.md) | Deno-first, dependency-minimal idioms for services and frontend. |
+| [Go appendix](docs/standards/appendix-golang.md) | Services, CLIs, and tooling. |
+| [Android / Kotlin appendix](docs/standards/appendix-android-kotlin.md) | Mobile and JVM Kotlin. |
+| [Godot appendix](docs/standards/appendix-godot.md) | GDScript game and interactive content. |
+| [Good Ideas appendix](docs/standards/appendix-good-ideas.md) | Annotated reading list — the influences behind the standard. |
+
 ## How to use this repo
 
 - **Onboarding** — read the relevant playbook for the discipline you're working in.
