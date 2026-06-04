@@ -16,7 +16,7 @@ Review the configuration surface of a single GitHub repo:
 - Actions permissions (default token scope, allowed actions, SHA-pinning enforcement, can-approve-PRs)
 - CODEOWNERS, dependabot config, SECURITY.md
 - Environments + deployment-branch restrictions
-- Webhook secrets if accessible
+- Webhook inventory — enumerate via `gh api repos/:owner/:repo/hooks`. Secret *values* aren't returned, but `config.secret` comes back masked as `********` when one is set — enough to confirm a secret is configured without leaving the API.
 
 Do NOT review the YAML inside `.github/workflows/` — that's the job of the `github-actions-review` playbook. If you find workflow-internal issues while doing reconnaissance, note them and recommend running that playbook separately.
 
@@ -44,7 +44,7 @@ Do this first. Report a brief summary before doing any analysis. Use `gh api` fo
 1. **Repo basics.** `gh api repos/:owner/:repo` — capture `visibility`, `default_branch`, `archived`, `disabled`, `has_issues`, `has_wiki`, `has_discussions`, `has_projects`, `allow_forking`, `web_commit_signoff_required`, all `allow_*_merge`, `delete_branch_on_merge`, `allow_auto_merge`, `use_squash_pr_title_as_default`, `security_and_analysis.*`, `forks_count`, `open_issues_count`.
 2. **Default branch protection — check BOTH endpoints.**
    - Classic: `gh api repos/:owner/:repo/branches/<default>/protection` (HTTP 404 means "no classic protection" — does NOT mean "unprotected").
-   - Rulesets: `gh api repos/:owner/:repo/rulesets` and drill into each with `gh api repos/:owner/:repo/rulesets/<id>`.
+   - Rulesets: `gh api --paginate repos/:owner/:repo/rulesets` and drill into each with `gh api repos/:owner/:repo/rulesets/<id>`.
 3. **Tag protection — same pattern.**
    - Classic (deprecated): `gh api repos/:owner/:repo/tags/protection`.
    - Rulesets: filter the rulesets list for `target == "tag"`.
@@ -52,7 +52,7 @@ Do this first. Report a brief summary before doing any analysis. Use `gh api` fo
    - `gh api repos/:owner/:repo/actions/permissions` — capture `enabled`, `allowed_actions`, `sha_pinning_required`.
    - `gh api repos/:owner/:repo/actions/permissions/workflow` — capture `default_workflow_permissions`, `can_approve_pull_request_reviews`.
 5. **Collaborators + org-admin surface.**
-   - `gh api repos/:owner/:repo/collaborators` — note role of each.
+   - `gh api --paginate repos/:owner/:repo/collaborators` — note role of each.
    - If the repo is in an org, ask whether org admins inherit repo admin (almost always yes).
 6. **CODEOWNERS + dependabot + security policy.** Check `.github/CODEOWNERS` (or `CODEOWNERS` at root or in `docs/`), `.github/dependabot.yml`, `SECURITY.md`, and presence of `.github/CONTRIBUTING.md` / `PULL_REQUEST_TEMPLATE.md`.
 7. **Release-workflow detection.** Is there a workflow that pushes to default branch (commit) or force-updates tags (floating major)? Look for `cut-release.yml`, `release-please`, `semantic-release`, or any `git push` / `git tag -f` in `.github/workflows/*.yml`. Note ALL such operations — every one needs a bypass actor on the eventual ruleset.
