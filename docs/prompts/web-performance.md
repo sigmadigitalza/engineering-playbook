@@ -99,7 +99,7 @@ Organize all findings by which Core Web Vital they primarily affect. Tag each fi
 
 ## INP — Interaction to Next Paint
 
-INP measures responsiveness across the page lifecycle, p98 of all interactions. Replaced FID. Most INP problems trace to long tasks on the main thread.
+INP measures responsiveness across the page lifecycle — the page's worst interaction latency (high-traffic pages drop ~1 per 50 interactions), assessed at the 75th percentile of real-user page views. Replaced FID. Most INP problems trace to long tasks on the main thread.
 
 ### Long task sources
 - **Heavy event handlers.** Click / input handlers doing expensive work synchronously. Recommend yielding via `scheduler.yield()` (modern) or `setTimeout(fn, 0)` (broad support) for work that can be deferred.

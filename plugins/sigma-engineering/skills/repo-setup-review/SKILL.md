@@ -110,7 +110,7 @@ For repos that publish reusable workflows or actions consumed via floating `@vN`
 
 - **Ruleset target `tag` covering `refs/tags/v*`** (or whichever pattern the repo uses for distribution tags).
 - **Deletion blocked.** `deletion` rule. Always wanted — accidental tag deletion breaks every consumer.
-- **Update blocked.** `update` rule. Blocks force-update of an existing tag. ⚠️ UI-ONLY bypass for the release bot — same trap as above.
+- **Update blocked.** `update` rule. Blocks force-update of an existing tag. ⚠️ `github-actions[bot]` can't bypass this either (not a valid bypass actor — API or UI); WORKFLOW REDESIGN, same trap as above.
 - **No bypass for tags except the release bot.** Specifically *do not* recommend `OrganizationAdmin` bypass on tag rulesets if a colleague-admin could update them by mistake.
 
 ## Collaborator surface

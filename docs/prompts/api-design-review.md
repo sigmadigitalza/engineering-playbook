@@ -39,7 +39,7 @@ Do this before any analysis. Report briefly.
 5. **Error response format.** Sample one error from each error class (validation, not-found, auth-failed, server-error). Is the shape consistent? Does it follow RFC 9457 (`type`, `title`, `status`, `detail`, `instance`)? GraphQL: are business errors in the `errors` array or in the schema as union types?
 6. **Pagination, filtering, sorting conventions.** Cursor vs offset; query params or headers for filtering; sort syntax. GraphQL: Relay connections, custom pagination, no pagination.
 7. **Idempotency posture.** Is `Idempotency-Key` documented? Honored? Scoped how (per-key, per-consumer)? GraphQL: are mutations explicitly named for idempotency intent (`createX` vs `upsertX`)? Is `clientMutationId` / similar accepted?
-8. **Rate limiting & quota signals.** `X-RateLimit-*` or `RateLimit` (RFC 9728) headers, `Retry-After`, GraphQL query cost / depth / complexity limits. Documented? Returned consistently?
+8. **Rate limiting & quota signals.** `X-RateLimit-*` or `RateLimit` (the `RateLimit` / `RateLimit-Policy` fields, per the IETF `draft-ietf-httpapi-ratelimit-headers` draft — not yet an RFC) headers, `Retry-After`, GraphQL query cost / depth / complexity limits. Documented? Returned consistently?
 9. **Consumer inventory.** Who consumes this API? First-party SDK, mobile app, partner integrations, internal services, public developer portal. Blast radius of breaking changes scales with this.
 10. **Existing style guide.** `docs/api-design.md`, `STYLE.md`, `API_GUIDELINES.md`, internal API guidelines. Read first — respect existing decisions until you have a reason not to.
 11. **Contract test coverage.** Contract tests, schema snapshot tests, OpenAPI conformance checks, GraphQL schema diff in CI. Note presence and scope.
@@ -74,7 +74,7 @@ Tag each finding: **CONFIRMED** (visible in the contract or code) / **RECOMMENDA
 - **GET is safe and idempotent.** No side effects. No state change. If a GET endpoint mutates anything, that's Breaking — caches, prefetchers, link-checkers will fire it.
 - **POST creates or invokes.** Non-idempotent. Use `Idempotency-Key` if retries matter.
 - **PUT replaces the whole resource.** Idempotent. Sending a partial body to a PUT is wrong; missing fields should be treated as null/unset by the server.
-- **PATCH partially updates.** Idempotent if the patch format is well-defined ([RFC 7396 JSON Merge Patch](https://www.rfc-editor.org/rfc/rfc7396) or [RFC 6902 JSON Patch](https://www.rfc-editor.org/rfc/rfc6902)).
+- **PATCH partially updates.** Idempotent only if the patch format is deterministic — [JSON Merge Patch (RFC 7396)](https://www.rfc-editor.org/rfc/rfc7396) is idempotent; [JSON Patch (RFC 6902)](https://www.rfc-editor.org/rfc/rfc6902) is NOT in general (its add-to-array-end / copy / move ops duplicate on retry), so treat a retried RFC 6902 PATCH as unsafe unless the server dedupes.
 - **DELETE removes.** Idempotent — deleting an already-deleted resource should return 204 or 404 consistently, not 500.
 - **OPTIONS for CORS preflight and capability discovery. HEAD for cheap existence / metadata checks.**
 - Flag any endpoint that mutates behind GET, or uses POST as a universal verb when PUT/PATCH/DELETE would be correct.
@@ -126,7 +126,7 @@ Tag each finding: **CONFIRMED** (visible in the contract or code) / **RECOMMENDA
 
 - **Auth scheme.** Bearer token, API key (header, never query string), OAuth 2 with PKCE, OIDC, mTLS. Document required headers per endpoint.
 - **Scopes / permissions.** Per-endpoint scopes documented in OpenAPI / reference. The minimum scope to call an endpoint should be in the docs.
-- **Rate limit headers.** `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset` (or `RateLimit` per RFC 9728). `Retry-After` on 429.
+- **Rate limit headers.** `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset` (or `RateLimit` — the `RateLimit` / `RateLimit-Policy` fields, per the IETF `draft-ietf-httpapi-ratelimit-headers` draft, not yet an RFC). `Retry-After` on 429.
 - **Quota visibility.** Consumers need to introspect their own remaining quota — either via response headers on every call or a `/me/quota` endpoint.
 - **Per-consumer rate limits.** Anonymous, per-API-key, per-user. Document the buckets.
 

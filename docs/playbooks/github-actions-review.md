@@ -12,7 +12,7 @@ A strategy and Claude Code prompt for auditing GitHub Actions workflows for cost
 
 **The safe/unsafe split is the core of requirement #4.** Split findings into three buckets rather than two:
 
-- **A — Functionality-preserving optimizations** (cache keys, pinning to SHA, adding `timeout-minutes`, `fetch-depth: 1`, path filters that provably don't change behavior). Only these get auto-applied.
+- **A — Functionality-preserving optimizations** (cache keys, adding `timeout-minutes`, `fetch-depth: 1`, path filters that provably don't change behavior). Only these get auto-applied.
 - **B — Judgment-call improvements** (adding concurrency cancellation, restructuring matrices, introducing reusable workflows, moving to Blacksmith, adding new scans). These change behavior or add surface area. Follow-up prompt only.
 - **C — Bugs & security findings.** Many security fixes *do* change behavior (e.g., tightening `permissions:`, swapping `pull_request_target` patterns). Auto-applying them is risky because it can break PR check runs in ways that surface only when a specific trigger fires. Follow-up prompt only.
 

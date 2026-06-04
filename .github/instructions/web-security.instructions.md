@@ -141,7 +141,7 @@ Match to the detected framework. Examples:
 
 - **HSTS.** `Strict-Transport-Security` with `max-age` ≥ 6 months, `includeSubDomains`, `preload` if appropriate.
 - **`X-Content-Type-Options: nosniff`** — should always be present.
-- **`Referrer-Policy`** — `strict-origin-when-cross-origin` is a sensible default. `no-referrer-when-downgrade` (browser default) leaks more.
+- **`Referrer-Policy`** — `strict-origin-when-cross-origin` is a sensible default — and is also the modern browser default (since 2020), so setting it explicitly is belt-and-suspenders; flag legacy overrides to `unsafe-url` or `no-referrer-when-downgrade`, which leak the full URL/path cross-origin.
 - **`Permissions-Policy`** — restrict camera, microphone, geolocation, payment, etc., to what the app actually needs.
 - **`X-Frame-Options` / `frame-ancestors`** for clickjacking.
 - **TLS config.** TLS 1.2 minimum, 1.3 preferred. Cert validity, chain, OCSP stapling. Cipher suite quality. Use `testssl.sh`-equivalent logic if probing is approved.

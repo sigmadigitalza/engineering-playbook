@@ -30,7 +30,7 @@ Security only really needs two modes. If something is actively being exploited, 
 
 2. **CSP as a single boolean.** A permissive CSP with `unsafe-inline` and `unsafe-eval` and `*` source allowlists is barely better than none. The prompt grades CSP quality, not just presence — nonce-based or hash-based CSP with `strict-dynamic` is the modern good answer; older allowlist CSPs are a step but not a destination.
 
-**Three-bucket reporting plus a called-out fourth:**
+**Three evidence-tiered sections (A/B/C), a separately called-out Theatrical list, and a Summary (Section D):**
 
 - **A — Confirmed vulnerabilities.** Reproducible, evidence-backed. Hard findings from code review.
 - **B — Threats & concerns requiring judgment.** Plausible attack paths, design-level recommendations, missing defense-in-depth.
@@ -182,7 +182,7 @@ Match to the detected framework. Examples:
 
 - **HSTS.** `Strict-Transport-Security` with `max-age` ≥ 6 months, `includeSubDomains`, `preload` if appropriate.
 - **`X-Content-Type-Options: nosniff`** — should always be present.
-- **`Referrer-Policy`** — `strict-origin-when-cross-origin` is a sensible default. `no-referrer-when-downgrade` (browser default) leaks more.
+- **`Referrer-Policy`** — `strict-origin-when-cross-origin` is a sensible default — and is also the modern browser default (since 2020), so setting it explicitly is belt-and-suspenders; flag legacy overrides to `unsafe-url` or `no-referrer-when-downgrade`, which leak the full URL/path cross-origin.
 - **`Permissions-Policy`** — restrict camera, microphone, geolocation, payment, etc., to what the app actually needs.
 - **`X-Frame-Options` / `frame-ancestors`** for clickjacking.
 - **TLS config.** TLS 1.2 minimum, 1.3 preferred. Cert validity, chain, OCSP stapling. Cipher suite quality. Use `testssl.sh`-equivalent logic if probing is approved.

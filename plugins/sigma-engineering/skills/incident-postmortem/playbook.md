@@ -310,7 +310,7 @@ Before producing the final draft, scan for:
 
 ## Mode 2 — Review postmortem
 
-Audit the provided draft against the rubric. Produce findings in the three-bucket format (Phase 3). Specific checks:
+Audit the provided draft against the rubric. Produce findings in the four-section format (Phase 3). Specific checks:
 
 ### Tone & framing
 - **Blameless voice.** Does the draft attribute outcomes to people's character or diligence ("X should have been more careful," "Y didn't follow the process")? Or does it name actions and ask what the system allowed? Flag every instance of person-targeted language.
@@ -348,7 +348,7 @@ If you have the chat transcripts, alerts, and deploy log, spot-check the draft's
 
 # PHASE 3 — REPORT
 
-Three buckets.
+Four sections.
 
 ## Section A — Findings (Mode 1: draft sections; Mode 2: confirmed compliance with rubric)
 

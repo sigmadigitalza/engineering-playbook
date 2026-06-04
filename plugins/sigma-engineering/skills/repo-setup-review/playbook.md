@@ -172,7 +172,7 @@ For repos that publish reusable workflows or actions consumed via floating `@vN`
 
 - **Ruleset target `tag` covering `refs/tags/v*`** (or whichever pattern the repo uses for distribution tags).
 - **Deletion blocked.** `deletion` rule. Always wanted — accidental tag deletion breaks every consumer.
-- **Update blocked.** `update` rule. Blocks force-update of an existing tag. ⚠️ UI-ONLY bypass for the release bot — same trap as above.
+- **Update blocked.** `update` rule. Blocks force-update of an existing tag. ⚠️ `github-actions[bot]` can't bypass this either (not a valid bypass actor — API or UI); WORKFLOW REDESIGN, same trap as above.
 - **No bypass for tags except the release bot.** Specifically *do not* recommend `OrganizationAdmin` bypass on tag rulesets if a colleague-admin could update them by mistake.
 
 ## Collaborator surface
@@ -275,11 +275,11 @@ For Section D items, output a concrete redesign sketch (e.g., "Install a `releas
 
 A few things to tune per repo:
 
-- **Distribution repos first.** If the repo publishes reusable workflows or actions consumed via floating `@vN` tags (rational-release, kit-style repos), run Phase 1 step 8 *first* and treat tag protection as the highest-priority category. The github-actions[bot] bypass UI step is unavoidable; don't apologise for it, just provide the click path.
+- **Distribution repos first.** If the repo publishes reusable workflows or actions consumed via floating `@vN` tags (rational-release, kit-style repos), run Phase 1 step 8 *first* and treat tag protection as the highest-priority category. Where the release bot needs to bypass a rule, there is no UI step to provide — `github-actions[bot]` isn't a valid bypass actor; frame it as a WORKFLOW REDESIGN (custom GitHub App / PAT / restructure the release flow).
 - **Personal repos.** Most Section A items still apply (CODEOWNERS, default token scope, secret scanning). Section B's collaborator/contribution questions usually collapse to "the owner."
 - **Public, open-source.** Issues / discussions / CONTRIBUTING.md flip to the other side of the rubric. Drive-by PRs expected, so branch protection needs care to not block forks unnecessarily — never require CODEOWNERS approval as the *only* gate (set `required_approving_review_count` ≥ 1 and let any maintainer approve).
 - **Pairs with `github-actions-review`.** If the workflow audit finds the kind of issue that depends on repo configuration (e.g., "no concurrency", "no CODEOWNERS to gate workflow changes"), follow up with this playbook on the same repo. The two are designed to be run back-to-back for full coverage.
-- **The github-actions[bot] bypass gap may close.** If GitHub adds API support for selecting the built-in github-actions integration as a bypass actor, the UI-ONLY section shrinks. Until then, accept the manual step.
+- **The github-actions[bot] bypass gap may close.** If GitHub ever makes the built-in github-actions integration selectable as a bypass actor (API or UI), the WORKFLOW-REDESIGN burden shrinks. Until then it cannot be bypassed at all.
 
 ---
 
