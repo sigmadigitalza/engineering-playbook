@@ -62,7 +62,7 @@ Don't treat framework auto-escaping as a clean bill of health. Check each path:
 
 - **Dangerous escape hatches.** `dangerouslySetInnerHTML` (React), `v-html` (Vue), `{@html}` (Svelte), `[innerHTML]` (Angular), `bypassSecurityTrust*` (Angular). For each: where does the input come from? Is it sanitized? With what library, configured how?
 - **Sanitizer correctness.** DOMPurify with default config is generally fine. Custom regex-based sanitizers are almost always wrong. Allowlists missing common tags / attributes that should be allowed (causing devs to disable sanitization). Sanitizing then re-stringifying then re-parsing (mutation XSS).
-- **URL sinks.** `<a href={userInput}>`, `<iframe src={...}>`, `window.location = userInput`, `<form action={...}>`. All vulnerable to `javascript:` and `data:` URLs unless validated. Check for explicit protocol allowlists.
+- **URL sinks.** `<a href={userInput}>`, `<iframe src={...}>`, `window.location = userInput`, `<form action={...}>`. `javascript:` is the script-execution sink across all of these — validate against it everywhere. `data:` is more nuanced: top-level navigation to `data:` URLs (`window.location =`, anchor clicks) is blocked by all modern browsers, so there it's a phishing / open-redirect concern, not XSS — but `data:` is a genuine XSS vector in `<iframe src>`, `<object>` / `<embed>`, and SVG. Check for explicit protocol allowlists.
 - **JSON-in-script.** SSR contexts that serialize state into `<script>` tags need `</script>` and `<!--` escaping, not just JSON.stringify.
 - **SSR / hydration.** Server-rendered output that isn't escaped consistently with client-rendered output. Hydration mismatches that allow injection.
 - **Third-party HTML.** Markdown rendering, rich-text editors, email templates rendered inline, user-supplied SVG (SVG can carry script).
@@ -141,7 +141,7 @@ Match to the detected framework. Examples:
 
 ## Headers & TLS (Mode 2)
 
-- **HSTS.** `Strict-Transport-Security` with `max-age` ≥ 6 months, `includeSubDomains`, `preload` if appropriate.
+- **HSTS.** `Strict-Transport-Security` with `max-age` ≥ 6 months and `includeSubDomains` as the baseline floor. For preload, the hstspreload.org list has hard requirements: `max-age` ≥ `31536000` (1 year) **and** `includeSubDomains` **and** the `preload` directive — all three. A `preload` directive with a too-short `max-age` is a misconfiguration; the preload list rejects it, so it buys nothing.
 - **`X-Content-Type-Options: nosniff`** — should always be present.
 - **`Referrer-Policy`** — `strict-origin-when-cross-origin` is a sensible default — and is also the modern browser default (since 2020), so setting it explicitly is belt-and-suspenders; flag legacy overrides to `unsafe-url` or `no-referrer-when-downgrade`, which leak the full URL/path cross-origin.
 - **`Permissions-Policy`** — restrict camera, microphone, geolocation, payment, etc., to what the app actually needs.

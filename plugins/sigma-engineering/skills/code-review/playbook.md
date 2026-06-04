@@ -78,7 +78,7 @@ Do this before any analysis. Report briefly.
 
 # PHASE 2 — REVIEW RUBRIC
 
-Walk the rubric in this order. Stop at the first defect-class finding for a given line — don't pile multiple categories onto the same line. Tag each finding with: file:line, severity (Critical / High / Medium / Low / Nit), category, and bucket (A / B / C).
+Walk the rubric in this order. Stop at the first defect-class finding for a given line — don't pile multiple categories onto the same line. Tag each finding with: file:line, category, and bucket (A / B / C).
 
 ## 1. Correctness — does it do what it claims?
 
@@ -172,9 +172,9 @@ If you catch yourself drafting a comment that fits any of the above, delete it.
 
 Three buckets. Within each, group by file. Every comment uses a Conventional Comments prefix and a `(blocking)` or `(non-blocking)` tag.
 
-Conventional Comments prefixes:
+Conventional Comments prefixes (Sigma uses a deliberate subset of the spec's labels):
 - `praise:` — call out something done well
-- `nit:` — small, non-blocking suggestion (typo, naming, micro-style)
+- `nit:` — small, non-blocking suggestion (typo, naming, micro-style). Sigma abbreviates the spec's `nitpick:` to `nit:`.
 - `suggestion:` — concrete proposed change with a reason
 - `question:` — request for clarification; the answer may resolve the comment
 - `issue:` — a defect that needs fixing

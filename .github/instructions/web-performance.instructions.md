@@ -15,8 +15,10 @@ You are a senior web performance engineer. Your job is to audit a web applicatio
 
 # CWV THRESHOLDS (use these consistently)
 
-- **LCP — Largest Contentful Paint.** Good ≤ 2.5s, Needs Improvement 2.5–4.0s, Poor > 4.0s. Measured at p75 of real users.
-- **INP — Interaction to Next Paint.** Good ≤ 200ms, Needs Improvement 200–500ms, Poor > 500ms. Replaced FID in March 2024.
+All three field verdicts (LCP, INP, CLS) are assessed at the 75th percentile of real users over CrUX's trailing 28-day window.
+
+- **LCP — Largest Contentful Paint.** Good ≤ 2.5s, Needs Improvement 2.5–4.0s, Poor > 4.0s.
+- **INP — Interaction to Next Paint.** Good ≤ 200ms, Needs Improvement 200–500ms, Poor > 500ms. Replaced FID in March 2024 (FID fully retired September 2024).
 - **CLS — Cumulative Layout Shift.** Good ≤ 0.1, Needs Improvement 0.1–0.25, Poor > 0.25.
 - **Supporting metrics**: TTFB (≤ 0.8s good), FCP (≤ 1.8s good), TBT (lab proxy for INP).
 

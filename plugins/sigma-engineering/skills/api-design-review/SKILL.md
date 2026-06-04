@@ -110,8 +110,9 @@ Tag each finding: **CONFIRMED** (visible in the contract or code) / **RECOMMENDA
 
 ### Idempotency & retry safety
 
-- **GET, PUT, DELETE are idempotent at the protocol level.** PATCH usually is, depending on patch format. POST is not.
+- **GET (and HEAD, OPTIONS), PUT, DELETE are idempotent; GET/HEAD/OPTIONS are also *safe* (no state change).** PATCH usually is, depending on patch format. POST is not.
 - **`Idempotency-Key` for mutating POST.** Documented, honored, scoped per consumer / API key. Server stores response keyed by (consumer, key) and returns the same response on retry within a TTL window. Stripe is the canonical reference.
+- **Conditional requests for optimistic concurrency.** `ETag` + `If-Match` on writes — a stale `If-Match` returns **412 Precondition Failed** instead of clobbering a newer version. **428 Precondition Required** forces clients to send the precondition at all, closing the lost-update window for unconditional writes. `If-None-Match: *` makes create-if-absent idempotent (second create fails the precondition rather than duplicating). Relying on **409 Conflict** alone, with no `ETag`, is the weaker body-driven substitute — it detects the conflict but gives the client no validator to retry against.
 - **Retry-safe error responses.** Errors the client can retry (5xx, 429) should be distinguishable from errors that won't change on retry (4xx). Document `Retry-After` for 429 and 503.
 - **Long-running operations.** For operations exceeding a sensible HTTP timeout, return 202 with a status URL the client can poll. Don't make the client hold a 60s connection.
 

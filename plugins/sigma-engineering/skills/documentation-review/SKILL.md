@@ -15,7 +15,7 @@ Review all human-facing documentation and agent-configuration files:
 - `README.md` at root and any per-package READMEs
 - Everything under `docs/` if present
 - `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, `LICENSE`, `CHANGELOG.md`
-- `CLAUDE.md`, `AGENTS.md`, `.github/copilot-instructions.md`, `.cursorrules`
+- `CLAUDE.md`, `AGENTS.md`, `.github/copilot-instructions.md`, `.cursor/rules/*.mdc` (or legacy `.cursorrules`)
 - `.github/PULL_REQUEST_TEMPLATE.md`, issue templates
 - Architecture Decision Records (ADRs) typically under `docs/adr/` or `docs/decisions/`
 - Inline documentation in entry-point files (main package README-equivalents) — not general code comments
@@ -112,7 +112,7 @@ For each finding, record: file path, location (section heading or line range), s
 Numbered list. Two sub-buckets:
 
 ### A1. Corrections to existing docs
-For each: file, location, before/after snippet, one-line rationale. Typos, broken links, wrong commands, code-fence language tags, consistent casing of project/tool names, obvious factual errors checked against code.
+For each: file, location, before/after snippet, one-line rationale. Typos, broken links, wrong commands, code-fence language tags, consistent casing of project/tool names, obvious factual errors checked against code, `LICENSE` reference in README — if missing.
 
 ### A2. Scaffolding (net-new files only where absent)
 Propose file contents for:
@@ -121,7 +121,7 @@ Propose file contents for:
 - `.github/copilot-instructions.md` — if absent and Copilot is used (check for Copilot-related CI or team indicators).
 - `docs/README.md` index — if `docs/` exists but has no index.
 - `docs/` skeleton with placeholder stubs — only if no `docs/` folder exists at all.
-- `CONTRIBUTING.md`, `SECURITY.md`, `LICENSE` reference in README — if missing.
+- create `CONTRIBUTING.md` / `SECURITY.md` if absent.
 
 For each scaffolding file: full proposed contents, with a note on what was pulled from existing repo content vs what's placeholder.
 

@@ -47,7 +47,7 @@ Do this first. Report a brief summary before doing any analysis. Use `gh api` fo
    - Classic: `gh api repos/:owner/:repo/branches/<default>/protection` (HTTP 404 means "no classic protection" — does NOT mean "unprotected").
    - Rulesets: `gh api --paginate repos/:owner/:repo/rulesets` and drill into each with `gh api repos/:owner/:repo/rulesets/<id>`.
 3. **Tag protection — same pattern.**
-   - Classic (deprecated): `gh api repos/:owner/:repo/tags/protection`.
+   - Classic (removed — sunset 2024-08-30; `gh api repos/:owner/:repo/tags/protection` now returns an error, GitHub auto-migrated tag protections to rulesets). Only relevant for un-migrated legacy state; read tag protection from the tag-target rulesets below instead.
    - Rulesets: filter the rulesets list for `target == "tag"`.
 4. **Actions permissions.**
    - `gh api repos/:owner/:repo/actions/permissions` — capture `enabled`, `allowed_actions`, `sha_pinning_required`.
