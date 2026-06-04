@@ -111,11 +111,11 @@ INP measures responsiveness across the page lifecycle — the page's worst inter
 ### JavaScript reduction
 - **Unused code.** Recommend Chrome DevTools Coverage tool to find dead code in production bundles.
 - **Code splitting.** Routes / components not needed on initial render — dynamic imports.
-- **Dependency replacement.** Heavy libraries with lighter alternatives (moment → date-fns / Temporal; lodash full → cherry-pick; full Material UI → tree-shakeable).
+- **Dependency replacement.** Heavy libraries with lighter alternatives (moment → date-fns (or the built-in `Temporal`); lodash full → cherry-pick; full Material UI → tree-shakeable).
 - **Polyfill costs.** Are polyfills shipped to modern browsers that don't need them? Differential serving via `module`/`nomodule` or `<script type="module">` + entry separation.
 
 ### DOM size
-- **Total DOM nodes** > 1,500 is a flag, > 3,000 is High. Recommend pagination, virtualization, or `content-visibility: auto` for off-screen sections.
+- **Total DOM nodes** — ~1,500 a flag, ~3,000 a strong flag (heuristic, not a CWV threshold). Recommend pagination, virtualization, or `content-visibility: auto` for off-screen sections.
 - **CSS containment** on isolated subtrees that don't affect the rest of the page.
 
 ### Hydration cost (SSR/SSG)
@@ -157,7 +157,7 @@ Propose measurements. Wait for approval per batch. Report what tier of measureme
 
 ## Lighthouse usage
 If running Lighthouse:
-- Default to mobile preset with simulated throttling — matches what most CWV scoring is based on.
+- Default to mobile preset with simulated throttling — matches the mobile conditions most lab CWV estimates assume.
 - One run per template, not multiple. Repeat runs are a measurement campaign, ask first.
 - Output: JSON for analysis, HTML for human review. Save to `./lighthouse-reports/<template>-<date>.{json,html}`.
 - Headless Chrome required. Flag if not available.

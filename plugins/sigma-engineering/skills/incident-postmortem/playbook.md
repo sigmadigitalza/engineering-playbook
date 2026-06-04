@@ -52,6 +52,8 @@ Copy this into your team's docs / wiki when an incident hits the threshold below
 ````markdown
 # Postmortem: <short incident title>
 
+> Conventions: `<…>` is a placeholder to fill in. `TK` marks content not yet supportable from the artifacts — the author confirms or supplies it before publishing.
+
 - **Severity:** SEV-1 / SEV-2 / SEV-3 / Near-miss
 - **Status:** Draft / In review / Published
 - **Date of incident:** YYYY-MM-DD
@@ -92,7 +94,7 @@ Strictly chronological. Each entry has a timestamp, an actor, the action, and a 
 | HH:MM | <name> | Customer comms posted | <status page link> |
 | HH:MM | <name> | Resolved | <message link> |
 
-## Root cause and contributing factors
+## Contributing factors (and root cause, if singular)
 
 Plural by default. Most incidents have a chain of small failures, not one cause.
 
@@ -237,6 +239,8 @@ Severity, dates, detected/resolved UTC timestamps, duration of customer impact (
 ### Customer impact
 Concrete, measured. Requests failed (with timeframe), users affected (count or %, with how determined), revenue impact (currency value or "not material" with reasoning), SLO burn (% of error budget), support load, external comms posted.
 
+For a near-miss, rename this section "Customer impact avoided" and describe what would have happened had the luck or fast catch not held, with the same concreteness.
+
 If a number isn't supportable from the artifacts, mark "TK — author to confirm" rather than guess.
 
 ### Timeline (UTC)
@@ -318,7 +322,7 @@ Audit the provided draft against the rubric. Produce findings in the four-sectio
 - **Performative passive voice.** Is the draft using passive voice everywhere ("a deploy was made") to avoid naming actions? Real blameless writing names the action and then asks why the system allowed it. Flag if the draft is uniformly evasive.
 
 ### Completeness
-- **Missing required sections.** Header, Summary, Customer impact, Timeline, Contributing factors, What went well, What went wrong, Where we got lucky, Action items, Lessons learned, Distribution. Flag any missing.
+- **Missing required sections.** Header, Summary, Customer impact, Timeline, Contributing factors, What went well, What went wrong, Where we got lucky, Action items, Lessons learned, Distribution. Flag any missing. For a near-miss draft, "Customer impact" may appear as "Customer impact avoided" — accept that heading and do not flag it as missing.
 - **Where we got lucky** is present and substantive (not "n/a"). If absent or empty, push back — there's almost always something.
 - **Timeline sources.** Every timeline row has a source (alert ID, message link, commit SHA, log query). Flag any rows without sources.
 - **Customer impact concreteness.** Are the numbers supported (with the source of the count or %)? Or are they adjectives ("significant," "many users")? Flag adjectives.

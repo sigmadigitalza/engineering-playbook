@@ -17,7 +17,7 @@ If a workflow calls a script, read the script before judging the workflow. If a 
 
 # PHASE 1 — RECONNAISSANCE
 
-Do this first. Report a brief summary before doing any analysis.
+Do this first — do not start fixing the first workflow you open. Report a brief summary before doing any analysis.
 
 1. List every workflow with its triggers, runner(s), top-level purpose, and whether it has a `permissions:` block and `concurrency:` block.
 2. Detect runner strategy per workflow: GitHub-hosted (`ubuntu-latest` etc.), Blacksmith (`blacksmith-*`), or self-hosted. Flag mixed usage within a single workflow.
@@ -61,7 +61,7 @@ Anchor every finding to the [GitHub Actions Secure Use Reference](https://docs.g
 ### Action pinning & third-party supply chain
 - **Action pinning.** Third-party actions MUST be pinned to a full commit SHA with a comment noting the version tag (`uses: org/action@<40-char-sha> # v1.2.3`). Per the GitHub doc, SHA pinning is "currently the only way to use an action as an immutable release" — tag pinning is bypassable by repo compromise (tags can be moved or deleted). Any unpinned third-party action is at minimum a High finding. The [tj-actions/changed-files compromise (March 2025)](https://www.stepsecurity.io/blog/harden-runner-detection-tj-actions-changed-files-action-is-compromised) is the canonical case for why this matters.
 - **Verify the SHA.** Confirm the pinned SHA is from the action's canonical repository, not a fork.
-- **Official vs third-party.** Official `actions/*` and verified-creator actions may use major tags, but SHA is preferred even for those.
+- **Official vs third-party.** Official `actions/*` may use major tags, but SHA is preferred even for those. Verified-creator actions are still third-party — pin them to a SHA.
 - **Reusable workflows.** Same supply-chain rules apply — pin remote `uses: org/repo/.github/workflows/foo.yml@<sha>`.
 - **Provenance signals.** Unknown publishers, unverified authors, archived repos, recent maintainer changes, low star/install counts on a security-sensitive action — flag as concerns even when otherwise pinned.
 - **Deprecated action runtime.** Flag third-party actions whose `action.yml` declares a deprecated Node runtime (`using: 'node12'` or `'node16'`) — GitHub forced node20-over-node16 by default on 2024-06-03, and these will eventually fail. Treat `node20` as nearing end-of-life (EOL ~April 2026, with node24 migration underway) and recommend upgrading to a Node24-capable version.
@@ -86,7 +86,7 @@ Anchor every finding to the [GitHub Actions Secure Use Reference](https://docs.g
 
 ### Permissions, OIDC, and access surface
 - **`permissions:` block.** Every workflow should declare minimum permissions explicitly at the workflow or job level. A workflow without one is a Medium finding (org defaults vary but historically default to write-all). Recommend `permissions: contents: read` as the workflow-level default and elevate per-job only where needed.
-- **`GITHUB_TOKEN` scope vs need.** Common over-grants: `contents: write` on read-only test jobs, `pull-requests: write` on jobs that don't comment, `id-token: write` outside an OIDC step. Tighten per-job.
+- **`GITHUB_TOKEN` scope vs need.** Common over-grants: `contents: write` on read-only test jobs, `pull-requests: write` on jobs that don't comment, `id-token: write` on a job with no OIDC/cloud-auth step. Tighten per-job.
 - **OIDC for cloud authentication.** Long-lived cloud credentials (AWS access keys, GCP service-account JSON, Azure SPN secrets) stored as repo secrets is a Medium finding when the provider supports OIDC — recommend the official OIDC integrations (`aws-actions/configure-aws-credentials`, `google-github-actions/auth`, `azure/login` with federated credentials) with `permissions: id-token: write` scoped to the deploy job. OIDC eliminates the standing credential entirely.
 - **Environments + required reviewers.** Production deployment workflows should target an environment (`environment: production`) with required reviewers and deployment-branch restrictions configured in repo Settings. Workflows that deploy to prod without environment-gated approval are at minimum Medium.
 - **CODEOWNERS for `.github/workflows/`.** The `.github/workflows/` directory should be owned in `CODEOWNERS` by the platform/security team and protected by branch-protection-required-review. Without this, anyone with repo write access can modify CI to exfiltrate secrets. Medium finding if missing on a repo with non-trivial secrets.
@@ -96,7 +96,7 @@ Anchor every finding to the [GitHub Actions Secure Use Reference](https://docs.g
 ### Runner risks
 - **GitHub-hosted runners** are ephemeral and isolated — the default safe choice. Per-image SBOMs are published at `actions/runner-images/releases` for supply-chain review.
 - **Self-hosted runners** are persistent unless explicitly ephemeral. Per the GitHub doc: **never use self-hosted runners on public repositories** — any user can open a PR that compromises the runner host. Internal/private repos still require care because forks and PRs from anyone with read access execute on the runner. Flag any self-hosted runner on a public repo as Critical.
-- **JIT (Just-In-Time) ephemeral runners.** If self-hosted is required, prefer the JIT REST API pattern (`POST /repos/{owner}/{repo}/actions/runners/generate-jitconfig`) that creates a single-job, self-destroying runner. Note the caveat: hardware reuse for JIT runners can leak between jobs unless automation provides a clean environment each time.
+- **JIT (Just-In-Time) ephemeral runners.** If self-hosted is required, prefer the JIT REST API pattern (`POST /repos/{owner}/{repo}/actions/runners/generate-jitconfig`) that creates a single-job, self-destroying runner. Note the caveat: the host/VM backing successive JIT runners can retain state unless each ephemeral runner gets a freshly provisioned environment.
 - **Runner groups.** Multi-repo / org-level self-hosted runners must be partitioned into runner groups with explicit repo allowlists. A runner group accessible to many repos is a cross-tenant compromise vector.
 - **Runner host hygiene.** Self-hosted runners with cloud-instance metadata access (AWS IMDSv2, GCP metadata service) are a credential-exfiltration risk if any workflow runs untrusted code. Lock down with IAM, IMDSv2-only, and `harden-runner` egress policies.
 

@@ -112,7 +112,7 @@ These are the findings axe most often misses.
 - **Body text contrast ≥ 4.5:1** against its background. Map to SC 1.4.3 Contrast (Minimum).
 - **Large text contrast ≥ 3:1** (≥ 18pt regular or ≥ 14pt bold). Map to SC 1.4.3.
 - **Non-text contrast ≥ 3:1** for UI components (input borders, button outlines, focus indicators) and meaningful graphical elements. Map to SC 1.4.11 Non-text Contrast.
-- **Focus indicator contrast ≥ 3:1** against adjacent (unfocused) state. Map to SC 1.4.11. (SC 2.4.13 Focus Appearance is AAA — not required for AA; note for teams targeting AAA.)
+- **Focus indicator contrast ≥ 3:1** against adjacent colors. Map to SC 1.4.11. (SC 2.4.13 Focus Appearance is AAA — not required for AA; it additionally requires a ≥ 3:1 contrast change between the focused and unfocused states plus a minimum indicator area. Note for teams targeting AAA.)
 - **Don't rely on color alone.** Status conveyed only by color (red error text, green success text, color-coded chart series, required-field red asterisk) fails color-blind users. Use icon + color + text, or shape, or pattern. Map to SC 1.4.1 Use of Color.
 - **Computed vs rendered contrast.** Contrast computed from declared CSS values misses overlays, gradients, semi-transparent backgrounds, and inherited contexts. For these, mark MANUAL-CHECK and ask for a screenshot or live page check.
 - **Dark mode / theme variants.** Each theme is a separate audit. A button that passes in light mode may fail in dark mode.

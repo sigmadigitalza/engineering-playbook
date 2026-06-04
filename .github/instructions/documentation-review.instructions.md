@@ -26,7 +26,7 @@ Do this first. Report briefly before any analysis.
 
 1. **Inventory.** List every documentation file found with one-line purpose and approximate freshness (git log last-modified if you can determine it, otherwise note).
 2. **Voice sample.** Read at least three representative documentation files and characterize the author voice in 2–3 sentences: formality (formal / conversational / casual), person (first / second / third), use of humor, emoji conventions, typical sentence length, any recurring stylistic signatures. Quote two short example sentences. This voice profile governs every edit you propose.
-3. **Structural map.** Describe the current `docs/` layout if present. Identify whether it already follows a recognizable framework (Diátaxis, Divio, monorepo-per-package, flat) or is ad-hoc.
+3. **Structural map.** Describe the current `docs/` layout if present. Identify whether it already follows a recognizable framework (Diátaxis (formerly the Divio system), monorepo-per-package, flat) or is ad-hoc.
 4. **Agent files.** Note which of `CLAUDE.md`, `AGENTS.md`, `.github/copilot-instructions.md` exist. Read each and note whether they point to docs or duplicate them.
 5. **Stack detection.** Languages, build tools, package managers. This determines what "getting started" must cover.
 6. **Gaps.** List foundational files that are absent (e.g., no `CONTRIBUTING.md`, no `LICENSE`, no `docs/` folder at all).
@@ -115,8 +115,9 @@ For each: file, location, before/after snippet, one-line rationale. Typos, broke
 ### A2. Scaffolding (net-new files only where absent)
 Propose file contents for:
 - `CLAUDE.md` — if absent. Concise. Points to `README.md` and `docs/`. Covers layout, commands, conventions, leave-alone areas.
-- `AGENTS.md` — if absent and CLAUDE.md is absent, or cover both if team uses multiple agent tools.
+- `AGENTS.md` — scaffold only if both `CLAUDE.md` and `AGENTS.md` are absent; scaffold both when the team uses multiple agent tools.
 - `.github/copilot-instructions.md` — if absent and Copilot is used (check for Copilot-related CI or team indicators).
+- Cursor rules (`.cursor/rules/*.mdc` or legacy `.cursorrules`) — reviewed where present, but not scaffolded; leave their authoring to teams already on Cursor.
 - `docs/README.md` index — if `docs/` exists but has no index.
 - `docs/` skeleton with placeholder stubs — only if no `docs/` folder exists at all.
 - create `CONTRIBUTING.md` / `SECURITY.md` if absent.

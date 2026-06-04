@@ -31,7 +31,7 @@ A strategy and Claude Code prompt for reviewing REST and GraphQL API designs —
 **Two traps to encode:**
 
 1. **"REST" as decoration.** The API has resource-shaped URLs and uses HTTP, but methods, status codes, and idempotency are RPC-flavored or absent. Surface as architectural — a redesign, not a nit.
-2. **GraphQL "always returns 200" treated as a feature.** The GraphQL spec does specify 200 for valid responses including errors — but that only works as a transport ergonomic if errors are *modeled in the schema*. A GraphQL API where every business failure is a string in the `errors` array is undermining its own contract.
+2. **GraphQL "always returns 200" treated as a feature.** The core GraphQL spec is transport-agnostic; the 200-with-`errors` rule comes from the separate GraphQL-over-HTTP spec — and it only works as a transport ergonomic if errors are *modeled in the schema*. A GraphQL API where every business failure is a string in the `errors` array is undermining its own contract.
 
 **Severity rubric:**
 
@@ -78,7 +78,7 @@ Ask for the inputs that mode needs:
 
 # PHASE 1 — RECONNAISSANCE (all modes)
 
-Do this before any analysis. Report briefly.
+Do this before any analysis. Report concisely — one or two lines per item.
 
 1. **API style detection.** REST, GraphQL, gRPC, JSON-RPC, mixed. Note framework — Express, Fastify, Hono, NestJS, Go net/http, Echo, Gin, FastAPI, Apollo Server, GraphQL Yoga, Mercurius, Hasura, PostGraphile, etc. This drives which conventions to expect.
 2. **Contract artifacts.** Where does the contract live?
@@ -146,7 +146,7 @@ Tag each finding: **CONFIRMED** (visible in the contract or code) / **RECOMMENDA
 - **URL versioning** (`/v1/`) — simple, visible, but coarse. New version requires duplicating endpoints. Recommend only when major breaks are infrequent.
 - **Header versioning** (`API-Version: 2024-04-10`) — finer-grained, less visible. Date-based versioning (Stripe-style) is the modern reference design for high-velocity public APIs.
 - **Within a version, additive changes only.** Adding optional fields, new endpoints, new optional query params — fine. Removing fields, changing types, tightening enums, renaming — Breaking.
-- **Deprecation signal.** `Deprecation` and `Sunset` headers (RFC 8594, draft-ietf-httpapi-deprecation-header) to communicate timelines.
+- **Deprecation signal.** `Deprecation` header (`draft-ietf-httpapi-deprecation-header`, draft) and `Sunset` header (RFC 8594) to communicate timelines.
 - **Version sprawl.** v1, v2, v3, v4 all live with no sunset plan is a Major maintenance finding.
 
 ### Error responses

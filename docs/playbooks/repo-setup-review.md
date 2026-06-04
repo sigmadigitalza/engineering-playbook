@@ -96,7 +96,7 @@ Ask the user **two** questions. Do not assume from the visibility flag alone.
 
 **2. Is there effectively one active human maintainer, or a meaningful team?**
 
-This second question is independent of visibility and changes the approval-gate recommendation entirely. GitHub forbids users from submitting approving reviews on their own PRs, so `required_approving_review_count: ≥1` deadlocks a solo maintainer on their own work. See Strategy — "The solo-maintainer self-approval trap" for the full reasoning.
+This second question is independent of visibility and changes the approval-gate recommendation entirely. GitHub forbids users from submitting approving reviews on their own PRs — the "Approve" button is disabled on a PR you authored — so `required_approving_review_count: ≥1` deadlocks a solo maintainer on their own work. See Strategy — "The solo-maintainer self-approval trap" for the full reasoning.
 
 If unclear, ask both. The same setting can be a critical finding under one posture and a no-op under another.
 
@@ -173,7 +173,7 @@ For repos that publish reusable workflows or actions consumed via floating `@vN`
 - **Ruleset target `tag` covering `refs/tags/v*`** (or whichever pattern the repo uses for distribution tags).
 - **Deletion blocked.** `deletion` rule. Always wanted — accidental tag deletion breaks every consumer.
 - **Update blocked.** `update` rule. Blocks force-update of an existing tag. ⚠️ `github-actions[bot]` can't bypass this either (not a valid bypass actor — API or UI); WORKFLOW REDESIGN, same trap as above.
-- **No bypass for tags except the release bot.** Specifically *do not* recommend `OrganizationAdmin` bypass on tag rulesets if a colleague-admin could update them by mistake.
+- **No bypass for tags except the release bot.** Specifically *do not* recommend `OrganizationAdmin` bypass on tag rulesets if a colleague-admin could update them by mistake. This caution applies to org-owned repos only — `OrganizationAdmin` is an org-owned-repo concept and isn't a selectable actor on personal repos.
 
 ## Collaborator surface
 
@@ -262,7 +262,7 @@ For Section D items, output a concrete redesign sketch (e.g., "Install a `releas
 - Do not delete or downgrade collaborator roles without confirming with the user.
 - Do not assume a setting just because the web UI shows it — query the API.
 - Quote the exact `gh api` endpoint and JSON field for every finding.
-- When recommending bypass actors, default to `bypass_mode: "always"` for release bots (custom GitHub App / PAT identities — not `github-actions[bot]`) and `bypass_mode: "pull_request"` only when the bypass is for merge-without-review (not direct push).
+- When recommending bypass actors, default to `bypass_mode: "always"` for release bots (custom GitHub App / PAT identities — not `github-actions[bot]`) and `bypass_mode: "pull_request"` only when the bypass is for merge-without-review (not direct push). `bypass_mode: "pull_request"` applies to BRANCH rulesets only — on TAG rulesets use `bypass_mode: "always"` (`pull_request` bypass_mode is not valid on tag rulesets).
 - `github-actions[bot]` is **not a valid bypass actor** for rulesets (neither API nor UI). Do NOT try `actor_type: Integration, actor_id: 15368` — it fails with "must be part of the ruleset source or owner organization". Do NOT recommend a UI walkthrough for it either — the option isn't there. Mark findings that require this bypass as **WORKFLOW REDESIGN** and propose a custom App, a PAT, or restructuring the release flow.
 - For solo-maintainer postures, do NOT recommend `required_approving_review_count: ≥1` or `require_code_owner_review: true` on the default branch — GitHub's product blocks self-approval, so the rule deadlocks the maintainer's own PRs. The `pull_request` rule is still useful (forces PRs, restricts merge methods), just with the approval gates disabled.
 - Always check both classic branch protection AND rulesets. Never declare "unprotected" based on one endpoint.
