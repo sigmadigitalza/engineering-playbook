@@ -17,7 +17,7 @@ If a workflow calls a script, read the script before judging the workflow. If a 
 
 # PHASE 1 — RECONNAISSANCE
 
-Do this first. Report a brief summary before doing any analysis.
+Do this first — do not start fixing the first workflow you open. Report a brief summary before doing any analysis.
 
 1. List every workflow with its triggers, runner(s), top-level purpose, and whether it has a `permissions:` block and `concurrency:` block.
 2. Detect runner strategy per workflow: GitHub-hosted (`ubuntu-latest` etc.), Blacksmith (`blacksmith-*`), or self-hosted. Flag mixed usage within a single workflow.
@@ -51,18 +51,20 @@ For each finding, record: file path, line range, severity (Critical/High/Medium/
 - **Job dependencies.** Missing `needs:` causing race conditions; over-constrained graphs serializing needlessly.
 - **Env vs secrets vs vars.** Misuse, scope errors.
 - **Shell safety.** Multi-line bash blocks without `set -euo pipefail`; shell interpolation bugs in called scripts.
+- **Deprecated workflow commands.** Flag deprecated workflow commands in `run:` blocks — `::set-output::` and `::save-state::` (use `$GITHUB_OUTPUT`/`$GITHUB_STATE`), and `::set-env::`/`::add-path::` (removed for script-injection safety; use `$GITHUB_ENV`/`$GITHUB_PATH`).
 - **Cache key correctness.** Two jobs writing the same cache key with different contents (poisoning each other).
 
 ## Security — expert-level critical review
 
-Anchor every finding to the [GitHub Actions Secure Use Reference](https://docs.github.com/en/actions/reference/security/secure-use). The rubric below is grouped by the same themes that doc uses; cite the doc plus the specific line/file for every finding. Where relevant, also map the finding to an OWASP Top 10 CI/CD risk or an OpenSSF Scorecard check.
+Anchor every finding to the [GitHub Actions Secure Use Reference](https://docs.github.com/en/actions/reference/security/secure-use). The rubric below is grouped to align with that reference where it speaks, plus items it doesn't cover (persist-credentials, cache poisoning, secrets-in-`if:`, concurrency); cite the doc plus the specific line/file for every finding. Where relevant, also map the finding to an OWASP Top 10 CI/CD risk or an OpenSSF Scorecard check.
 
 ### Action pinning & third-party supply chain
 - **Action pinning.** Third-party actions MUST be pinned to a full commit SHA with a comment noting the version tag (`uses: org/action@<40-char-sha> # v1.2.3`). Per the GitHub doc, SHA pinning is "currently the only way to use an action as an immutable release" — tag pinning is bypassable by repo compromise (tags can be moved or deleted). Any unpinned third-party action is at minimum a High finding. The [tj-actions/changed-files compromise (March 2025)](https://www.stepsecurity.io/blog/harden-runner-detection-tj-actions-changed-files-action-is-compromised) is the canonical case for why this matters.
 - **Verify the SHA.** Confirm the pinned SHA is from the action's canonical repository, not a fork.
-- **Official vs third-party.** Official `actions/*` and verified-creator actions may use major tags, but SHA is preferred even for those.
+- **Official vs third-party.** Official `actions/*` may use major tags, but SHA is preferred even for those. Verified-creator actions are still third-party — pin them to a SHA.
 - **Reusable workflows.** Same supply-chain rules apply — pin remote `uses: org/repo/.github/workflows/foo.yml@<sha>`.
 - **Provenance signals.** Unknown publishers, unverified authors, archived repos, recent maintainer changes, low star/install counts on a security-sensitive action — flag as concerns even when otherwise pinned.
+- **Deprecated action runtime.** Flag third-party actions whose `action.yml` declares a deprecated Node runtime (`using: 'node12'` or `'node16'`) — GitHub forced node20-over-node16 by default on 2024-06-03, and these will eventually fail. Treat `node20` as nearing end-of-life (EOL ~April 2026, with node24 migration underway) and recommend upgrading to a Node24-capable version.
 - **Dependabot for actions.** `.github/dependabot.yml` should include `package-ecosystem: github-actions`. Note: Dependabot only opens version-update PRs for semver-pinned actions — SHA-pinned actions don't generate Dependabot alerts. Mitigation is the SHA-with-version-comment pattern (Dependabot updates the comment along with the SHA).
 - **Dependency review on PRs.** PRs touching `.github/` should run `actions/dependency-review-action` to flag vulnerable transitive action versions before merge.
 
@@ -71,20 +73,20 @@ Anchor every finding to the [GitHub Actions Secure Use Reference](https://docs.g
 - **Structured data as a single secret is broken.** JSON, XML, YAML blobs encapsulating multiple values cause log redaction to fail (redaction is exact-string match). Per the GitHub doc, split into individual secrets per sensitive value. Flag any secret whose name suggests a blob (`*_JSON`, `*_CONFIG`, `*_BUNDLE`).
 - **Generated/derived secrets must be re-masked.** When a workflow derives a value from a secret (signed JWT, base64-re-encoded key, OAuth code exchange, decrypted blob), register the derived value with `echo "::add-mask::$VALUE"` before the next step uses it. Otherwise it leaks in logs.
 - **`echo` of secrets** (even temporarily, even in a debugging step left behind) is a Critical finding. Same for unredacted secrets in step outputs, error messages, or environment dumps.
-- **Secrets in `if:` expressions.** Expressions evaluate before redaction and can leak via the workflow run UI. Flag any `if:` referencing `secrets.*`.
+- **Secrets in `if:` expressions.** Secrets transformed through expression functions (`fromJSON`, `format`, string concatenation) can defeat the runner's exact-string log redaction and leak in logs/UI. Flag any `if:` referencing `secrets.*`.
 - **Exposure response.** If unredacted secrets appeared in any prior run's logs, the secret is compromised — delete the log and rotate. Note this as the documented response procedure, not a maybe.
 - **Environment-scoped secrets with required reviewers.** Sensitive secrets (production deploy keys, signing keys, third-party API keys with destructive scope) should live in environment-scoped secrets with required reviewers and deployment-branch restrictions, not as repo or org secrets. Flag prod-deploy workflows that use repo secrets directly.
 
 ### Workflow code injection
 - **Script injection via `${{ ... }}` interpolation.** Any `${{ github.event.* }}`, `${{ github.head_ref }}`, `${{ inputs.* }}`, `${{ github.event.pull_request.title }}`, `${{ github.event.comment.body }}`, `${{ github.event.issue.title }}` (or any other user-controllable context value) interpolated directly into a `run:` block is a High finding (Critical if the workflow has elevated permissions or runs on `pull_request_target`). Fix per the GitHub doc: pass via an `env:` mapping and reference `"$VAR"` (double-quoted), with `set -euo pipefail` upstream. Better still, use a JavaScript or composite action that takes the value as an argument.
-- **`pull_request_target` + checkout of PR head.** Classic RCE vector — `pull_request_target` runs with write permissions and access to repo secrets, and a malicious PR can inject code that runs in that context. **Critical.**
+- **`pull_request_target` + checkout of PR head.** Classic RCE vector — `pull_request_target` runs with write permissions and access to repo secrets, and a malicious PR can inject code that runs in that context. **Critical.** The default `pull_request` event from a fork runs with a read-only `GITHUB_TOKEN` and *no* access to secrets by design — which is precisely why people reach for `pull_request_target`. The secure pattern is to keep untrusted-code jobs on `pull_request` and isolate any secret-requiring step behind an environment with required reviewers.
 - **`workflow_run` trigger.** Verify it does not execute untrusted PR code with elevated privileges from the triggering workflow's context.
 - **`persist-credentials: true`** on `actions/checkout` when the job does not push — leaves the `GITHUB_TOKEN` on disk and reachable from any subsequent step or composite action. Set to `false` unless explicitly needed for `git push`.
 - **Cache poisoning.** PR-writable caches (`actions/cache` keyed on PR-controllable values) consumed by trusted workflows can be poisoned by an attacker PR. Scope cache keys to the trigger; never let a PR run write a cache key that a `main` run or a privileged workflow reads.
 
 ### Permissions, OIDC, and access surface
 - **`permissions:` block.** Every workflow should declare minimum permissions explicitly at the workflow or job level. A workflow without one is a Medium finding (org defaults vary but historically default to write-all). Recommend `permissions: contents: read` as the workflow-level default and elevate per-job only where needed.
-- **`GITHUB_TOKEN` scope vs need.** Common over-grants: `contents: write` on read-only test jobs, `pull-requests: write` on jobs that don't comment, `id-token: write` outside an OIDC step. Tighten per-job.
+- **`GITHUB_TOKEN` scope vs need.** Common over-grants: `contents: write` on read-only test jobs, `pull-requests: write` on jobs that don't comment, `id-token: write` on a job with no OIDC/cloud-auth step. Tighten per-job.
 - **OIDC for cloud authentication.** Long-lived cloud credentials (AWS access keys, GCP service-account JSON, Azure SPN secrets) stored as repo secrets is a Medium finding when the provider supports OIDC — recommend the official OIDC integrations (`aws-actions/configure-aws-credentials`, `google-github-actions/auth`, `azure/login` with federated credentials) with `permissions: id-token: write` scoped to the deploy job. OIDC eliminates the standing credential entirely.
 - **Environments + required reviewers.** Production deployment workflows should target an environment (`environment: production`) with required reviewers and deployment-branch restrictions configured in repo Settings. Workflows that deploy to prod without environment-gated approval are at minimum Medium.
 - **CODEOWNERS for `.github/workflows/`.** The `.github/workflows/` directory should be owned in `CODEOWNERS` by the platform/security team and protected by branch-protection-required-review. Without this, anyone with repo write access can modify CI to exfiltrate secrets. Medium finding if missing on a repo with non-trivial secrets.
@@ -94,7 +96,7 @@ Anchor every finding to the [GitHub Actions Secure Use Reference](https://docs.g
 ### Runner risks
 - **GitHub-hosted runners** are ephemeral and isolated — the default safe choice. Per-image SBOMs are published at `actions/runner-images/releases` for supply-chain review.
 - **Self-hosted runners** are persistent unless explicitly ephemeral. Per the GitHub doc: **never use self-hosted runners on public repositories** — any user can open a PR that compromises the runner host. Internal/private repos still require care because forks and PRs from anyone with read access execute on the runner. Flag any self-hosted runner on a public repo as Critical.
-- **JIT (Just-In-Time) ephemeral runners.** If self-hosted is required, prefer the JIT REST API pattern (`POST /repos/{owner}/{repo}/actions/runners/generate-jitconfig`) that creates a single-job, self-destroying runner. Note the caveat: hardware reuse for JIT runners can leak between jobs unless automation provides a clean environment each time.
+- **JIT (Just-In-Time) ephemeral runners.** If self-hosted is required, prefer the JIT REST API pattern (`POST /repos/{owner}/{repo}/actions/runners/generate-jitconfig`) that creates a single-job, self-destroying runner. Note the caveat: the host/VM backing successive JIT runners can retain state unless each ephemeral runner gets a freshly provisioned environment.
 - **Runner groups.** Multi-repo / org-level self-hosted runners must be partitioned into runner groups with explicit repo allowlists. A runner group accessible to many repos is a cross-tenant compromise vector.
 - **Runner host hygiene.** Self-hosted runners with cloud-instance metadata access (AWS IMDSv2, GCP metadata service) are a credential-exfiltration risk if any workflow runs untrusted code. Lock down with IAM, IMDSv2-only, and `harden-runner` egress policies.
 

@@ -82,11 +82,11 @@ The first rule of ARIA is don't use ARIA. Check for misuse before presence.
 
 ## Keyboard Navigation
 
-A page that doesn't work with a keyboard alone is broken regardless of any other quality. Map throughout to SC 2.1.1 Keyboard, SC 2.1.2 No Keyboard Trap, SC 2.4.3 Focus Order, SC 2.4.7 Focus Visible, and (new in 2.2) SC 2.4.11 Focus Not Obscured (Minimum), SC 2.4.13 Focus Appearance.
+A page that doesn't work with a keyboard alone is broken regardless of any other quality. Map throughout to SC 2.1.1 Keyboard, SC 2.1.2 No Keyboard Trap, SC 2.4.3 Focus Order, SC 2.4.7 Focus Visible, and (new in 2.2) SC 2.4.11 Focus Not Obscured (Minimum), AA, and SC 2.4.13 Focus Appearance (AAA — not required for AA; note for teams targeting AAA).
 
 - **Everything interactive must be focusable.** `<div onClick>` without `tabIndex={0}` and a key handler is unreachable by keyboard. `<button>` solves this for free.
 - **Tab order matches visual / reading order.** Inspect for stray `tabIndex` values > 0 (these jump out of document order and are almost always wrong). `tabIndex={-1}` is fine for programmatic-focus-only elements.
-- **Focus is visible.** No `outline: none` / `outline: 0` without a replacement focus indicator. The replacement must be visible against adjacent colors at 3:1 (SC 1.4.11 Non-text Contrast for the indicator itself). Default browser focus rings vary; Tailwind's `focus-visible:ring-2` is a common good pattern. Map to SC 2.4.7, SC 2.4.13.
+- **Focus is visible.** No `outline: none` / `outline: 0` without a replacement focus indicator. The replacement must be visible against adjacent colors at 3:1 (SC 1.4.11 Non-text Contrast for the indicator itself). Default browser focus rings vary; Tailwind's `focus-visible:ring-2` is a common good pattern. Map to SC 2.4.7. (SC 2.4.13 Focus Appearance is AAA — not required for AA; note for teams targeting AAA.)
 - **Focus is not obscured by sticky headers / cookie banners / chat widgets.** A focused element scrolled behind a sticky element is a SC 2.4.11 failure (new in 2.2). Look for `position: sticky` / `position: fixed` headers and check whether scroll-margin or scroll-padding compensates.
 - **Focus management on route change.** SPA navigation must move focus to the new content (commonly the new page's `<h1>` or a `<main>` made programmatically focusable with `tabIndex={-1}`). Without this, screen reader users hear nothing on navigation. Map to SC 4.1.3 / SC 2.4.3.
 - **Focus trapping in modals.** Open modals must trap Tab within the modal and return focus to the triggering element on close. Native `<dialog showModal()>` does this; custom modals usually need `focus-trap` or library equivalents. Esc must close (SC 2.1.2). Click-outside-to-close is bonus, not a substitute for Esc.
@@ -111,7 +111,7 @@ These are the findings axe most often misses.
 - **Body text contrast ≥ 4.5:1** against its background. Map to SC 1.4.3 Contrast (Minimum).
 - **Large text contrast ≥ 3:1** (≥ 18pt regular or ≥ 14pt bold). Map to SC 1.4.3.
 - **Non-text contrast ≥ 3:1** for UI components (input borders, button outlines, focus indicators) and meaningful graphical elements. Map to SC 1.4.11 Non-text Contrast.
-- **Focus indicator contrast ≥ 3:1** against adjacent (unfocused) state. Map to SC 1.4.11, SC 2.4.13.
+- **Focus indicator contrast ≥ 3:1** against adjacent colors. Map to SC 1.4.11. (SC 2.4.13 Focus Appearance is AAA — not required for AA; it additionally requires a ≥ 3:1 contrast change between the focused and unfocused states plus a minimum indicator area. Note for teams targeting AAA.)
 - **Don't rely on color alone.** Status conveyed only by color (red error text, green success text, color-coded chart series, required-field red asterisk) fails color-blind users. Use icon + color + text, or shape, or pattern. Map to SC 1.4.1 Use of Color.
 - **Computed vs rendered contrast.** Contrast computed from declared CSS values misses overlays, gradients, semi-transparent backgrounds, and inherited contexts. For these, mark MANUAL-CHECK and ask for a screenshot or live page check.
 - **Dark mode / theme variants.** Each theme is a separate audit. A button that passes in light mode may fail in dark mode.

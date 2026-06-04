@@ -26,7 +26,7 @@ Ask for the inputs that mode needs:
 
 # PHASE 1 — RECONNAISSANCE (all modes)
 
-Do this before any analysis. Report briefly.
+Do this before any analysis. Report concisely — one or two lines per item.
 
 1. **API style detection.** REST, GraphQL, gRPC, JSON-RPC, mixed. Note framework — Express, Fastify, Hono, NestJS, Go net/http, Echo, Gin, FastAPI, Apollo Server, GraphQL Yoga, Mercurius, Hasura, PostGraphile, etc. This drives which conventions to expect.
 2. **Contract artifacts.** Where does the contract live?
@@ -38,7 +38,7 @@ Do this before any analysis. Report briefly.
 5. **Error response format.** Sample one error from each error class (validation, not-found, auth-failed, server-error). Is the shape consistent? Does it follow RFC 9457 (`type`, `title`, `status`, `detail`, `instance`)? GraphQL: are business errors in the `errors` array or in the schema as union types?
 6. **Pagination, filtering, sorting conventions.** Cursor vs offset; query params or headers for filtering; sort syntax. GraphQL: Relay connections, custom pagination, no pagination.
 7. **Idempotency posture.** Is `Idempotency-Key` documented? Honored? Scoped how (per-key, per-consumer)? GraphQL: are mutations explicitly named for idempotency intent (`createX` vs `upsertX`)? Is `clientMutationId` / similar accepted?
-8. **Rate limiting & quota signals.** `X-RateLimit-*` or `RateLimit` (RFC 9728) headers, `Retry-After`, GraphQL query cost / depth / complexity limits. Documented? Returned consistently?
+8. **Rate limiting & quota signals.** `X-RateLimit-*` or `RateLimit` (the `RateLimit` / `RateLimit-Policy` fields, per the IETF `draft-ietf-httpapi-ratelimit-headers` draft — not yet an RFC) headers, `Retry-After`, GraphQL query cost / depth / complexity limits. Documented? Returned consistently?
 9. **Consumer inventory.** Who consumes this API? First-party SDK, mobile app, partner integrations, internal services, public developer portal. Blast radius of breaking changes scales with this.
 10. **Existing style guide.** `docs/api-design.md`, `STYLE.md`, `API_GUIDELINES.md`, internal API guidelines. Read first — respect existing decisions until you have a reason not to.
 11. **Contract test coverage.** Contract tests, schema snapshot tests, OpenAPI conformance checks, GraphQL schema diff in CI. Note presence and scope.
@@ -73,7 +73,7 @@ Tag each finding: **CONFIRMED** (visible in the contract or code) / **RECOMMENDA
 - **GET is safe and idempotent.** No side effects. No state change. If a GET endpoint mutates anything, that's Breaking — caches, prefetchers, link-checkers will fire it.
 - **POST creates or invokes.** Non-idempotent. Use `Idempotency-Key` if retries matter.
 - **PUT replaces the whole resource.** Idempotent. Sending a partial body to a PUT is wrong; missing fields should be treated as null/unset by the server.
-- **PATCH partially updates.** Idempotent if the patch format is well-defined ([RFC 7396 JSON Merge Patch](https://www.rfc-editor.org/rfc/rfc7396) or [RFC 6902 JSON Patch](https://www.rfc-editor.org/rfc/rfc6902)).
+- **PATCH partially updates.** Idempotent only if the patch format is deterministic — [JSON Merge Patch (RFC 7396)](https://www.rfc-editor.org/rfc/rfc7396) is idempotent; [JSON Patch (RFC 6902)](https://www.rfc-editor.org/rfc/rfc6902) is NOT in general (its add-to-array-end / copy / move ops duplicate on retry), so treat a retried RFC 6902 PATCH as unsafe unless the server dedupes.
 - **DELETE removes.** Idempotent — deleting an already-deleted resource should return 204 or 404 consistently, not 500.
 - **OPTIONS for CORS preflight and capability discovery. HEAD for cheap existence / metadata checks.**
 - Flag any endpoint that mutates behind GET, or uses POST as a universal verb when PUT/PATCH/DELETE would be correct.
@@ -94,7 +94,7 @@ Tag each finding: **CONFIRMED** (visible in the contract or code) / **RECOMMENDA
 - **URL versioning** (`/v1/`) — simple, visible, but coarse. New version requires duplicating endpoints. Recommend only when major breaks are infrequent.
 - **Header versioning** (`API-Version: 2024-04-10`) — finer-grained, less visible. Date-based versioning (Stripe-style) is the modern reference design for high-velocity public APIs.
 - **Within a version, additive changes only.** Adding optional fields, new endpoints, new optional query params — fine. Removing fields, changing types, tightening enums, renaming — Breaking.
-- **Deprecation signal.** `Deprecation` and `Sunset` headers (RFC 8594, draft-ietf-httpapi-deprecation-header) to communicate timelines.
+- **Deprecation signal.** `Deprecation` header (`draft-ietf-httpapi-deprecation-header`, draft) and `Sunset` header (RFC 8594) to communicate timelines.
 - **Version sprawl.** v1, v2, v3, v4 all live with no sunset plan is a Major maintenance finding.
 
 ### Error responses
@@ -108,8 +108,9 @@ Tag each finding: **CONFIRMED** (visible in the contract or code) / **RECOMMENDA
 
 ### Idempotency & retry safety
 
-- **GET, PUT, DELETE are idempotent at the protocol level.** PATCH usually is, depending on patch format. POST is not.
+- **GET (and HEAD, OPTIONS), PUT, DELETE are idempotent; GET/HEAD/OPTIONS are also *safe* (no state change).** PATCH usually is, depending on patch format. POST is not.
 - **`Idempotency-Key` for mutating POST.** Documented, honored, scoped per consumer / API key. Server stores response keyed by (consumer, key) and returns the same response on retry within a TTL window. Stripe is the canonical reference.
+- **Conditional requests for optimistic concurrency.** `ETag` + `If-Match` on writes — a stale `If-Match` returns **412 Precondition Failed** instead of clobbering a newer version. **428 Precondition Required** forces clients to send the precondition at all, closing the lost-update window for unconditional writes. `If-None-Match: *` makes create-if-absent idempotent (second create fails the precondition rather than duplicating). Relying on **409 Conflict** alone, with no `ETag`, is the weaker body-driven substitute — it detects the conflict but gives the client no validator to retry against.
 - **Retry-safe error responses.** Errors the client can retry (5xx, 429) should be distinguishable from errors that won't change on retry (4xx). Document `Retry-After` for 429 and 503.
 - **Long-running operations.** For operations exceeding a sensible HTTP timeout, return 202 with a status URL the client can poll. Don't make the client hold a 60s connection.
 
@@ -125,7 +126,7 @@ Tag each finding: **CONFIRMED** (visible in the contract or code) / **RECOMMENDA
 
 - **Auth scheme.** Bearer token, API key (header, never query string), OAuth 2 with PKCE, OIDC, mTLS. Document required headers per endpoint.
 - **Scopes / permissions.** Per-endpoint scopes documented in OpenAPI / reference. The minimum scope to call an endpoint should be in the docs.
-- **Rate limit headers.** `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset` (or `RateLimit` per RFC 9728). `Retry-After` on 429.
+- **Rate limit headers.** `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset` (or `RateLimit` — the `RateLimit` / `RateLimit-Policy` fields, per the IETF `draft-ietf-httpapi-ratelimit-headers` draft, not yet an RFC). `Retry-After` on 429.
 - **Quota visibility.** Consumers need to introspect their own remaining quota — either via response headers on every call or a `/me/quota` endpoint.
 - **Per-consumer rate limits.** Anonymous, per-API-key, per-user. Document the buckets.
 

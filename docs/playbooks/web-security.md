@@ -30,7 +30,7 @@ Security only really needs two modes. If something is actively being exploited, 
 
 2. **CSP as a single boolean.** A permissive CSP with `unsafe-inline` and `unsafe-eval` and `*` source allowlists is barely better than none. The prompt grades CSP quality, not just presence — nonce-based or hash-based CSP with `strict-dynamic` is the modern good answer; older allowlist CSPs are a step but not a destination.
 
-**Three-bucket reporting plus a called-out fourth:**
+**Three evidence-tiered sections (A/B/C), a separately called-out Theatrical list, and a Summary (Section D):**
 
 - **A — Confirmed vulnerabilities.** Reproducible, evidence-backed. Hard findings from code review.
 - **B — Threats & concerns requiring judgment.** Plausible attack paths, design-level recommendations, missing defense-in-depth.
@@ -101,7 +101,7 @@ Don't treat framework auto-escaping as a clean bill of health. Check each path:
 
 - **Dangerous escape hatches.** `dangerouslySetInnerHTML` (React), `v-html` (Vue), `{@html}` (Svelte), `[innerHTML]` (Angular), `bypassSecurityTrust*` (Angular). For each: where does the input come from? Is it sanitized? With what library, configured how?
 - **Sanitizer correctness.** DOMPurify with default config is generally fine. Custom regex-based sanitizers are almost always wrong. Allowlists missing common tags / attributes that should be allowed (causing devs to disable sanitization). Sanitizing then re-stringifying then re-parsing (mutation XSS).
-- **URL sinks.** `<a href={userInput}>`, `<iframe src={...}>`, `window.location = userInput`, `<form action={...}>`. All vulnerable to `javascript:` and `data:` URLs unless validated. Check for explicit protocol allowlists.
+- **URL sinks.** `<a href={userInput}>`, `<iframe src={...}>`, `window.location = userInput`, `<form action={...}>`. `javascript:` is the script-execution sink across all of these — validate against it everywhere. `data:` is more nuanced: top-level navigation to `data:` URLs (`window.location =`, anchor clicks) is blocked by all modern browsers, so there it's a phishing / open-redirect concern, not XSS — but `data:` is a genuine XSS vector in `<iframe src>`, `<object>` / `<embed>`, and SVG. Check for explicit protocol allowlists.
 - **JSON-in-script.** SSR contexts that serialize state into `<script>` tags need `</script>` and `<!--` escaping, not just JSON.stringify.
 - **SSR / hydration.** Server-rendered output that isn't escaped consistently with client-rendered output. Hydration mismatches that allow injection.
 - **Third-party HTML.** Markdown rendering, rich-text editors, email templates rendered inline, user-supplied SVG (SVG can carry script).
@@ -112,7 +112,7 @@ Don't treat framework auto-escaping as a clean bill of health. Check each path:
 - **Presence.** No CSP at all is a Medium finding (defense-in-depth gap).
 - **Quality grading:**
   - `unsafe-inline` in `script-src` — undermines most of the value. High finding unless justified by nonce / hash.
-  - `unsafe-eval` — High finding unless framework genuinely requires it (some legacy templating). Modern frameworks don't.
+  - `unsafe-eval` — High finding unless framework genuinely requires it (some legacy templating). Most modern *production* builds don't, but legitimate exceptions exist — dev-mode source maps, runtime template compilation (e.g. Vue full build), and WebAssembly (`wasm-unsafe-eval`). Confirm it's load-bearing before grading High.
   - `*` or overly broad source allowlists — Medium to High depending on what's allowed.
   - `default-src 'self'` only, no other directives — partial coverage; flag missing `frame-ancestors`, `form-action`, `base-uri`.
   - Allowlist-based without `strict-dynamic` — bypassable via JSONP endpoints in allowlisted origins. Recommend nonce + `strict-dynamic`.
@@ -122,10 +122,10 @@ Don't treat framework auto-escaping as a clean bill of health. Check each path:
 
 ## Client-Side Auth & Token Handling
 
-- **Token storage.** localStorage / sessionStorage tokens are XSS-exfiltratable — any XSS == account takeover. Httponly cookies are the safer default. Flag localStorage tokens as High unless there's a specific justification (e.g., cross-domain SPA with no shared cookie domain).
+- **Token storage.** localStorage / sessionStorage tokens are XSS-exfiltratable — any XSS == account takeover. HttpOnly cookies are the safer default. Flag localStorage tokens as High unless there's a specific justification (e.g., cross-domain SPA with no shared cookie domain).
 - **Cookie attributes.** `Secure`, `HttpOnly`, `SameSite` (Lax minimum, Strict where possible), `Domain` not over-broad, `Path` set if it matters. Flag missing or weak values.
 - **CSRF posture.** SameSite cookies cover most cases. If cross-origin POSTs are intentional, is there a CSRF token? Are state-changing GETs avoided?
-- **OAuth / OIDC flow.** Implicit flow is deprecated — flag as High. Authorization code with PKCE is the modern answer. State parameter validated? Nonce on OIDC? Redirect URI strictly allowlisted?
+- **OAuth / OIDC flow.** Implicit flow is removed in OAuth 2.1 and disallowed by RFC 9700 (OAuth Security BCP) — flag as High. Authorization Code + PKCE is the answer. State parameter validated? Nonce on OIDC? Redirect URI strictly allowlisted?
 - **Token lifetime & refresh.** Short access tokens, refresh in httpOnly cookie. Refresh tokens in localStorage are bad.
 - **Logout.** Does logout actually clear all tokens, including any in memory or in service workers? Does it invalidate server-side sessions?
 - **Authenticated state in URLs.** Tokens, session IDs, or PII in query strings (visible in referrer, logs, history). Always a finding.
@@ -156,7 +156,7 @@ Don't treat framework auto-escaping as a clean bill of health. Check each path:
 ## postMessage & Cross-Window Security
 
 - **`window.postMessage` listeners.** Every `addEventListener('message', ...)` should validate `event.origin`. Missing origin check is High — any tab the user has open can post messages.
-- **`window.opener` exposure.** `<a target="_blank">` without `rel="noopener noreferrer"` lets the opened page navigate the opener. Modern browsers default `noopener` for `target="_blank"` but legacy code may override. Check.
+- **`window.opener` exposure.** `<a target="_blank">` without `rel="noopener"` (add `noreferrer` to also strip the `Referer` header — a privacy add-on, not the tabnabbing fix) lets the opened page navigate the opener. `noopener` alone closes the reverse-tabnabbing path. Modern browsers default `noopener` for `target="_blank"` but legacy code may override. Check.
 - **Iframe sandboxing.** User-supplied or third-party iframes should have `sandbox` attribute. CSP `frame-ancestors` to control who can frame you (clickjacking).
 - **`X-Frame-Options` header** as fallback for older browsers, though `frame-ancestors` supersedes.
 
@@ -174,15 +174,15 @@ Match to the detected framework. Examples:
 ## Secrets in Frontend Code
 
 - **API keys in bundled JS.** Anything not labeled "publishable" (Stripe publishable key is fine; Stripe secret key is a Critical incident).
-- **`NEXT_PUBLIC_*` / `VITE_*` / `REACT_APP_*` env vars.** These ship to the client. Audit each — should this value be visible to every visitor?
+- **`NEXT_PUBLIC_*` / `VITE_*` / `REACT_APP_*` env vars.** These ship to the client. Audit each — should this value be visible to every visitor? A sensitive value carrying one of these public prefixes is a Critical finding (per the framework-footguns rubric).
 - **Hardcoded URLs to internal services.** Staging, admin, internal API endpoints in client code reveal infrastructure.
 - **Source maps in production.** Source maps reveal original source. Some teams accept this for error reporting; many ship them unintentionally. Note as a finding for awareness, severity depending on what the source reveals.
 
 ## Headers & TLS (Mode 2)
 
-- **HSTS.** `Strict-Transport-Security` with `max-age` ≥ 6 months, `includeSubDomains`, `preload` if appropriate.
+- **HSTS.** `Strict-Transport-Security` with `max-age` ≥ 6 months and `includeSubDomains` as the baseline floor. For preload, the hstspreload.org list has hard requirements: `max-age` ≥ `31536000` (1 year) **and** `includeSubDomains` **and** the `preload` directive — all three. A `preload` directive with a too-short `max-age` is a misconfiguration; the preload list rejects it, so it buys nothing.
 - **`X-Content-Type-Options: nosniff`** — should always be present.
-- **`Referrer-Policy`** — `strict-origin-when-cross-origin` is a sensible default. `no-referrer-when-downgrade` (browser default) leaks more.
+- **`Referrer-Policy`** — `strict-origin-when-cross-origin` is a sensible default — and is also the modern browser default (since 2020), so setting it explicitly is belt-and-suspenders; flag legacy overrides to `unsafe-url` or `no-referrer-when-downgrade`, which leak the full URL/path cross-origin.
 - **`Permissions-Policy`** — restrict camera, microphone, geolocation, payment, etc., to what the app actually needs.
 - **`X-Frame-Options` / `frame-ancestors`** for clickjacking.
 - **TLS config.** TLS 1.2 minimum, 1.3 preferred. Cert validity, chain, OCSP stapling. Cipher suite quality. Use `testssl.sh`-equivalent logic if probing is approved.
@@ -261,7 +261,7 @@ You can offer to draft (not execute):
 - **Read-only repo probes.** File reads, `git log`. No approval needed.
 - **Public-info probes.** DNS, WHOIS, TLS cert, status page. Group and ask once.
 - **HTTP HEAD / GET on the public URL.** Headers, status, CSP. Ask before each batch.
-- **Rendered-DOM fetch.** Single page load via web_fetch. Ask. Look for: third-party scripts loaded, SRI presence, inline event handlers, exposed env values in HTML, source map references.
+- **Rendered-DOM fetch.** A single rendered-DOM fetch (your web-fetch tool). Ask. Look for: third-party scripts loaded, SRI presence, inline event handlers, exposed env values in HTML, source map references.
 - **Asset enumeration.** Following script src URLs to verify what loads. Ask.
 - **Anything touching auth flows.** Forbidden without explicit, in-this-conversation approval naming the action.
 - **Anything submitting forms or making state changes.** Forbidden without explicit approval.

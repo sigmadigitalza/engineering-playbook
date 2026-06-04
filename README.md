@@ -70,6 +70,7 @@ Long-form guides describing how we approach a discipline, what "good" looks like
 | [Frontend accessibility review](docs/playbooks/frontend-accessibility-review.md) | WCAG 2.2 AA review of web frontends — semantic HTML, ARIA, keyboard, screen reader, contrast, forms, motion, i18n. |
 | [GitHub Actions review](docs/playbooks/github-actions-review.md) | Workflow design, security, and reliability practices for CI/CD pipelines. |
 | [Incident postmortem](docs/playbooks/incident-postmortem.md) | Blameless postmortem template, drafting and review rubric for post-incident reviews. |
+| [Repo setup & review](docs/playbooks/repo-setup-review.md) | GitHub repo configuration audit — branch and tag rulesets, CODEOWNERS, collaborators, default token scope, secret scanning, contribution gates. Posture-aware. |
 | [Web performance](docs/playbooks/web-performance.md) | Core Web Vitals audit, lab-vs-field discipline, and quick-win optimisations for web applications. |
 | [Web security](docs/playbooks/web-security.md) | Threat model, hardening checklist, and review procedure for web applications. |
 | [Web SRE](docs/playbooks/web-sre.md) | Reliability, observability, and incident-response practices for web services. |
@@ -87,9 +88,23 @@ Each playbook has a paired prompt designed to be handed to an LLM (Claude, ChatG
 | [Frontend accessibility review](docs/prompts/frontend-accessibility-review.md) | [Frontend accessibility review playbook](docs/playbooks/frontend-accessibility-review.md) |
 | [GitHub Actions review](docs/prompts/github-actions-review.md) | [GitHub Actions review playbook](docs/playbooks/github-actions-review.md) |
 | [Incident postmortem](docs/prompts/incident-postmortem.md) | [Incident postmortem playbook](docs/playbooks/incident-postmortem.md) |
+| [Repo setup & review](docs/prompts/repo-setup-review.md) | [Repo setup & review playbook](docs/playbooks/repo-setup-review.md) |
 | [Web performance](docs/prompts/web-performance.md) | [Web performance playbook](docs/playbooks/web-performance.md) |
 | [Web security](docs/prompts/web-security.md) | [Web security playbook](docs/playbooks/web-security.md) |
 | [Web SRE](docs/prompts/web-sre.md) | [Web SRE playbook](docs/playbooks/web-sre.md) |
+
+### Engineering standards — [`docs/standards`](docs/standards)
+
+The normative spine — what we hold ourselves, and any AI agent in our repos, to. Stack appendices translate the principles into per-language idioms.
+
+| Document | What it covers |
+|----------|----------------|
+| [Sigma Engineering Standards](docs/standards/sigma-engineering-standards.md) | The spine: the Sigma Ten, security / resilience / supply-chain baselines, maturity tiers, and AI-agent rules. |
+| [JavaScript / TypeScript appendix](docs/standards/appendix-javascript-typescript.md) | Deno-first, dependency-minimal idioms for services and frontend. |
+| [Go appendix](docs/standards/appendix-golang.md) | Services, CLIs, and tooling. |
+| [Android / Kotlin appendix](docs/standards/appendix-android-kotlin.md) | Mobile and JVM Kotlin. |
+| [Godot appendix](docs/standards/appendix-godot.md) | GDScript game and interactive content. |
+| [Good Ideas appendix](docs/standards/appendix-good-ideas.md) | Annotated reading list — the influences behind the standard. |
 
 ## How to use this repo
 
