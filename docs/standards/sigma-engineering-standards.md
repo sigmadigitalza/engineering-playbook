@@ -26,6 +26,9 @@ This standard is deliberately small. It is the spine. Stack-specific translation
 ### Cultural appendix
 - **[Good Ideas](./appendix-good-ideas.md)** — annotated reading list. The influences behind this standard.
 
+### Companion review playbooks
+The standard says what "good" is; the **review playbooks** are how we check it — each a human guide with a paired AI prompt: [code review](../playbooks/code-review.md), [API design](../playbooks/api-design-review.md), [database](../playbooks/database-review.md), [web security](../playbooks/web-security.md), [web performance](../playbooks/web-performance.md), [frontend accessibility](../playbooks/frontend-accessibility-review.md), [GitHub Actions](../playbooks/github-actions-review.md), [repo setup](../playbooks/repo-setup-review.md), [web SRE](../playbooks/web-sre.md), [documentation](../playbooks/documentation-review.md), and [incident postmortems](../playbooks/incident-postmortem.md).
+
 ---
 
 ## 1. First Principles
@@ -104,7 +107,7 @@ Linters, type-checkers, static analysers, and dependency audits are green in CI 
 
 ## 4. Security Baseline
 
-These are non-negotiable for any code shipped to a user or to production infrastructure. Language-specific tooling is in the appendices.
+These are non-negotiable for any code shipped to a user or to production infrastructure. Language-specific tooling is in the appendices; the frontend trust boundary and the review procedure are in the [web-security](../playbooks/web-security.md) playbook.
 
 ### Secrets
 - **Never** in source, never in client-side bundles, never in logs, never in error messages, never in URLs.
@@ -137,7 +140,7 @@ These are non-negotiable for any code shipped to a user or to production infrast
 
 ## 5. Resilience Patterns
 
-Every external dependency — every HTTP call, DB query, queue read, file read — is a potential failure. Apply the patterns proportional to criticality.
+Every external dependency — every HTTP call, DB query, queue read, file read — is a potential failure. Apply the patterns proportional to criticality. For release readiness, post-release verification, and incident diagnosis, see the [web-sre](../playbooks/web-sre.md) playbook.
 
 ### The core five
 1. **Timeout** — every I/O has an explicit, finite timeout. There is no "wait forever". Propagate cancellation from the request edge down to the leaf I/O.
@@ -147,7 +150,7 @@ Every external dependency — every HTTP call, DB query, queue read, file read �
 5. **Graceful degradation / fallback** — define what "reduced service" looks like for each failure mode. A cached response. A static fallback. An empty list with a banner. A queued retry. Never a 500 to the user if a degraded response is possible and correct.
 
 ### Cross-cutting
-- **Idempotency** — any operation that mutates state and may be retried (across the network, across a queue redelivery) must be idempotent or guarded by an idempotency key. Mandatory for payment, scheduling, notification, and any external integration.
+- **Idempotency** — any operation that mutates state and may be retried (across the network, across a queue redelivery) must be idempotent or guarded by an idempotency key. Mandatory for payment, scheduling, notification, and any external integration. See the [api-design-review](../playbooks/api-design-review.md) playbook for contract-level idempotency (idempotency keys, conditional requests, `412`/`428`).
 - **Backpressure** — bounded queues with rejection policies. Never let a producer outrun the consumer without a defined drop or block strategy.
 - **Health vs readiness** — distinguish "process is alive" (health, used by orchestrator to restart) from "process can serve traffic" (readiness, used by load balancer to route).
 - **Graceful shutdown** — handle termination signals. Stop accepting new work, drain in-flight work to a timeout, then exit.
@@ -162,10 +165,10 @@ Every external dependency — every HTTP call, DB query, queue read, file read �
 
 ## 6. Supply Chain Integrity
 
-Adapted from SLSA + NIST SSDF. Apply at least Level 2 equivalence for production systems.
+Adapted from SLSA + NIST SSDF. Apply at least Level 2 equivalence for production systems. The review procedures live in the [github-actions-review](../playbooks/github-actions-review.md) and [repo-setup-review](../playbooks/repo-setup-review.md) playbooks.
 
 ### Source
-- Branch protection on `main`: no direct pushes, required reviews, required status checks. ("Required reviews" assumes a multi-person repo — a solo maintainer cannot approve their own PR, so set the approval count accordingly; see `repo-setup-review`.)
+- Branch protection on `main`: no direct pushes, required reviews, required status checks. ("Required reviews" assumes a multi-person repo — a solo maintainer cannot approve their own PR, so set the approval count accordingly; see [repo-setup-review](../playbooks/repo-setup-review.md).)
 - Signed commits required for release branches.
 - `.gitignore` covers env files (except documented examples), credentials, key material, build outputs.
 - Secret scanning runs in CI on every PR and rejects on hit.
@@ -208,7 +211,7 @@ Not every line of code needs production-grade rigour from day one — but the pa
 **Purpose:** real users, real data, but tolerant audience; ownership clear.
 
 - The Ten apply fully.
-- Required: security baseline (§4) in full, structured logging, error reporting, basic metrics, automated tests for critical paths (≥60% coverage on business logic), CI with linting + tests + dependency audit. For user-facing UI: WCAG 2.2 AA on critical flows (see `frontend-accessibility-review`).
+- Required: security baseline (§4) in full, structured logging, error reporting, basic metrics, automated tests for critical paths (≥60% coverage on business logic), CI with linting + tests + dependency audit. For user-facing UI: WCAG 2.2 AA on critical flows (see [frontend-accessibility-review](../playbooks/frontend-accessibility-review.md)).
 - Required-light: resilience patterns where failure is plausible (timeouts always; retry/breaker where downstreams flake).
 - Not yet required: SLSA Level 2, full SBOM, chaos testing.
 
