@@ -6,7 +6,7 @@ A strategy and Claude Code prompt for auditing repository documentation for clar
 
 ## Strategy
 
-**Respect-first posture.** This is the biggest shift from a typical code-review playbook. Documentation is mostly judgment, and the author's voice carries information — tone tells a junior dev whether it's okay to ask stupid questions, tells a senior dev whether the project takes itself seriously. A prompt that rewrites everything into neutral technical-writer voice will feel sanitized and worse, even if it scores higher on some rubric. So the prompt needs to force Claude Code to sample the existing voice before editing and preserve it.
+**Respect-first posture.** This is the biggest shift from a typical [code-review](code-review.md) playbook. Documentation is mostly judgment, and the author's voice carries information — tone tells a junior dev whether it's okay to ask stupid questions, tells a senior dev whether the project takes itself seriously. A prompt that rewrites everything into neutral technical-writer voice will feel sanitized and worse, even if it scores higher on some rubric. So the prompt needs to force Claude Code to sample the existing voice before editing and preserve it.
 
 **Recon before any editing.** Without it, Claude Code tends to "improve" the first README it sees, miss that there's a perfectly good `docs/architecture.md` already covering the topic, and generate duplication. Recon should also catch the opposite failure mode: a repo where the README looks fine but `docs/` is full of stale content from two refactors ago.
 
