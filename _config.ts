@@ -80,6 +80,23 @@ site.data("layout", "layouts/page.vto");
 site.add("styles.css");
 site.add("copy.js");
 
+// Cache-bust the stylesheet: hash its contents and expose the digest as
+// `cssVersion`, which the base layout appends to the stylesheet URL as a query
+// string. When the CSS changes the URL changes, so browsers refetch it instead
+// of serving a stale cached copy (no manual hard refresh needed after a deploy).
+let cssVersion = "1";
+try {
+  const cssText = Deno.readTextFileSync("styles.css");
+  let h = 5381;
+  for (let i = 0; i < cssText.length; i++) {
+    h = ((h << 5) + h + cssText.charCodeAt(i)) | 0;
+  }
+  cssVersion = (h >>> 0).toString(36);
+} catch {
+  // Fall back to a static token if the file can't be read at config time.
+}
+site.data("cssVersion", cssVersion);
+
 // The Design pillar is the self-contained Sigma Design Foundations bundle. Its
 // inline theme is the reference look the rest of the site is aligned to, so we
 // serve it verbatim: ignore it from the page pipeline, then copy it as static
