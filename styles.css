@@ -262,9 +262,9 @@ main.wrap { padding-block: 3rem 4rem; }
   font-family: var(--font-heading);
   font-weight: 700;
   letter-spacing: -0.01em;
-  /* Syne has deep descenders (g, p, y); 1.2 cramps them against the line box
-     and reads as clipped. 1.32 gives them room. */
-  line-height: 1.32;
+  /* Syne has deep descenders (g, p, y); a tight line box cramps them and reads
+     as clipped. 1.4 gives them room with margin across browsers. */
+  line-height: 1.4;
   color: var(--ink);
 }
 .prose h1 {
