@@ -130,11 +130,11 @@ Light touch. Flag obvious problems, don't speculate about microoptimisation.
 - **Unbounded loops or collections.** Pagination missing, fetch-all-rows patterns, no upper bound on retry loops, growing-without-bound caches.
 - **Blocking calls on hot paths.** Synchronous IO in a request handler, CPU-heavy work on the event loop in Node.
 - **Quadratic where linear would do.** Nested loops over the same large list, repeated `Array.includes` inside a loop instead of a `Set`.
-- **Refer to web-performance playbook** for anything user-facing (Core Web Vitals, bundle size, render path).
+- **Refer to [web-performance](/docs/playbooks/web-performance.md) playbook** for anything user-facing (Core Web Vitals, bundle size, render path).
 
 ## 6. Security — light touch
 
-Surface obvious issues; refer the rest to the web-security playbook.
+Surface obvious issues; refer the rest to the [web-security](/docs/playbooks/web-security.md) playbook.
 
 - **Input validation at boundaries.** New endpoint, new form, new file upload — is input validated and bounded?
 - **AuthZ / AuthN.** New endpoint or new operation — is access controlled? Does it check the right thing (resource ownership, role, scope)?
@@ -150,7 +150,7 @@ Same posture as security: flag obvious gaps, refer to the relevant playbook.
 - **Logging.** New error paths without logs are operational dark matter. Suggest logs at the boundary, not inside hot loops.
 - **Metrics.** New code path that matters in production probably needs a metric. Flag as Section B suggestion.
 - **Feature flags.** Risky changes (touching auth, payment, data) should ship behind a flag with a rollout plan. If absent, Section B for the author to consider.
-- **Migration safety.** Schema changes — are they backward-compatible with the previous code? Can they be rolled back? Refer to the web-sre playbook for the full release-readiness rubric.
+- **Migration safety.** Schema changes — are they backward-compatible with the previous code? Can they be rolled back? Refer to the [web-sre](/docs/playbooks/web-sre.md) playbook for the full release-readiness rubric.
 - **Refer to web-sre playbook** for release-readiness on anything that touches production behaviour.
 
 # PHASE 3 — WHAT NOT TO FLAG

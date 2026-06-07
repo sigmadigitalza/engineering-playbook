@@ -146,11 +146,15 @@ site.process([".html"], (pages) => {
     const from = "file://" + page.src.path + page.src.ext;
     for (const anchor of document.querySelectorAll("a[href]")) {
       const href = anchor.getAttribute("href");
-      if (!href || href.startsWith("/") || href.startsWith("#")) continue;
+      if (!href || href.startsWith("#")) continue;
       if (/^[a-z][a-z0-9+.-]*:/i.test(href)) continue; // external scheme
       const [path, hash] = href.split("#");
       if (!path.endsWith(".md")) continue;
-      const target = new URL(path, from).pathname;
+      // Absolute (root-relative) `.md` links map straight to a source page;
+      // relative links resolve against the current file. Absolute links let the
+      // same href work from both a prompt file and the playbook's embedded copy
+      // (which live in different folders).
+      const target = path.startsWith("/") ? path : new URL(path, from).pathname;
       const url = urlBySource.get(target);
       if (url) anchor.setAttribute("href", hash ? `${url}#${hash}` : url);
     }
