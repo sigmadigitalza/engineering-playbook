@@ -7,13 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-### Changed
-
 ### Fixed
 
-### Removed
+- use the handbook footer on the design section (#30 by @Pushplaybang)
 
 ## [0.6.0] - 2026-06-07
 
