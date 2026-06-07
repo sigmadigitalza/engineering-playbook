@@ -7,13 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
 ### Changed
+
+- add verified links to the Lineage section (#32 by @Pushplaybang)
 
 ### Fixed
 
-### Removed
+- loosen heading line-height so Syne descenders aren't clipped (#33 by @Pushplaybang)
 
 ## [0.6.1] - 2026-06-07
 
