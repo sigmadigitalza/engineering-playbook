@@ -19,7 +19,7 @@ Review the configuration surface of a single GitHub repo:
 - Environments + deployment-branch restrictions
 - Webhook inventory — enumerate via `gh api repos/:owner/:repo/hooks`. Secret *values* aren't returned, but `config.secret` comes back masked as `********` when one is set — enough to confirm a secret is configured without leaving the API.
 
-Do NOT review the YAML inside `.github/workflows/` — that's the job of the `github-actions-review` playbook. If you find workflow-internal issues while doing reconnaissance, note them and recommend running that playbook separately.
+Do NOT review the YAML inside `.github/workflows/` — that's the job of the [`github-actions-review`](/docs/playbooks/github-actions-review.md) playbook. If you find workflow-internal issues while doing reconnaissance, note them and recommend running that playbook separately.
 
 # PHASE 0 — POSTURE DETECTION
 

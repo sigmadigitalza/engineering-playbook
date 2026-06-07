@@ -1,0 +1,121 @@
+/* Handbook chrome (sticky header + footer) for the self-contained design-
+   foundations pages, so the Design section shares the site's nav and footer.
+   Scoped to .site-header / .site-footer and applied to <div>s (not <header>/
+   <footer>) so the foundations' element-level header{}/footer{} rules don't
+   collide. Uses the tokens + Space Mono already defined per page. */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: saturate(140%) blur(12px);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+.site-header .wrap,
+.site-footer .wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: 60px;
+}
+.site-header .brand {
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.site-header .brand::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: var(--red);
+}
+.site-header nav {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  font-family: "Space Mono", monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.site-header nav a {
+  color: var(--ink-dim);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+.site-header nav a:hover,
+.site-header nav a[aria-current] {
+  color: var(--ink);
+}
+.site-footer {
+  max-width: 1080px;
+  margin: 5rem auto 0;
+  padding: 0 1.5rem 4rem;
+}
+.site-footer .foot-top {
+  border-top: 1px solid var(--line);
+  padding-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+.site-footer .foot-label {
+  font-family: "Space Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.site-footer .colophon {
+  font-family: "Space Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  margin: 0;
+}
+.site-footer nav {
+  margin-top: 1.25rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.site-footer nav a {
+  font-family: "Space Mono", monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+.site-footer nav a:hover {
+  color: var(--ink);
+}
+@media (max-width: 620px) {
+  .site-header nav {
+    gap: 0.9rem;
+    font-size: 0.68rem;
+  }
+  .site-header .brand span {
+    display: none;
+  }
+}
