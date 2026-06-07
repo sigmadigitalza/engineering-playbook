@@ -50,14 +50,14 @@ These are the *why* behind the rules.
 
 For context, this standard distils and adapts:
 
-- **NASA/JPL Power of 10** (Holzmann, 2006) — the structural backbone, adapted for managed runtimes.
-- **SEI CERT Secure Coding Standards** — language-specific security and reliability rules.
-- **NIST SSDF (SP 800-218)** — organisational and lifecycle controls.
-- **SLSA** — build and supply-chain integrity.
-- **OWASP ASVS / Top 10** — application security baseline.
-- **Twelve-Factor App** — operational hygiene for services.
-- **Release It! (Nygard)** — stability patterns (circuit breaker, bulkhead, etc.).
-- Language-native canon: Effective Go, Kotlin coding conventions, TypeScript strict mode, GDScript style guide.
+- **[NASA/JPL Power of 10](https://spinroot.com/gerard/pdf/P10.pdf)** (Holzmann, 2006) — the structural backbone, adapted for managed runtimes.
+- **[SEI CERT Secure Coding Standards](https://cmu-sei.github.io/secure-coding-standards/)** — language-specific security and reliability rules.
+- **[NIST SSDF (SP 800-218)](https://csrc.nist.gov/pubs/sp/800/218/final)** — organisational and lifecycle controls.
+- **[SLSA](https://slsa.dev/)** — build and supply-chain integrity.
+- **OWASP [ASVS](https://owasp.org/www-project-application-security-verification-standard/) / [Top 10](https://owasp.org/www-project-top-ten/)** — application security baseline.
+- **[Twelve-Factor App](https://12factor.net/)** — operational hygiene for services.
+- **[Release It!](https://pragprog.com/titles/mnee2/release-it-second-edition/)** (Nygard) — stability patterns (circuit breaker, bulkhead, etc.).
+- Language-native canon: [Effective Go](https://go.dev/doc/effective_go), [Kotlin coding conventions](https://kotlinlang.org/docs/coding-conventions.html), [TypeScript strict mode](https://www.typescriptlang.org/tsconfig/#strict), [GDScript style guide](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_styleguide.html).
 
 You do not need to read all of these. You need to internalise what follows.
 
