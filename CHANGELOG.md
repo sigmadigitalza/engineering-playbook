@@ -9,11 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-### Changed
-
-### Fixed
-
-### Removed
+- light mode for the design foundations; linkify in-doc cross-references (#26 by @Pushplaybang)
 
 ## [0.4.0] - 2026-06-07
 
