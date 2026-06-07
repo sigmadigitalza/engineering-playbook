@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+## [0.6.2] - 2026-06-07
+
 ### Changed
 
 - add verified links to the Lineage section (#32 by @Pushplaybang)
