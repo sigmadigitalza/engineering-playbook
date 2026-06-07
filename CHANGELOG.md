@@ -9,11 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-### Changed
-
-### Fixed
-
-### Removed
+- handbook header/footer on the design section; linkify prompt-body cross-refs (#28 by @Pushplaybang)
 
 ## [0.5.0] - 2026-06-07
 
