@@ -15,6 +15,11 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  # rational-release@v1's reusable workflow declares `actions: write` (for its
+  # optional post-push dispatch step). A reusable-workflow caller must grant at
+  # least what the called workflow declares, or the run fails at startup — which
+  # is what silently blocked every release since v0.3.0.
+  actions: write
 
 jobs:
   prepare:
