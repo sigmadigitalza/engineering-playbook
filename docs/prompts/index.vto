@@ -1,0 +1,24 @@
+---
+layout: layouts/base.vto
+title: Prompts
+url: /docs/prompts/
+---
+<article class="home">
+  <header class="hero">
+    <div class="eyebrow">Sigma · Prompts</div>
+    <h1>The<br><em>prompts.</em></h1>
+    <p class="lede">The LLM-ready version of each playbook — hand one to Claude Code, Claude, or Copilot and point it at a PR, a workflow, a service, or a design. They <a href="https://github.com/sigmadigitalza/engineering-playbook#use-in-your-ai-assistant">install as skills and Copilot instructions</a>, so the same review runs whichever assistant you use.</p>
+  </header>
+
+  <div class="section-block">
+    <ul class="entry-list">
+      {{ for entry of search.pages("section=prompts", "title") }}
+      <li>
+        <a href="{{ entry.url }}">
+          <span class="entry-title">{{ entry.title }}</span>
+        </a>
+      </li>
+      {{ /for }}
+    </ul>
+  </div>
+</article>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestalt — The Laws of Seeing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Syne:wght@600;700&family=Hanken+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#100f0d;
+    --surface:#1a1916;
+    --surface-2:#232220;
+    --line:rgba(236,234,225,0.10);
+    --line-2:rgba(236,234,225,0.18);
+    --ink:#ECEAE1;
+    --ink-dim:#8d8a80;
+    --ink-faint:#4f4d47;
+    --red:#E8503A;
+    --blue:#3D6BFF;
+    --yellow:#F2C14E;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Hanken Grotesk",sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(61,107,255,0.07), transparent 40%),
+      radial-gradient(circle at 88% 96%, rgba(232,80,58,0.06), transparent 42%);
+    background-attachment:fixed;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    max-width:1080px;
+    margin:0 auto;
+    padding:6rem 1.5rem 2.5rem;
+    border-bottom:1px solid var(--line);
+    opacity:0; animation:rise .8s .05s ease forwards;
+  }
+  .eyebrow{
+    font-family:"Space Mono",monospace;
+    font-size:.78rem; letter-spacing:.28em; text-transform:uppercase;
+    color:var(--red); margin-bottom:1.4rem;
+    display:flex; align-items:center; gap:.8rem;
+  }
+  .eyebrow::before{content:""; width:34px; height:2px; background:var(--red); display:inline-block;}
+  h1{
+    font-family:"Fraunces",serif; font-weight:900; font-optical-sizing:auto;
+    font-size:clamp(2.8rem,7.5vw,5.6rem);
+    line-height:.96; letter-spacing:-.025em; margin:0;
+  }
+  h1 em{ font-style:italic; font-weight:600; color:var(--ink-faint); }
+  header p{
+    max-width:64ch; color:var(--ink-dim); margin:1.6rem 0 0; font-size:1.05rem;
+  }
+
+  /* ---------- grid ---------- */
+  .grid{
+    max-width:1080px; margin:0 auto; padding:3rem 1.5rem 5rem;
+    display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem;
+  }
+  @media (max-width:720px){ .grid{grid-template-columns:1fr;} header{padding-top:4rem;} }
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:1.6rem 1.6rem 1.4rem;
+    display:flex; flex-direction:column;
+    opacity:0; transform:translateY(18px);
+    animation:rise .7s ease forwards;
+    transition:border-color .3s ease, transform .3s ease;
+  }
+  .card:hover{ border-color:var(--line-2); }
+  .card-head{ display:flex; align-items:baseline; gap:.75rem; margin-bottom:.2rem; }
+  .num{
+    font-family:"Space Mono",monospace; font-size:.8rem; color:var(--ink-faint);
+    font-weight:700;
+  }
+  .card h2{
+    font-family:"Syne",sans-serif; font-weight:700; font-size:1.35rem;
+    margin:0; letter-spacing:-.01em;
+  }
+  .card .lede{ color:var(--ink-dim); font-size:.92rem; margin:.5rem 0 1.2rem; min-height:2.6em; }
+
+  /* ---------- demo stage ---------- */
+  .stage{
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:11px;
+    aspect-ratio:8/5;
+    position:relative; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .stage svg{ width:100%; height:100%; display:block; }
+  .layer{ position:absolute; inset:0; transition:opacity .55s ease; }
+
+  /* controls */
+  .ctrl{ display:flex; align-items:center; justify-content:space-between; margin-top:1.1rem; gap:1rem; }
+  .state-tag{
+    font-family:"Space Mono",monospace; font-size:.72rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--ink-dim); transition:color .3s ease;
+  }
+  .card.on .state-tag{ color:var(--yellow); }
+  .toggle{
+    appearance:none; border:1px solid var(--line-2); background:transparent;
+    color:var(--ink); font-family:"Space Mono",monospace; font-size:.78rem;
+    letter-spacing:.06em; padding:.5rem .9rem; border-radius:50px; cursor:pointer;
+    transition:all .25s ease; white-space:nowrap;
+  }
+  .toggle:hover{ border-color:var(--ink-dim); }
+  .card.on .toggle{ background:var(--ink); color:var(--bg); border-color:var(--ink); }
+
+  /* ===== per-demo visuals (CSS-driven where possible) ===== */
+
+  /* Similarity & Focal: css grids */
+  .dot-grid{ display:grid; gap:9%; height:78%; aspect-ratio:1; }
+  .cell{ border-radius:50%; aspect-ratio:1; background:var(--ink-faint); transition:background .45s ease, transform .45s ease; }
+  /* similarity: alternate columns flip on */
+  .card.on .cell.alt{ background:var(--red); }
+  /* focal: single cell flips */
+  .card.on .cell.focal{ background:var(--red); transform:scale(1.5); }
+
+  /* layered SVG demos: second layer hidden until .on */
+  .reveal{ opacity:0; }
+  .card.on .reveal{ opacity:1; }
+  .base.fade-out{ transition:opacity .55s ease; }
+  .card.on .base.fade-out{ opacity:0; }
+
+  /* Rubin figure-ground swap */
+  .rubin-ground{ fill:var(--blue); transition:fill .6s ease; }
+  .rubin-vase{ fill:var(--ink); transition:fill .6s ease; }
+  .card.on .rubin-ground{ fill:var(--ink); }
+  .card.on .rubin-vase{ fill:var(--blue); }
+
+  /* Common Fate: synchronised drift */
+  @keyframes cfdrift{ 0%,100%{ transform:translateX(-28px); } 50%{ transform:translateX(28px); } }
+  .card.on .cf-move{ animation:cfdrift 2s ease-in-out infinite; }
+
+  footer{ max-width:1080px; margin:0 auto; padding:0 1.5rem 5rem; }
+  .foot-inner{ border-top:1px solid var(--line); padding-top:2rem; display:flex; justify-content:space-between; gap:1.5rem 2rem; flex-wrap:wrap; align-items:baseline; }
+  .cross{ display:flex; gap:1.5rem; flex-wrap:wrap; }
+  .cross a{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); text-decoration:none; transition:color .25s ease; display:inline-flex; align-items:center; gap:.55rem; }
+  .cross a:hover{ color:var(--ink); }
+  .cross a[aria-current]{ color:var(--ink); }
+  .cross a[aria-current]::before{ content:""; width:18px; height:2px; background:var(--red); display:inline-block; }
+  .colophon{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.08em; color:var(--ink-faint); margin:0; }
+  .cross a.here{ color:var(--red); }
+  .cross .soon{ color:var(--ink-faint); }
+  .cross .soon::after{ content:"soon"; font-size:.58rem; letter-spacing:.1em; border:1px solid var(--line); border-radius:3px; padding:0 .3rem; margin-left:.45rem; }
+  .pillars{ margin-top:1.25rem; padding-top:1.15rem; border-top:1px solid var(--line); }
+
+  @keyframes rise{ to{opacity:1; transform:translateY(0);} }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important; transition:none!important;} .card{opacity:1;transform:none;} header{opacity:1;} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Visual Perception · 1920s → today</div>
+  <h1>The Laws<br>of <em>Seeing.</em></h1>
+  <p>The mind doesn't read pixels — it builds wholes. These are the Gestalt principles: the rules your brain follows to turn marks on a screen into meaning. Toggle each one to watch perception switch on.</p>
+</header>
+
+<main class="grid" id="grid"></main>
+
+<footer>
+  <div class="foot-inner">
+    <nav class="cross">
+      <a href="gestalt-principles.html" aria-current="page">Interactive</a>
+      <a href="gestalt-overview.html">Overview</a>
+      <a href="gestalt-reference.html">Reference</a>
+      <a href="gestalt-reading.html">Further Reading</a>
+    </nav>
+    <p class="colophon">GESTALT // das Ganze ist mehr als die Summe seiner Teile</p>
+  </div>
+  <nav class="cross pillars">
+    <a href="index.html">Foundations</a>
+    <a href="gestalt-principles.html" class="here">Gestalt</a>
+    <a href="typography-principles.html">Typography</a>
+    <a href="motion-principles.html">Motion</a>
+  </nav>
+</footer>
+
+<script>
+const NS = "http://www.w3.org/2000/svg";
+const el = (n,a={})=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e;};
+const VB = "0 0 320 200";
+
+/* ---- Catmull-Rom -> bezier path (for the Rubin vase) ---- */
+function smooth(pts){ // pts: array of [x,y], path assumed already at pts[0]
+  let d="";
+  for(let i=0;i<pts.length-1;i++){
+    const p0=pts[i-1]||pts[i], p1=pts[i], p2=pts[i+1], p3=pts[i+2]||pts[i+1];
+    const c1x=p1[0]+(p2[0]-p0[0])/6, c1y=p1[1]+(p2[1]-p0[1])/6;
+    const c2x=p2[0]-(p3[0]-p1[0])/6, c2y=p2[1]-(p3[1]-p1[1])/6;
+    d+=`C${c1x.toFixed(1)},${c1y.toFixed(1)} ${c2x.toFixed(1)},${c2y.toFixed(1)} ${p2[0]},${p2[1]} `;
+  }
+  return d;
+}
+
+/* ===== demo builders ===== */
+const demos = {
+  proximity(stage){
+    // layer A: even field
+    const a = el("svg",{viewBox:VB,class:"layer base fade-out"});
+    const cols=[64,128,192,256], rows=[60,100,140];
+    cols.forEach(x=>rows.forEach(y=>a.appendChild(el("circle",{cx:x,cy:y,r:10,fill:"var(--ink-dim)"}))));
+    // layer B: three clusters
+    const b = el("svg",{viewBox:VB,class:"layer reveal"});
+    const groups=[55,160,265];
+    groups.forEach(gx=>[[-15,-22],[15,-22],[-15,22],[15,22]].forEach(([dx,dy])=>
+      b.appendChild(el("circle",{cx:gx+dx,cy:100+dy,r:10,fill:"var(--ink)"}))));
+    stage.append(a,b);
+  },
+
+  similarity(stage){
+    const grid=document.createElement("div"); grid.className="dot-grid";
+    grid.style.gridTemplateColumns="repeat(5,1fr)";
+    grid.style.gridTemplateRows="repeat(5,1fr)";
+    for(let r=0;r<5;r++)for(let c=0;c<5;c++){
+      const d=document.createElement("div");
+      d.className="cell"+(c%2===0?" alt":"");
+      grid.appendChild(d);
+    }
+    stage.appendChild(grid);
+  },
+
+  continuity(stage){
+    const base=el("svg",{viewBox:VB,class:"layer base"});
+    const reveal=el("svg",{viewBox:VB,class:"layer reveal"});
+    const N=7;
+    const A=[],B=[];
+    for(let i=0;i<N;i++){
+      const t=i/(N-1), x=30+t*260;
+      const bow=Math.sin(t*Math.PI)*14;
+      A.push([x, 50+t*100 + bow]);   // top-left -> bottom-right
+      B.push([x, 150-t*100 - bow]);  // bottom-left -> top-right
+    }
+    A.concat(B).forEach(([x,y])=>base.appendChild(el("circle",{cx:x,cy:y,r:8,fill:"var(--ink-faint)"})));
+    A.forEach(([x,y])=>reveal.appendChild(el("circle",{cx:x,cy:y,r:8,fill:"var(--blue)"})));
+    B.forEach(([x,y])=>reveal.appendChild(el("circle",{cx:x,cy:y,r:8,fill:"var(--yellow)"})));
+    stage.append(base,reveal);
+  },
+
+  closure(stage){
+    const verts=[[160,55],[80,150],[240,150]];
+    const C=[(verts[0][0]+verts[1][0]+verts[2][0])/3,(verts[0][1]+verts[1][1]+verts[2][1])/3];
+    const base=el("svg",{viewBox:VB,class:"layer base"});
+    const reveal=el("svg",{viewBox:VB,class:"layer reveal"});
+    // illusory triangle revealed underneath the discs
+    reveal.appendChild(el("path",{d:`M${verts[0]}L${verts[1]}L${verts[2]}Z`,fill:"rgba(232,80,58,0.14)",stroke:"var(--red)","stroke-width":1.5,"stroke-dasharray":"4 4"}));
+    // each disc's notch opens exactly toward the other two vertices -> edges land on the triangle
+    const TAU=Math.PI*2, norm=x=>((x%TAU)+TAU)%TAU, R=30;
+    const neighbours=[[1,2],[0,2],[0,1]];
+    verts.forEach((v,vi)=>{
+      const A=verts[neighbours[vi][0]], B=verts[neighbours[vi][1]];
+      const aA=Math.atan2(A[1]-v[1],A[0]-v[0]);
+      const aB=Math.atan2(B[1]-v[1],B[0]-v[0]);
+      const aC=Math.atan2(C[1]-v[1],C[0]-v[0]);
+      const interiorCCW = norm(aC-aA) <= norm(aB-aA); // notch sector contains the centroid
+      const span = interiorCCW ? norm(aA-aB) : norm(aB-aA); // sweep the exterior (body) arc
+      const dir  = interiorCCW ? -1 : 1, steps=Math.ceil(span/0.1), pts=[];
+      for(let i=0;i<=steps;i++){
+        const ang=aA+dir*span*(i/steps);
+        pts.push(`${(v[0]+R*Math.cos(ang)).toFixed(1)},${(v[1]+R*Math.sin(ang)).toFixed(1)}`);
+      }
+      base.appendChild(el("path",{d:`M${v[0]},${v[1]} L${pts.join(" L")} Z`,fill:"var(--ink)"}));
+    });
+    stage.append(reveal,base);
+  },
+
+  figureground(stage){
+    const svg=el("svg",{viewBox:"0 0 200 200",class:"layer"});
+    svg.appendChild(el("rect",{x:0,y:0,width:200,height:200,class:"rubin-ground"}));
+    // right-edge profile points (x = 100 + d). Mirror for left.
+    const right=[[146,22],[140,42],[149,66],[128,90],[121,108],[145,120],[133,129],[143,137],[133,147],[129,166],[151,186],[140,196]];
+    const left=right.map(p=>[200-p[0],p[1]]).reverse();
+    let d=`M54,22 L146,22 ${smooth(right)} L60,196 ${smooth(left)} Z`;
+    svg.appendChild(el("path",{d, class:"rubin-vase"}));
+    stage.appendChild(svg);
+  },
+
+  commonregion(stage){
+    const base=el("svg",{viewBox:VB,class:"layer"});
+    const reveal=el("svg",{viewBox:VB,class:"layer reveal"});
+    const xs=[50,98,146,194,242,290];
+    // regions sit behind dots, grouping 1-3 and 4-6
+    reveal.appendChild(el("rect",{x:30,y:70,width:142,height:60,rx:14,fill:"rgba(61,107,255,0.16)",stroke:"var(--blue)","stroke-width":1.5}));
+    reveal.appendChild(el("rect",{x:174,y:70,width:120,height:60,rx:14,fill:"rgba(242,193,78,0.16)",stroke:"var(--yellow)","stroke-width":1.5}));
+    xs.forEach(x=>base.appendChild(el("circle",{cx:x,cy:100,r:11,fill:"var(--ink)"})));
+    stage.append(reveal,base);
+  },
+
+  connectedness(stage){
+    const base=el("svg",{viewBox:VB,class:"layer"});
+    const reveal=el("svg",{viewBox:VB,class:"layer reveal"});
+    const xs=[50,98,146,194,242,290];
+    // connectors bind pairs (1-2),(3-4),(5-6) — beats even spacing
+    [[0,1],[2,3],[4,5]].forEach(([i,j])=>
+      reveal.appendChild(el("line",{x1:xs[i],y1:100,x2:xs[j],y2:100,stroke:"var(--red)","stroke-width":4,"stroke-linecap":"round"})));
+    xs.forEach(x=>base.appendChild(el("circle",{cx:x,cy:100,r:11,fill:"var(--ink)"})));
+    stage.append(reveal,base);
+  },
+
+  focal(stage){
+    const grid=document.createElement("div"); grid.className="dot-grid";
+    grid.style.gridTemplateColumns="repeat(5,1fr)";
+    grid.style.gridTemplateRows="repeat(5,1fr)";
+    for(let i=0;i<25;i++){
+      const d=document.createElement("div");
+      d.className="cell"+(i===12?" focal":"");
+      grid.appendChild(d);
+    }
+    stage.appendChild(grid);
+  },
+
+  symmetry(stage){
+    // off: lopsided cluster (weighted left)   on: balanced, symmetric composition
+    const base=el("svg",{viewBox:VB,class:"layer base fade-out"});
+    [[42,44,66,26],[52,82,40,38],[34,132,92,20],[150,58,46,74]].forEach(([x,y,w,h])=>
+      base.appendChild(el("rect",{x,y,width:w,height:h,rx:4,fill:"var(--ink-faint)"})));
+    const rev=el("svg",{viewBox:VB,class:"layer reveal"});
+    rev.appendChild(el("line",{x1:160,y1:24,x2:160,y2:176,stroke:"var(--blue)","stroke-width":1,"stroke-dasharray":"3 5",opacity:.6}));
+    [[110,34,100,16],[58,66,82,84],[182,66,82,84],[110,166,100,14]].forEach(([x,y,w,h])=>
+      rev.appendChild(el("rect",{x,y,width:w,height:h,rx:4,fill:"var(--ink)"})));
+    stage.append(base,rev);
+  },
+
+  commonfate(stage){
+    // identical, evenly-spaced field; the middle column drifts in unison when on
+    const svg=el("svg",{viewBox:VB,class:"layer"});
+    const xs=[50,105,160,215,270], ys=[55,100,145], move=el("g",{class:"cf-move"});
+    xs.forEach((x,ci)=>ys.forEach(y=>{
+      const c=el("circle",{cx:x,cy:y,r:9,fill:"var(--ink)"});
+      (ci===2?move:svg).appendChild(c);
+    }));
+    svg.appendChild(move);
+    stage.appendChild(svg);
+  }
+};
+
+/* ===== card definitions ===== */
+const cards=[
+  {key:"proximity",    title:"Proximity",             lede:"Objects placed near each other read as one group — spacing alone, no lines or colour, splits a flat field into clusters.", off:"Even field", on:"Three groups", btn:"Cluster them"},
+  {key:"similarity",   title:"Similarity",            lede:"Elements that share a visual trait are grouped together. Identical spacing, but shared colour pulls the dots into vertical bands.", off:"Uniform field", on:"Grouped by colour", btn:"Match colours"},
+  {key:"closure",      title:"Closure",               lede:"Given enough of an edge, the mind completes the shape — three notched discs conjure a triangle never actually drawn.", off:"Three discs", on:"Hidden triangle", btn:"Reveal it"},
+  {key:"figureground", title:"Figure-Ground",         lede:"Perception splits a scene into subject and backdrop — and can flip which is which. A vase, or two faces in profile? Both live here.", off:"A vase", on:"Two faces", btn:"Flip it"},
+  {key:"continuity",   title:"Continuity",            lede:"The eye follows the smoothest path. At the crossing we don't see a corner — we see two flowing strands that pass through each other.", off:"A tangle", on:"Two strands", btn:"Trace the flow"},
+  {key:"commonregion", title:"Common Region",         lede:"A shared boundary outranks distance. Enclose the dots and they regroup by region, ignoring how evenly they're spaced.", off:"Six equal dots", on:"Two regions", btn:"Draw regions"},
+  {key:"focal",        title:"Focal Point",           lede:"One break in the pattern captures attention instantly. A single deviation in a uniform field becomes the place your eye lands first.", off:"All alike", on:"One stands out", btn:"Break the grid"},
+  {key:"connectedness",title:"Uniform Connectedness", lede:"A visible link is the strongest bind of all. Connect pairs and they read as three units, overriding the even rhythm of the row.", off:"Six equal dots", on:"Three pairs", btn:"Connect them"},
+  {key:"symmetry",     title:"Symmetry & Order",      lede:"The mind prefers the simplest, most balanced reading. A lopsided cluster resolves into a calm, symmetric composition parsed at a glance.", off:"Lopsided", on:"Balanced", btn:"Balance it"},
+  {key:"commonfate",   title:"Common Fate",           lede:"Things that move together belong together. Set one column drifting in unison and it lifts away from the still field — grouped by motion alone.", off:"Still field", on:"Moving as one", btn:"Set them moving"},
+];
+
+const grid=document.getElementById("grid");
+cards.forEach((c,i)=>{
+  const card=document.createElement("section");
+  card.className="card";
+  card.style.animationDelay=(0.12+i*0.06)+"s";
+  card.innerHTML=`
+    <div class="card-head"><span class="num">${String(i+1).padStart(2,"0")}</span><h2>${c.title}</h2></div>
+    <p class="lede">${c.lede}</p>
+    <div class="stage"></div>
+    <div class="ctrl">
+      <span class="state-tag" data-off="${c.off}" data-on="${c.on}">${c.off}</span>
+      <button class="toggle">${c.btn}</button>
+    </div>`;
+  grid.appendChild(card);
+  demos[c.key](card.querySelector(".stage"));
+
+  const btn=card.querySelector(".toggle");
+  const tag=card.querySelector(".state-tag");
+  btn.addEventListener("click",()=>{
+    const on=card.classList.toggle("on");
+    tag.textContent = on ? tag.dataset.on : tag.dataset.off;
+    btn.textContent = on ? "Reset" : c.btn;
+  });
+});
+</script>
+</body>
+</html>

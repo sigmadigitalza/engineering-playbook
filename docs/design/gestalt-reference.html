@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestalt — The Ten Laws</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Syne:wght@600;700&family=Hanken+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#100f0d; --surface:#1a1916; --surface-2:#232220;
+    --line:rgba(236,234,225,0.10); --line-2:rgba(236,234,225,0.18);
+    --ink:#ECEAE1; --ink-dim:#8d8a80; --ink-faint:#4f4d47;
+    --red:#E8503A; --blue:#3D6BFF; --yellow:#F2C14E;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Hanken Grotesk",sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(61,107,255,0.07), transparent 40%),
+      radial-gradient(circle at 88% 96%, rgba(232,80,58,0.06), transparent 42%);
+    background-attachment:fixed;
+  }
+  header{ max-width:1080px; margin:0 auto; padding:6rem 1.5rem 2.5rem; border-bottom:1px solid var(--line); opacity:0; animation:rise .8s .05s ease forwards; }
+  .eyebrow{ font-family:"Space Mono",monospace; font-size:.78rem; letter-spacing:.28em; text-transform:uppercase; color:var(--red); margin-bottom:1.4rem; display:flex; align-items:center; gap:.8rem; }
+  .eyebrow::before{ content:""; width:34px; height:2px; background:var(--red); display:inline-block; }
+  h1{ font-family:"Fraunces",serif; font-weight:900; font-optical-sizing:auto; font-size:clamp(2.8rem,7.5vw,5.6rem); line-height:.96; letter-spacing:-.025em; margin:0; }
+  h1 em{ font-style:italic; font-weight:600; color:var(--ink-faint); }
+  .intro{ max-width:64ch; color:var(--ink-dim); margin:1.6rem 0 0; font-size:1.05rem; }
+  main{ max-width:1080px; margin:0 auto; padding:3rem 1.5rem 4rem; }
+
+  .refgrid{ display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem; }
+  .rcard{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:1.6rem 1.6rem 1.5rem; display:flex; flex-direction:column; transition:border-color .3s ease; }
+  .rcard:hover{ border-color:var(--line-2); }
+  .rhead{ display:flex; align-items:baseline; gap:.7rem; }
+  .rnum{ font-family:"Space Mono",monospace; font-size:.8rem; font-weight:700; color:var(--ink-faint); }
+  .rcard h2{ font-family:"Syne",sans-serif; font-weight:700; font-size:1.25rem; margin:0; letter-spacing:-.01em; }
+  .alt{ font-family:"Space Mono",monospace; font-size:.66rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint); margin:.3rem 0 0; }
+  .concept{ color:var(--ink-dim); font-size:.92rem; margin:.9rem 0 0; }
+  pre.ascii{ font-family:"Space Mono",monospace; font-size:.7rem; line-height:1.55; color:var(--ink-dim); background:var(--surface-2); border:1px solid var(--line); border-left:2px solid var(--blue); border-radius:9px; padding:1rem 1.1rem; margin:1.1rem 0; overflow-x:auto; white-space:pre; }
+  .impl{ font-size:.9rem; color:var(--ink); margin:auto 0 0; }
+  .impllabel{ font-family:"Space Mono",monospace; font-size:.64rem; letter-spacing:.16em; text-transform:uppercase; color:var(--blue); display:block; margin-bottom:.35rem; }
+
+  .tablewrap{ margin-top:3.5rem; border-top:1px solid var(--line); padding-top:2.8rem; }
+  .tablewrap h2{ font-family:"Syne",sans-serif; font-weight:700; font-size:1.6rem; margin:0 0 .4rem; letter-spacing:-.01em; }
+  .tablewrap p{ color:var(--ink-dim); margin:0 0 1.6rem; font-size:.95rem; }
+  .scroll{ overflow-x:auto; }
+  table{ width:100%; border-collapse:collapse; font-size:.92rem; min-width:560px; }
+  th{ font-family:"Space Mono",monospace; font-size:.68rem; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-dim); text-align:left; padding:.7rem .9rem; border-bottom:1px solid var(--line-2); white-space:nowrap; }
+  td{ padding:.85rem .9rem; border-bottom:1px solid var(--line); color:var(--ink-dim); vertical-align:top; }
+  td.name{ color:var(--ink); font-family:"Syne",sans-serif; font-weight:600; white-space:nowrap; }
+  tr:hover td{ color:var(--ink); }
+
+  footer{ max-width:1080px; margin:0 auto; padding:0 1.5rem 5rem; }
+  .foot-inner{ border-top:1px solid var(--line); padding-top:2rem; display:flex; justify-content:space-between; gap:1.5rem 2rem; flex-wrap:wrap; align-items:baseline; }
+  .cross{ display:flex; gap:1.5rem; flex-wrap:wrap; }
+  .cross a{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); text-decoration:none; transition:color .25s ease; display:inline-flex; align-items:center; gap:.55rem; }
+  .cross a:hover{ color:var(--ink); }
+  .cross a[aria-current]{ color:var(--ink); }
+  .cross a[aria-current]::before{ content:""; width:18px; height:2px; background:var(--red); display:inline-block; }
+  .colophon{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.08em; color:var(--ink-faint); margin:0; }
+  .cross a.here{ color:var(--red); }
+  .cross .soon{ color:var(--ink-faint); }
+  .cross .soon::after{ content:"soon"; font-size:.58rem; letter-spacing:.1em; border:1px solid var(--line); border-radius:3px; padding:0 .3rem; margin-left:.45rem; }
+  .pillars{ margin-top:1.25rem; padding-top:1.15rem; border-top:1px solid var(--line); }
+
+  @media (max-width:720px){ .refgrid{ grid-template-columns:1fr; } header{ padding-top:4rem; } }
+  @keyframes rise{ to{ opacity:1; transform:translateY(0); } }
+  @media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; } header{ opacity:1; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Exhaustive Reference · 10 Laws</div>
+  <h1>The Ten<br><em>Laws.</em></h1>
+  <p class="intro">Every recognised Gestalt principle in one place — the concept, a quick visual sketch, and where it shows up in real interfaces. A working reference for design and build alike.</p>
+</header>
+
+<main>
+  <div class="refgrid">
+
+    <article class="rcard">
+      <div class="rhead"><span class="rnum">01</span><h2>Proximity</h2></div>
+      <p class="alt">Law of Propinquity</p>
+      <p class="concept">Elements placed close to one another are perceived as a single, unified group sharing a common relationship.</p>
+      <pre class="ascii">[ Image ]               [ Image ]
+[ Heading 1 ]           [ Heading 2 ]
+[ Body Paragraph 1 ]    [ Body Paragraph 2 ]</pre>
+      <p class="impl"><span class="impllabel">In the interface</span>Margins and padding create distinct content blocks — the gap between a heading and its body is kept smaller than the gap between two separate articles.</p>
+    </article>
+
+    <article class="rcard">
+      <div class="rhead"><span class="rnum">02</span><h2>Similarity</h2></div>
+      <p class="alt">Shared visual traits</p>
+      <p class="concept">Objects sharing colour, shape, size, orientation or weight are automatically grouped by the brain.</p>
+      <pre class="ascii">( ● ) Primary    ( ● ) Primary    ( ○ ) Secondary</pre>
+      <p class="impl"><span class="impllabel">In the interface</span>Consistent button languages: primary calls-to-action share one fill and font, while secondary links use outline-only styling.</p>
+    </article>
+
+    <article class="rcard">
+      <div class="rhead"><span class="rnum">03</span><h2>Closure</h2></div>
+      <p class="alt">Completing the gap</p>
+      <p class="concept">The eye automatically fills in the missing parts of an incomplete structure to perceive a whole, recognisable shape.</p>
+      <pre class="ascii">──────┐     ┌──────
+      │     │   --> the mind treats this
+      │     │       segmented viewport
+──────┘     └──────   as a solid square</pre>
+      <p class="impl"><span class="impllabel">In the interface</span>Loading wheels, abstract brand icons, and dashboard progress arcs — also a carousel clipping a card at the edge to signal more off-screen.</p>
+    </article>
+
+    <article class="rcard">
+      <div class="rhead"><span class="rnum">04</span><h2>Figure-Ground</h2></div>
+      <p class="alt">Object vs background</p>
+      <p class="concept">The mind instinctively separates foreground focal elements (the figure) from their supporting background (the ground).</p>
+      <pre class="ascii">┌────────────────────────────────────┐
+│ Background content (dimmed)         │
+│     ┌──────────────────────┐        │
+│     │      MODAL WINDOW     │  &lt;-- figure
+│     │   [ Confirm Action ]  │        │
+│     └──────────────────────┘        │
+└────────────────────────────────────┘</pre>
+      <p class="impl"><span class="impllabel">In the interface</span>Lightbox overlays and system dialogs: the app layer is desaturated, darkened or blurred via backdrop-filter, pushing the modal forward.</p>
+    </article>
+
+    <article class="rcard">
+      <div class="rhead"><span class="rnum">05</span><h2>Continuity</h2></div>
+      <p class="alt">Good Continuation</p>
+      <p class="concept">The eye naturally follows the smoothest, unbroken path or alignment vector rather than sharp, jagged changes in direction.</p>
+      <pre class="ascii">Step 1 (○)─────── Step 2 (○)─────── Step 3 (●)</pre>
+      <p class="impl"><span class="impllabel">In the interface</span>Linear multi-step registration timelines, drop-downs aligned to a clean vertical grid, and vertical timelines in activity feeds.</p>
+    </article>
+
+    <article class="rcard">
+      <div class="rhead"><span class="rnum">06</span><h2>Common Region</h2></div>
+      <p class="alt">Enclosure</p>
+      <p class="concept">Items enclosed within a clearly defined boundary are perceived as a distinct unit — overriding conflicting proximity rules.</p>
+      <pre class="ascii">┌──────────────────┐  ┌──────────────────┐
+│ User A Info      │  │ User B Info      │
+│ [Edit]  [Delete] │  │ [Edit]  [Delete] │
+└──────────────────┘  └──────────────────┘</pre>
+      <p class="impl"><span class="impllabel">In the interface</span>Feed cards, profile boxes and dashboard widgets — even identical button labels gain ownership from the container that wraps them.</p>
+    </article>
+
+    <article class="rcard">
+      <div class="rhead"><span class="rnum">07</span><h2>Focal Point</h2></div>
+      <p class="alt">Emphasis</p>
+      <p class="concept">A single element that is visually prominent or radically different from its surroundings immediately captures initial attention.</p>
+      <pre class="ascii">[ Standard ]   [ POPULAR ● ]   [ Enterprise ]</pre>
+      <p class="impl"><span class="impllabel">In the interface</span>Pricing matrices where the middle tier is scaled up, given a high-contrast colour, and badged "Most Popular" to dominate the gaze.</p>
+    </article>
+
+    <article class="rcard">
+      <div class="rhead"><span class="rnum">08</span><h2>Uniform Connectedness</h2></div>
+      <p class="alt">Physical linkage</p>
+      <p class="concept">Elements connected by lines, arrows or shared shading are perceived as more strongly related than those grouped by proximity or similarity alone.</p>
+      <pre class="ascii">[Tab A]═══[Tab B]   [Tab C]
+   ║
+[Active Content]</pre>
+      <p class="impl"><span class="impllabel">In the interface</span>Tab architectures where a solid accent line links the active pill directly to its parent viewport, proving ownership.</p>
+    </article>
+
+    <article class="rcard">
+      <div class="rhead"><span class="rnum">09</span><h2>Symmetry &amp; Order</h2></div>
+      <p class="alt">Prägnanz · Simplicity</p>
+      <p class="concept">The brain prefers ambiguous or complex stimuli to be read in their simplest, most symmetric and balanced interpretation.</p>
+      <pre class="ascii">┌───────────────┬───────────────┐
+│   Left Col    │   Right Col   │  &lt;-- balanced
+│   [Content]   │   [Content]   │      50 / 50
+└───────────────┴───────────────┘</pre>
+      <p class="impl"><span class="impllabel">In the interface</span>Balanced multi-column grids, centred landing layouts and proportional geometry blocks — minimising the work to read a layout.</p>
+    </article>
+
+    <article class="rcard">
+      <div class="rhead"><span class="rnum">10</span><h2>Common Fate</h2></div>
+      <p class="alt">Shared movement</p>
+      <p class="concept">Elements that move in the same direction, at the same velocity, or along the same vector are perceived as highly related.</p>
+      <pre class="ascii">[Item 1] ───> slide right
+[Item 2] ───> slide right
+[Item 3] ───> slide right</pre>
+      <p class="impl"><span class="impllabel">In the interface</span>Accordion panels, nested drawers and swipe cards — animating in unison along a clear axis reveals a single structural branch.</p>
+    </article>
+
+  </div>
+
+  <div class="tablewrap">
+    <h2>Quick reference</h2>
+    <p>Principle, purpose, and the UI pattern that most often triggers it.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Principle</th><th>Primary UX purpose</th><th>Common UI trigger</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Proximity</td><td>Establishes content relationships</td><td>Margins, line-heights, grid gaps</td></tr>
+          <tr><td class="name">Similarity</td><td>System-wide functional recognition</td><td>Button colours, consistent links</td></tr>
+          <tr><td class="name">Closure</td><td>Prompts exploration and interaction</td><td>Carousels, icons, load spinners</td></tr>
+          <tr><td class="name">Figure-Ground</td><td>Isolates high-priority tasks</td><td>Modals, lightboxes, dropdowns</td></tr>
+          <tr><td class="name">Continuity</td><td>Navigates the eye through steps</td><td>Checkout timelines, aligned columns</td></tr>
+          <tr><td class="name">Common Region</td><td>Segregates dense layout streams</td><td>Dashboard cards, feed containers</td></tr>
+          <tr><td class="name">Focal Point</td><td>Drives conversions and urgent choices</td><td>Accent buttons, conversion tables</td></tr>
+          <tr><td class="name">Uniform Connectedness</td><td>Validates deep hierarchies</td><td>Tab systems, connection bars</td></tr>
+          <tr><td class="name">Symmetry &amp; Order</td><td>Decreases interpretation time</td><td>Grid structures, hero columns</td></tr>
+          <tr><td class="name">Common Fate</td><td>Guides understanding via movement</td><td>Accordions, swipe-to-delete paths</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <nav class="cross">
+      <a href="gestalt-principles.html">Interactive</a>
+      <a href="gestalt-overview.html">Overview</a>
+      <a href="gestalt-reference.html" aria-current="page">Reference</a>
+      <a href="gestalt-reading.html">Further Reading</a>
+    </nav>
+    <p class="colophon">GESTALT // das Ganze ist mehr als die Summe seiner Teile</p>
+  </div>
+  <nav class="cross pillars">
+    <a href="index.html">Foundations</a>
+    <a href="gestalt-principles.html" class="here">Gestalt</a>
+    <a href="typography-principles.html">Typography</a>
+    <a href="motion-principles.html">Motion</a>
+  </nav>
+</footer>
+
+</body>
+</html>

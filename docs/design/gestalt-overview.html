@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestalt — Seeing in Wholes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Syne:wght@600;700&family=Hanken+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#100f0d; --surface:#1a1916; --surface-2:#232220;
+    --line:rgba(236,234,225,0.10); --line-2:rgba(236,234,225,0.18);
+    --ink:#ECEAE1; --ink-dim:#8d8a80; --ink-faint:#4f4d47;
+    --red:#E8503A; --blue:#3D6BFF; --yellow:#F2C14E;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Hanken Grotesk",sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(61,107,255,0.07), transparent 40%),
+      radial-gradient(circle at 88% 96%, rgba(232,80,58,0.06), transparent 42%);
+    background-attachment:fixed;
+  }
+  header{ max-width:1080px; margin:0 auto; padding:6rem 1.5rem 2.5rem; border-bottom:1px solid var(--line); opacity:0; animation:rise .8s .05s ease forwards; }
+  .eyebrow{ font-family:"Space Mono",monospace; font-size:.78rem; letter-spacing:.28em; text-transform:uppercase; color:var(--red); margin-bottom:1.4rem; display:flex; align-items:center; gap:.8rem; }
+  .eyebrow::before{ content:""; width:34px; height:2px; background:var(--red); display:inline-block; }
+  h1{ font-family:"Fraunces",serif; font-weight:900; font-optical-sizing:auto; font-size:clamp(2.8rem,7.5vw,5.6rem); line-height:.96; letter-spacing:-.025em; margin:0; }
+  h1 em{ font-style:italic; font-weight:600; color:var(--ink-faint); }
+  .intro{ max-width:64ch; color:var(--ink-dim); margin:1.6rem 0 0; font-size:1.05rem; }
+  main{ max-width:1080px; margin:0 auto; padding:1rem 1.5rem 4rem; }
+
+  .section{ padding:3.2rem 0; border-top:1px solid var(--line); }
+  .section:first-child{ border-top:none; }
+  .kicker{ font-family:"Space Mono",monospace; font-size:.76rem; letter-spacing:.22em; text-transform:uppercase; color:var(--red); display:flex; align-items:center; gap:.7rem; margin-bottom:.9rem; }
+  .kicker::before{ content:attr(data-n); color:var(--ink-faint); font-weight:700; }
+  .section h2{ font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(1.6rem,3.4vw,2.2rem); letter-spacing:-.01em; margin:0 0 1.4rem; }
+  .prose{ max-width:68ch; }
+  .prose p{ margin:0 0 1.1rem; color:var(--ink-dim); font-size:1.05rem; }
+  .prose p:last-child{ margin-bottom:0; }
+  .lead-in{ font-family:"Syne",sans-serif; font-weight:600; color:var(--ink); }
+
+  blockquote{ margin:2.6rem 0; padding-left:1.6rem; border-left:3px solid var(--red); font-family:"Fraunces",serif; font-style:italic; font-weight:600; font-size:clamp(1.5rem,3.5vw,2.1rem); line-height:1.2; color:var(--ink); max-width:22ch; }
+
+  .cardgrid{ display:grid; grid-template-columns:repeat(2,1fr); gap:1.25rem; margin-top:1.8rem; }
+  .pcard{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:1.5rem; transition:border-color .3s ease; }
+  .pcard:hover{ border-color:var(--line-2); }
+  .pcard h3{ font-family:"Syne",sans-serif; font-weight:700; font-size:1.15rem; margin:0 0 .5rem; }
+  .pcard .concept{ color:var(--ink-dim); font-size:.92rem; margin:0 0 1rem; }
+  .applabel{ font-family:"Space Mono",monospace; font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:var(--blue); display:block; margin-bottom:.35rem; }
+  .pcard .app{ font-size:.92rem; color:var(--ink); margin:0; }
+
+  .cta{ display:inline-flex; align-items:center; gap:.55rem; margin-top:2rem; font-family:"Space Mono",monospace; font-size:.8rem; letter-spacing:.06em; color:var(--ink); text-decoration:none; border-bottom:1px solid var(--line-2); padding-bottom:3px; transition:color .25s, border-color .25s; }
+  .cta:hover{ color:var(--red); border-color:var(--red); }
+
+  .goals{ display:grid; gap:1.6rem; margin-top:.5rem; max-width:60ch; }
+  .goal{ display:flex; gap:1.3rem; align-items:baseline; }
+  .goal .n{ font-family:"Fraunces",serif; font-weight:900; font-size:2.2rem; color:var(--ink-faint); line-height:1; min-width:1.4em; }
+  .goal h3{ font-family:"Syne",sans-serif; font-weight:600; font-size:1.1rem; margin:0 0 .25rem; }
+  .goal p{ margin:0; color:var(--ink-dim); font-size:.95rem; }
+
+  footer{ max-width:1080px; margin:0 auto; padding:0 1.5rem 5rem; }
+  .foot-inner{ border-top:1px solid var(--line); padding-top:2rem; display:flex; justify-content:space-between; gap:1.5rem 2rem; flex-wrap:wrap; align-items:baseline; }
+  .cross{ display:flex; gap:1.5rem; flex-wrap:wrap; }
+  .cross a{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); text-decoration:none; transition:color .25s ease; display:inline-flex; align-items:center; gap:.55rem; }
+  .cross a:hover{ color:var(--ink); }
+  .cross a[aria-current]{ color:var(--ink); }
+  .cross a[aria-current]::before{ content:""; width:18px; height:2px; background:var(--red); display:inline-block; }
+  .colophon{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.08em; color:var(--ink-faint); margin:0; }
+  .cross a.here{ color:var(--red); }
+  .cross .soon{ color:var(--ink-faint); }
+  .cross .soon::after{ content:"soon"; font-size:.58rem; letter-spacing:.1em; border:1px solid var(--line); border-radius:3px; padding:0 .3rem; margin-left:.45rem; }
+  .pillars{ margin-top:1.25rem; padding-top:1.15rem; border-top:1px solid var(--line); }
+
+  @media (max-width:720px){ .cardgrid{ grid-template-columns:1fr; } header{ padding-top:4rem; } }
+  @keyframes rise{ to{ opacity:1; transform:translateY(0); } }
+  @media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; } header{ opacity:1; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Origin · Evolution · Application</div>
+  <h1>Seeing in<br><em>Wholes.</em></h1>
+  <p class="intro">A set of psychological theories from 1920s Germany showing that we perceive visual elements as organised wholes, not isolated parts. In digital design, they are the blueprint for interfaces that feel intuitive.</p>
+</header>
+
+<main>
+  <section class="section">
+    <div class="kicker" data-n="01">Origins &amp; Foundations</div>
+    <h2>A rebellion against the parts</h2>
+    <div class="prose">
+      <p><span class="lead-in">The context.</span> In the early 20th century, the dominant theories — structuralism and behaviourism — tried to break human experience down into isolated sensory inputs.</p>
+      <p><span class="lead-in">The breakthrough.</span> In the 1920s, German psychologists Max Wertheimer, Kurt Koffka and Wolfgang Köhler rejected that reductionist view. They observed that the brain naturally organises visual chaos into meaningful patterns.</p>
+      <p><span class="lead-in">The philosophy.</span> They coined the term <em>Gestalt</em> — German for "unified whole" or "form." The mind automatically groups, simplifies and fills in visual gaps to make sense of its environment.</p>
+    </div>
+    <blockquote>The whole is different from the sum of its parts.</blockquote>
+  </section>
+
+  <section class="section">
+    <div class="kicker" data-n="02">From the Lab to the Studio</div>
+    <h2>How psychology became design</h2>
+    <div class="prose">
+      <p><span class="lead-in">The Bauhaus connection (1920s–30s).</span> The concepts migrated quickly from psychology labs to the Bauhaus school. Artists and architects realised that if they understood how the brain grouped objects, they could engineer layouts that were universally easy to understand.</p>
+      <p><span class="lead-in">Formalisation (1940s–60s).</span> As the creators fled Nazi Germany, the theory spread globally. György Kepes published <em>Language of Vision</em> (1944); Rudolf Arnheim published <em>Art and Visual Perception</em> (1954). These texts turned Gestalt from a psychological curiosity into the bedrock of design education.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="kicker" data-n="03">In the Interface</div>
+    <h2>Ten principles, applied</h2>
+    <div class="prose"><p>Users scan a screen in seconds. Designers lean on these cognitive shortcuts to make an interface immediately legible.</p></div>
+    <div class="cardgrid">
+      <div class="pcard"><h3>Proximity</h3><p class="concept">Elements placed close together read as a single related group.</p><span class="applabel">In the interface</span><p class="app">Form fields sit beside their labels; cards bundle an image, title and body into one unit.</p></div>
+      <div class="pcard"><h3>Similarity</h3><p class="concept">Shared colour, shape or size signals shared function.</p><span class="applabel">In the interface</span><p class="app">Every primary action button uses the same fill and shape — teaching what's clickable without instruction.</p></div>
+      <div class="pcard"><h3>Closure</h3><p class="concept">The brain fills in missing information to perceive a complete shape.</p><span class="applabel">In the interface</span><p class="app">Iconography, loading animations, and carousels clipped at the edge to imply more content.</p></div>
+      <div class="pcard"><h3>Figure-Ground</h3><p class="concept">The eye separates a focal object from its background.</p><span class="applabel">In the interface</span><p class="app">Drop shadows and darkened backdrops push a modal forward and the rest of the app back.</p></div>
+      <div class="pcard"><h3>Continuity</h3><p class="concept">The eye follows the smoothest path rather than abrupt changes.</p><span class="applabel">In the interface</span><p class="app">Nav menus, multi-step progress bars, and long-scroll pages guide the gaze sequentially.</p></div>
+      <div class="pcard"><h3>Common Region</h3><p class="concept">A shared boundary binds elements into a distinct unit.</p><span class="applabel">In the interface</span><p class="app">A border or background around a group of settings, comments or feed items sets it apart.</p></div>
+      <div class="pcard"><h3>Focal Point</h3><p class="concept">A single prominent or deviating element captures attention first.</p><span class="applabel">In the interface</span><p class="app">The "Most Popular" pricing tier — scaled up and colour-badged to win the first glance.</p></div>
+      <div class="pcard"><h3>Uniform Connectedness</h3><p class="concept">Elements joined by a line or shared shape bind more strongly than proximity or similarity alone.</p><span class="applabel">In the interface</span><p class="app">A tab's accent underline tying the active pill to its panel; connector lines in flows and tree views.</p></div>
+      <div class="pcard"><h3>Symmetry &amp; Order</h3><p class="concept">The mind resolves complexity into the simplest, most balanced interpretation.</p><span class="applabel">In the interface</span><p class="app">Balanced columns and centred layouts that cost the least effort to parse.</p></div>
+      <div class="pcard"><h3>Common Fate</h3><p class="concept">Elements moving in the same direction at the same time read as one group.</p><span class="applabel">In the interface</span><p class="app">Accordion sections and drawers that animate in unison, signalling they're one unit.</p></div>
+    </div>
+    <a class="cta" href="gestalt-principles.html">See these in motion →</a>
+  </section>
+
+  <section class="section">
+    <div class="kicker" data-n="04">Why It Matters</div>
+    <h2>Aligning with the brain's shortcuts</h2>
+    <div class="goals">
+      <div class="goal"><div class="n">1</div><div><h3>Visual hierarchy</h3><p>Direct the eye to the most important information first — pricing, alerts, the primary action.</p></div></div>
+      <div class="goal"><div class="n">2</div><div><h3>Scannability</h3><p>Let people find what they need in seconds without reading every word.</p></div></div>
+      <div class="goal"><div class="n">3</div><div><h3>Reduced cognitive load</h3><p>Make the interface feel familiar, predictable and effortless to navigate.</p></div></div>
+    </div>
+    <div class="prose" style="margin-top:2rem;"><p>Design without these principles produces visual friction, high cognitive load and frustration. Designing with them is what makes a product feel quietly inevitable.</p></div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <nav class="cross">
+      <a href="gestalt-principles.html">Interactive</a>
+      <a href="gestalt-overview.html" aria-current="page">Overview</a>
+      <a href="gestalt-reference.html">Reference</a>
+      <a href="gestalt-reading.html">Further Reading</a>
+    </nav>
+    <p class="colophon">GESTALT // das Ganze ist mehr als die Summe seiner Teile</p>
+  </div>
+  <nav class="cross pillars">
+    <a href="index.html">Foundations</a>
+    <a href="gestalt-principles.html" class="here">Gestalt</a>
+    <a href="typography-principles.html">Typography</a>
+    <a href="motion-principles.html">Motion</a>
+  </nav>
+</footer>
+
+</body>
+</html>

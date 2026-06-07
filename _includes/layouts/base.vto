@@ -6,6 +6,9 @@
   <title>{{ if title }}{{ title }} — {{ /if }}{{ site.title }}</title>
   <meta name="description" content="{{ description || site.subtitle }}">
   <meta name="color-scheme" content="light dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Syne:wght@600;700&family=Hanken+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <script src="/copy.js" defer></script>
 </head>
@@ -13,11 +16,11 @@
   <a href="#main" class="skip-link">Skip to content</a>
   <header class="site-header">
     <div class="wrap">
-      <a href="/" class="brand">{{ site.title }}</a>
+      <a href="/" class="brand">Sigma&nbsp;<span>Playbook</span></a>
       <nav class="primary" aria-label="Primary">
-        <a href="/#playbooks">Playbooks</a>
-        <a href="/#prompts">Prompts</a>
-        <a href="/#standards">Standards</a>
+        <a href="/docs/standards/">Engineering</a>
+        <a href="/docs/design/">Design</a>
+        <a href="/docs/playbooks/">Playbooks</a>
         <a href="https://github.com/sigmadigitalza/engineering-playbook" rel="noopener">GitHub</a>
       </nav>
     </div>
@@ -29,10 +32,16 @@
 
   <footer class="site-footer">
     <div class="wrap">
-      <p>
-        Maintained by <a href="https://sigmadigital.io" rel="noopener">Sigma Digital</a>.
-        Source on <a href="https://github.com/sigmadigitalza/engineering-playbook" rel="noopener">GitHub</a>.
-      </p>
+      <div class="foot-top">
+        <span class="foot-label">{{ site.title }}</span>
+        <p class="colophon">One language for how we build, design, and ship.</p>
+      </div>
+      <nav class="foot-nav" aria-label="Sections">
+        <a href="/docs/standards/">Engineering</a>
+        <a href="/docs/design/">Design</a>
+        <a href="/docs/playbooks/">Playbooks &amp; Prompts</a>
+        <a href="https://github.com/sigmadigitalza/engineering-playbook" rel="noopener">GitHub</a>
+      </nav>
     </div>
   </footer>
 </body>

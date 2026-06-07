@@ -1,0 +1,24 @@
+---
+layout: layouts/base.vto
+title: Playbooks
+url: /docs/playbooks/
+---
+<article class="home">
+  <header class="hero">
+    <div class="eyebrow">Sigma · Playbooks</div>
+    <h1>The<br><em>playbooks.</em></h1>
+    <p class="lede">How we review and operate, by discipline — the posture, the severity-ordered rubric, and the specific checks we run. Each pairs with an LLM-ready prompt in Prompts.</p>
+  </header>
+
+  <div class="section-block">
+    <ul class="entry-list">
+      {{ for entry of search.pages("section=playbooks", "title") }}
+      <li>
+        <a href="{{ entry.url }}">
+          <span class="entry-title">{{ entry.title }}</span>
+        </a>
+      </li>
+      {{ /for }}
+    </ul>
+  </div>
+</article>

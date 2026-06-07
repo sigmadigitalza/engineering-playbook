@@ -1,0 +1,155 @@
+{
+  "name": "Sigma Concept Explainer",
+  "version": "1.0.0",
+  "description": "Design tokens for single-page concept explainers and interactive examples. Bauhaus-on-dark editorial: a warm near-black canvas, refined off-white ink, primary-colour accents used sparingly, a high-contrast display serif over a geometric grotesque, and monospace for technical labels.",
+  "aesthetic": "bauhaus-on-dark / editorial",
+
+  "fontImport": "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Syne:wght@600;700&family=Hanken+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap",
+
+  "color": {
+    "background": {
+      "canvas": "#100f0d",
+      "surface": "#1a1916",
+      "surfaceRaised": "#232220"
+    },
+    "ink": {
+      "default": "#ECEAE1",
+      "dim": "#8d8a80",
+      "faint": "#4f4d47"
+    },
+    "line": {
+      "subtle": "rgba(236,234,225,0.10)",
+      "strong": "rgba(236,234,225,0.18)"
+    },
+    "accent": {
+      "primary": "#E8503A",
+      "red": "#E8503A",
+      "blue": "#3D6BFF",
+      "yellow": "#F2C14E",
+      "note": "Accents are sparks, not fields. One accent leads (red); blue and yellow support inside diagrams only."
+    },
+    "atmosphere": {
+      "type": "fixed dual radial gradients on the canvas",
+      "gradients": [
+        "radial-gradient(circle at 12% 8%, rgba(61,107,255,0.07), transparent 40%)",
+        "radial-gradient(circle at 88% 96%, rgba(232,80,58,0.06), transparent 42%)"
+      ]
+    }
+  },
+
+  "typography": {
+    "families": {
+      "display": "\"Fraunces\", serif",
+      "heading": "\"Syne\", sans-serif",
+      "body": "\"Hanken Grotesk\", sans-serif",
+      "mono": "\"Space Mono\", monospace"
+    },
+    "roles": {
+      "eyebrow":     { "family": "mono", "size": "0.78rem", "weight": 400, "letterSpacing": "0.28em", "transform": "uppercase", "color": "accent.primary", "note": "Pair with a 34x2px accent bar before the text, gap 0.8rem." },
+      "hero":        { "family": "display", "size": "clamp(2.8rem, 7.5vw, 5.6rem)", "weight": 900, "lineHeight": 0.96, "letterSpacing": "-0.025em", "opticalSizing": "auto" },
+      "heroAccent":  { "family": "display", "weight": 600, "style": "italic", "color": "ink.faint", "note": "One emphasised word in the hero, set italic in faint ink." },
+      "intro":       { "family": "body", "size": "1.05rem", "color": "ink.dim", "maxWidth": "64ch", "marginTop": "1.6rem" },
+      "sectionTitle":{ "family": "heading", "size": "1.35rem", "weight": 700, "letterSpacing": "-0.01em", "color": "ink.default" },
+      "lede":        { "family": "body", "size": "0.92rem", "color": "ink.dim", "minHeight": "2.6em", "note": "Keep to two lines for grid alignment." },
+      "label":       { "family": "mono", "size": "0.72rem", "weight": 400, "letterSpacing": "0.12em", "transform": "uppercase", "color": "ink.dim" },
+      "control":     { "family": "mono", "size": "0.78rem", "weight": 400, "letterSpacing": "0.06em" },
+      "index":       { "family": "mono", "size": "0.8rem", "weight": 700, "color": "ink.faint" },
+      "footnote":    { "family": "mono", "size": "0.75rem", "letterSpacing": "0.08em", "color": "ink.faint" }
+    }
+  },
+
+  "layout": {
+    "maxWidth": "1080px",
+    "pageGutter": "1.5rem",
+    "headerPadding": "6rem 1.5rem 2.5rem",
+    "sectionPadding": "3rem 1.5rem 5rem",
+    "grid": { "columns": 2, "gap": "1.5rem", "collapseBelow": "720px" }
+  },
+
+  "radius": {
+    "card": "16px",
+    "stage": "11px",
+    "region": "14px",
+    "pill": "50px"
+  },
+
+  "border": {
+    "hairline": "1px solid rgba(236,234,225,0.10)",
+    "hairlineHover": "1px solid rgba(236,234,225,0.18)"
+  },
+
+  "spacing": {
+    "scale": ["0.25rem", "0.5rem", "0.9rem", "1.1rem", "1.5rem", "1.6rem", "2.5rem", "3rem", "6rem"],
+    "cardPadding": "1.6rem 1.6rem 1.4rem"
+  },
+
+  "motion": {
+    "easing": "ease",
+    "keyframeRise": { "from": { "opacity": 0, "translateY": "18px" }, "to": { "opacity": 1, "translateY": "0" } },
+    "headerEntrance": "rise 0.8s 0.05s",
+    "cardEntrance": "rise 0.7s",
+    "cardStagger": "0.12s base + 0.06s per item",
+    "transitions": {
+      "border": "0.3s",
+      "transform": "0.3s",
+      "layerFade": "0.55s",
+      "fillSwap": "0.6s",
+      "diagramElement": "0.45s"
+    },
+    "reducedMotion": "Honour prefers-reduced-motion: disable all animation and transition, reveal content statically."
+  },
+
+  "components": {
+    "card": {
+      "background": "color.surface",
+      "border": "border.hairline",
+      "borderHover": "border.hairlineHover",
+      "radius": "radius.card",
+      "padding": "spacing.cardPadding",
+      "structure": ["index + sectionTitle", "lede", "stage", "controls (label + toggle)"]
+    },
+    "stage": {
+      "purpose": "the demo canvas inside a card",
+      "background": "color.surfaceRaised",
+      "border": "border.hairline",
+      "radius": "radius.stage",
+      "aspectRatio": "8 / 5",
+      "overflow": "hidden",
+      "technique": "Stack absolutely-positioned layers; cross-fade with opacity (layerFade) to switch between neutral and principle-on states."
+    },
+    "toggle": {
+      "shape": "pill",
+      "radius": "radius.pill",
+      "padding": "0.5rem 0.9rem",
+      "type": "control",
+      "default": { "background": "transparent", "border": "border.hairlineHover", "color": "color.ink.default" },
+      "active": { "background": "color.ink.default", "color": "color.background.canvas", "border": "color.ink.default" }
+    },
+    "stateTag": {
+      "type": "label",
+      "color": "color.ink.dim",
+      "activeColor": "color.accent.yellow",
+      "note": "Mirrors the toggle: names the current state of the demo."
+    },
+    "eyebrow": {
+      "type": "eyebrow",
+      "decoration": "34x2px solid bar in accent.primary preceding the text"
+    },
+    "footer": {
+      "type": "footnote",
+      "borderTop": "border.hairline",
+      "paddingTop": "2rem"
+    }
+  },
+
+  "principles": [
+    "Dark canvas, light ink: the page is warm near-black; off-white carries the content.",
+    "Accents are punctuation, not paint. Lead with one accent; reserve blue/yellow for inside diagrams.",
+    "Three voices of type: a display serif for the hero, a geometric grotesque for body, monospace for any technical or state label.",
+    "Cards are common regions. Equal-weight cards in a two-up grid; let enclosure and proximity do the grouping.",
+    "One focal point per view. The eyebrow's accent bar or a single coloured element is the eye's first landing.",
+    "Interaction over illustration. Each demo toggles between a neutral and an active state so the idea is felt, not just shown.",
+    "Restraint in motion. One orchestrated staggered entrance; quiet cross-fades on interaction; always respect reduced-motion.",
+    "Generous negative space and a contained measure (~64ch for intro prose, two-line ledes) keep hierarchy calm and legible."
+  ]
+}

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Typography — The Voice of the Interface</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Syne:wght@600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#100f0d; --surface:#1a1916; --surface-2:#232220;
+    --line:rgba(236,234,225,0.10); --line-2:rgba(236,234,225,0.18);
+    --ink:#ECEAE1; --ink-dim:#8d8a80; --ink-faint:#4f4d47;
+    --red:#E8503A; --blue:#3D6BFF; --yellow:#F2C14E;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Hanken Grotesk",sans-serif; line-height:1.55; -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(61,107,255,0.07), transparent 40%),
+      radial-gradient(circle at 88% 96%, rgba(232,80,58,0.06), transparent 42%);
+    background-attachment:fixed;
+  }
+  header{ max-width:1080px; margin:0 auto; padding:6rem 1.5rem 2.5rem; border-bottom:1px solid var(--line); opacity:0; animation:rise .8s .05s ease forwards; }
+  .eyebrow{ font-family:"Space Mono",monospace; font-size:.78rem; letter-spacing:.28em; text-transform:uppercase; color:var(--red); margin-bottom:1.4rem; display:flex; align-items:center; gap:.8rem; }
+  .eyebrow::before{ content:""; width:34px; height:2px; background:var(--red); display:inline-block; }
+  h1{ font-family:"Fraunces",serif; font-weight:900; font-optical-sizing:auto; font-size:clamp(2.8rem,7.5vw,5.6rem); line-height:.96; letter-spacing:-.025em; margin:0; }
+  h1 em{ font-style:italic; font-weight:600; color:var(--ink-faint); }
+  .intro{ max-width:64ch; color:var(--ink-dim); margin:1.6rem 0 0; font-size:1.05rem; }
+
+  .grid{ max-width:1080px; margin:0 auto; padding:3rem 1.5rem 4rem; display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem; }
+  @media (max-width:760px){ .grid{ grid-template-columns:1fr; } header{ padding-top:4rem; } }
+
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:1.6rem 1.6rem 1.4rem; display:flex; flex-direction:column; opacity:0; transform:translateY(18px); animation:rise .7s ease forwards; transition:border-color .3s ease; }
+  .card:hover{ border-color:var(--line-2); }
+  .card-head{ display:flex; align-items:baseline; gap:.75rem; margin-bottom:.2rem; }
+  .num{ font-family:"Space Mono",monospace; font-size:.8rem; color:var(--ink-faint); font-weight:700; }
+  .card h2{ font-family:"Syne",sans-serif; font-weight:700; font-size:1.35rem; margin:0; letter-spacing:-.01em; }
+  .card .lede{ color:var(--ink-dim); font-size:.92rem; margin:.5rem 0 1.2rem; min-height:2.6em; }
+
+  .stage{ background:var(--surface-2); border:1px solid var(--line); border-radius:11px; min-height:200px; position:relative; overflow:hidden; padding:1.4rem 1.5rem; display:flex; flex-direction:column; justify-content:center; }
+
+  .ctrl{ display:flex; align-items:center; justify-content:space-between; margin-top:1.1rem; gap:1rem; flex-wrap:wrap; }
+  .state-tag{ font-family:"Space Mono",monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-dim); transition:color .3s ease; }
+  .card.on .state-tag{ color:var(--yellow); }
+  .toggle{ appearance:none; border:1px solid var(--line-2); background:transparent; color:var(--ink); font-family:"Space Mono",monospace; font-size:.78rem; letter-spacing:.06em; padding:.5rem .9rem; border-radius:50px; cursor:pointer; transition:all .25s ease; white-space:nowrap; }
+  .toggle:hover{ border-color:var(--ink-dim); }
+  .card.on .toggle{ background:var(--ink); color:var(--bg); border-color:var(--ink); }
+  .seg{ display:inline-flex; border:1px solid var(--line-2); border-radius:50px; overflow:hidden; }
+  .seg button{ background:transparent; border:none; color:var(--ink-dim); font-family:"Space Mono",monospace; font-size:.72rem; letter-spacing:.04em; padding:.45rem .85rem; cursor:pointer; transition:all .2s ease; }
+  .seg button:hover{ color:var(--ink); }
+  .seg button.active{ background:var(--ink); color:var(--bg); }
+
+  /* ---- demo 1: vertical rhythm ---- */
+  .rhythm{ position:relative; }
+  .rhythm .lines{ position:absolute; inset:0; opacity:0; transition:opacity .45s ease; background-image:repeating-linear-gradient(to bottom, transparent 0, transparent 27px, rgba(61,107,255,0.55) 27px, rgba(61,107,255,0.55) 28px); }
+  .card.on .rhythm .lines{ opacity:1; }
+  .rhythm p{ position:relative; margin:0 0 28px; font-size:15px; line-height:28px; color:var(--ink); }
+  .rhythm p:last-child{ margin-bottom:0; }
+  .rhythm h4{ position:relative; margin:0 0 28px; font-family:"Syne",sans-serif; font-weight:700; font-size:19px; line-height:28px; }
+
+  /* ---- demo 2: measure ---- */
+  .measure{ display:flex; flex-direction:column; align-items:flex-start; }
+  .measure p{ margin:0; color:var(--ink); font-size:.95rem; transition:max-width .4s ease; }
+  .measure[data-state="narrow"] p{ max-width:17em; }
+  .measure[data-state="ideal"] p{ max-width:34em; }
+  .measure[data-state="wide"] p{ max-width:100%; }
+
+  /* ---- demo 3: scale & hierarchy ---- */
+  .scale > *{ margin:0 0 .55rem; transition:font-size .4s ease, font-weight .4s ease, letter-spacing .4s ease, color .4s ease; }
+  .scale .t{ font-family:"Syne",sans-serif; font-size:1rem; font-weight:400; color:var(--ink-dim); letter-spacing:0; }
+  .scale .s{ font-size:1rem; font-weight:400; color:var(--ink-dim); }
+  .scale .b{ font-size:1rem; font-weight:400; color:var(--ink-dim); }
+  .scale .c{ font-size:1rem; font-weight:400; color:var(--ink-dim); }
+  .card.on .scale .t{ font-size:2.05rem; font-weight:700; color:var(--ink); letter-spacing:-.01em; line-height:1.1; }
+  .card.on .scale .s{ font-size:1.3rem; font-weight:600; color:var(--ink); }
+  .card.on .scale .b{ font-size:1rem; font-weight:400; color:var(--ink); }
+  .card.on .scale .c{ font-size:.78rem; font-weight:600; color:var(--ink-dim); letter-spacing:.04em; text-transform:uppercase; font-family:"Space Mono",monospace; }
+
+  /* ---- demo 4: leading ---- */
+  .leading p{ margin:0; color:var(--ink); font-size:.95rem; transition:line-height .35s ease; }
+  .leading[data-state="tight"] p{ line-height:1.15; }
+  .leading[data-state="comfy"] p{ line-height:1.6; }
+  .leading[data-state="loose"] p{ line-height:2.15; }
+
+  /* ---- demo 5: the grid ---- */
+  .swiss{ position:relative; }
+  .swiss .cols{ position:absolute; inset:0; opacity:0; transition:opacity .45s ease; display:grid; grid-template-columns:repeat(6,1fr); gap:10px; pointer-events:none; }
+  .swiss .cols span{ background:rgba(232,80,58,0.12); border-left:1px solid rgba(232,80,58,0.45); }
+  .card.on .swiss .cols{ opacity:1; }
+  .swiss .layout{ position:relative; display:grid; grid-template-columns:repeat(6,1fr); gap:10px; }
+  .swiss .blk{ background:var(--surface); border:1px solid var(--line-2); border-radius:5px; height:34px; }
+  .swiss .h{ grid-column:span 6; height:26px; }
+  .swiss .a{ grid-column:span 4; height:62px; }
+  .swiss .b{ grid-column:span 2; height:62px; }
+  .swiss .c1{ grid-column:span 2; } .swiss .c2{ grid-column:span 2; } .swiss .c3{ grid-column:span 2; }
+
+  footer{ max-width:1080px; margin:0 auto; padding:0 1.5rem 5rem; }
+  .foot-top{ border-top:1px solid var(--line); padding-top:2rem; display:flex; justify-content:space-between; gap:1.5rem 2rem; flex-wrap:wrap; align-items:baseline; }
+  .cross{ display:flex; gap:1.5rem; flex-wrap:wrap; }
+  .cross a{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); text-decoration:none; transition:color .25s ease; display:inline-flex; align-items:center; gap:.55rem; }
+  .cross a:hover{ color:var(--ink); }
+  .cross a[aria-current]{ color:var(--ink); }
+  .cross a[aria-current]::before{ content:""; width:18px; height:2px; background:var(--red); display:inline-block; }
+  .cross a.here{ color:var(--red); }
+  .cross .soon{ color:var(--ink-faint); }
+  .cross .soon::after{ content:"soon"; font-size:.58rem; letter-spacing:.1em; border:1px solid var(--line); border-radius:3px; padding:0 .3rem; margin-left:.45rem; }
+  .colophon{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.08em; color:var(--ink-faint); margin:0; }
+  .pillars{ margin-top:1.25rem; padding-top:1.15rem; border-top:1px solid var(--line); }
+
+  @keyframes rise{ to{ opacity:1; transform:translateY(0); } }
+  @media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; } .card{ opacity:1; transform:none; } header{ opacity:1; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Swiss · Bauhaus · The Baseline Grid</div>
+  <h1>The Voice of<br>the <em>Interface.</em></h1>
+  <p class="intro">Type is most of what a user actually reads. These are the levers that turn a wall of text into something legible, ordered and calm — measure, scale, leading, and the vertical rhythm that holds a page together. Toggle each to feel the difference.</p>
+</header>
+
+<main class="grid">
+
+  <section class="card">
+    <div class="card-head"><span class="num">01</span><h2>Vertical Rhythm</h2></div>
+    <p class="lede">Set every line and space to a consistent baseline interval, and the page gains an invisible, steadying pulse.</p>
+    <div class="stage">
+      <div class="rhythm">
+        <div class="lines"></div>
+        <h4>A steady cadence</h4>
+        <p>When line-height and spacing are multiples of one base unit, text settles onto a shared rhythm.</p>
+        <p>The eye stops noticing the mechanics and simply reads.</p>
+      </div>
+    </div>
+    <div class="ctrl">
+      <span class="state-tag" data-off="Rhythm, felt" data-on="Baseline grid shown">Rhythm, felt</span>
+      <button class="toggle" data-on-label="Hide grid">Show baseline grid</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><span class="num">02</span><h2>Measure</h2></div>
+    <p class="lede">Line length governs reading comfort. Too short and the eye jumps; too long and it loses the return. Aim for roughly 45–75 characters.</p>
+    <div class="stage">
+      <div class="measure" data-state="ideal">
+        <p>Good typography is largely invisible. The reader should glide from line to line without effort, never conscious of where one ends and the next begins — a comfortable measure is what makes that glide possible, line after line after line.</p>
+      </div>
+    </div>
+    <div class="ctrl">
+      <span class="state-tag" id="measure-tag">~66 characters · ideal</span>
+      <div class="seg" data-target="measure">
+        <button data-state="narrow">Narrow</button>
+        <button data-state="ideal" class="active">Ideal</button>
+        <button data-state="wide">Wide</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><span class="num">03</span><h2>Scale &amp; Hierarchy</h2></div>
+    <p class="lede">Sizes drawn from one ratio create harmony and instant hierarchy. Flatten them and everything competes for the same attention.</p>
+    <div class="stage">
+      <div class="scale">
+        <div class="t">Designing the reading experience</div>
+        <div class="s">A modular scale brings order</div>
+        <div class="b">Each step relates to the next by a fixed ratio, so headings, body and captions feel like one family rather than arbitrary sizes.</div>
+        <div class="c">Caption · supporting detail</div>
+      </div>
+    </div>
+    <div class="ctrl">
+      <span class="state-tag" data-off="Flat — no hierarchy" data-on="Modular scale applied">Flat — no hierarchy</span>
+      <button class="toggle" data-on-label="Flatten">Apply scale</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><span class="num">04</span><h2>Leading</h2></div>
+    <p class="lede">Line spacing decides whether body text breathes. Cramped lines blur together; over-spaced ones break into stripes.</p>
+    <div class="stage">
+      <div class="leading" data-state="comfy">
+        <p>Leading is the space between lines of type. Set it well and paragraphs read as a single, continuous flow; set it poorly and the reader works to keep their place. For body copy on screen, somewhere around 1.5 to 1.6 tends to feel right.</p>
+      </div>
+    </div>
+    <div class="ctrl">
+      <span class="state-tag" id="leading-tag">line-height 1.6 · comfortable</span>
+      <div class="seg" data-target="leading">
+        <button data-state="tight">Tight</button>
+        <button data-state="comfy" class="active">Comfortable</button>
+        <button data-state="loose">Loose</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><span class="num">05</span><h2>The Grid</h2></div>
+    <p class="lede">The Swiss inheritance: a shared column structure that aligns every element and removes a thousand arbitrary decisions.</p>
+    <div class="stage">
+      <div class="swiss">
+        <div class="cols"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="layout">
+          <div class="blk h"></div>
+          <div class="blk a"></div>
+          <div class="blk b"></div>
+          <div class="blk c1"></div>
+          <div class="blk c2"></div>
+          <div class="blk c3"></div>
+        </div>
+      </div>
+    </div>
+    <div class="ctrl">
+      <span class="state-tag" data-off="Aligned, invisibly" data-on="Six-column grid shown">Aligned, invisibly</span>
+      <button class="toggle" data-on-label="Hide columns">Show columns</button>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-top">
+    <nav class="cross">
+      <a href="typography-principles.html" aria-current="page">Interactive</a>
+      <a href="typography-docs.html">Docs &amp; Sources</a>
+    </nav>
+    <p class="colophon">RHYTHM // type is most of what they read</p>
+  </div>
+  <nav class="cross pillars">
+    <a href="index.html">Foundations</a>
+    <a href="gestalt-principles.html">Gestalt</a>
+    <a href="typography-principles.html" class="here">Typography</a>
+    <a href="motion-principles.html">Motion</a>
+  </nav>
+</footer>
+
+<script>
+  // toggle demos
+  document.querySelectorAll(".toggle").forEach(btn=>{
+    const card=btn.closest(".card"), tag=card.querySelector(".state-tag");
+    const onLabel=btn.dataset.onLabel, offLabel=btn.textContent;
+    btn.addEventListener("click",()=>{
+      const on=card.classList.toggle("on");
+      if(tag&&tag.dataset.on){ tag.textContent = on ? tag.dataset.on : tag.dataset.off; }
+      btn.textContent = on ? onLabel : offLabel;
+    });
+  });
+
+  // segmented demos
+  const tags={
+    measure:{ narrow:"~38 characters · too short", ideal:"~66 characters · ideal", wide:"110+ characters · too wide" },
+    leading:{ tight:"line-height 1.15 · cramped", comfy:"line-height 1.6 · comfortable", loose:"line-height 2.15 · stripey" }
+  };
+  document.querySelectorAll(".seg").forEach(seg=>{
+    const target=seg.dataset.target;
+    const demo=document.querySelector("."+target);
+    const tag=document.getElementById(target+"-tag");
+    seg.querySelectorAll("button").forEach(b=>{
+      b.addEventListener("click",()=>{
+        seg.querySelectorAll("button").forEach(x=>x.classList.remove("active"));
+        b.classList.add("active");
+        demo.dataset.state=b.dataset.state;
+        if(tag) tag.textContent=tags[target][b.dataset.state];
+      });
+    });
+  });
+</script>
+</body>
+</html>

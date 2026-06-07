@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Motion — Change, Explained</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Syne:wght@600;700&family=Hanken+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#100f0d; --surface:#1a1916; --surface-2:#232220;
+    --line:rgba(236,234,225,0.10); --line-2:rgba(236,234,225,0.18);
+    --ink:#ECEAE1; --ink-dim:#8d8a80; --ink-faint:#4f4d47;
+    --red:#E8503A; --blue:#3D6BFF; --yellow:#F2C14E;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Hanken Grotesk",sans-serif; line-height:1.55; -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(61,107,255,0.07), transparent 40%),
+      radial-gradient(circle at 88% 96%, rgba(232,80,58,0.06), transparent 42%);
+    background-attachment:fixed;
+  }
+  header{ max-width:1080px; margin:0 auto; padding:6rem 1.5rem 2.5rem; border-bottom:1px solid var(--line); opacity:0; animation:rise .8s .05s ease forwards; }
+  .eyebrow{ font-family:"Space Mono",monospace; font-size:.78rem; letter-spacing:.28em; text-transform:uppercase; color:var(--red); margin-bottom:1.4rem; display:flex; align-items:center; gap:.8rem; }
+  .eyebrow::before{ content:""; width:34px; height:2px; background:var(--red); display:inline-block; }
+  h1{ font-family:"Fraunces",serif; font-weight:900; font-optical-sizing:auto; font-size:clamp(2.8rem,7.5vw,5.6rem); line-height:.96; letter-spacing:-.025em; margin:0; }
+  h1 em{ font-style:italic; font-weight:600; color:var(--ink-faint); }
+  .intro{ max-width:64ch; color:var(--ink-dim); margin:1.6rem 0 0; font-size:1.05rem; }
+
+  .grid{ max-width:1080px; margin:0 auto; padding:3rem 1.5rem 4rem; display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem; }
+  @media (max-width:760px){ .grid{ grid-template-columns:1fr; } header{ padding-top:4rem; } }
+
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:1.6rem 1.6rem 1.4rem; display:flex; flex-direction:column; opacity:0; transform:translateY(18px); animation:rise .7s ease forwards; transition:border-color .3s ease; }
+  .card:hover{ border-color:var(--line-2); }
+  .card-head{ display:flex; align-items:baseline; gap:.75rem; margin-bottom:.2rem; }
+  .num{ font-family:"Space Mono",monospace; font-size:.8rem; color:var(--ink-faint); font-weight:700; }
+  .card h2{ font-family:"Syne",sans-serif; font-weight:700; font-size:1.35rem; margin:0; letter-spacing:-.01em; }
+  .card .lede{ color:var(--ink-dim); font-size:.92rem; margin:.5rem 0 1.2rem; min-height:2.6em; }
+
+  .stage{ background:var(--surface-2); border:1px solid var(--line); border-radius:11px; min-height:188px; position:relative; overflow:hidden; padding:1.5rem 1.6rem; display:flex; flex-direction:column; justify-content:center; }
+
+  .ctrl{ display:flex; align-items:center; justify-content:space-between; margin-top:1.1rem; gap:1rem; flex-wrap:wrap; }
+  .state-tag{ font-family:"Space Mono",monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-dim); transition:color .3s ease; }
+  .card.on .state-tag{ color:var(--yellow); }
+  .toggle{ appearance:none; border:1px solid var(--line-2); background:transparent; color:var(--ink); font-family:"Space Mono",monospace; font-size:.78rem; letter-spacing:.06em; padding:.5rem .9rem; border-radius:50px; cursor:pointer; transition:all .25s ease; white-space:nowrap; }
+  .toggle:hover{ border-color:var(--ink-dim); }
+  .card.on .toggle{ background:var(--ink); color:var(--bg); border-color:var(--ink); }
+  .seg{ display:inline-flex; border:1px solid var(--line-2); border-radius:50px; overflow:hidden; }
+  .seg button{ background:transparent; border:none; color:var(--ink-dim); font-family:"Space Mono",monospace; font-size:.72rem; letter-spacing:.04em; padding:.45rem .85rem; cursor:pointer; transition:all .2s ease; }
+  .seg button:hover{ color:var(--ink); }
+  .seg button.active{ background:var(--ink); color:var(--bg); }
+
+  /* ---- 1. easing ---- */
+  .easing{ display:flex; flex-direction:column; gap:1.25rem; }
+  .track{ position:relative; height:18px; }
+  .track .lab{ position:absolute; left:0; top:-13px; font-family:"Space Mono",monospace; font-size:.58rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint); }
+  .dot{ position:absolute; top:0; left:0; width:18px; height:18px; border-radius:50%; background:var(--ink); }
+  .e-lin{ transition:left 1s linear; }
+  .e-out{ transition:left 1s cubic-bezier(.16,1,.3,1); }
+  .e-spr{ transition:left 1s cubic-bezier(.34,1.56,.64,1); }
+  .card.on .easing .dot{ left:calc(100% - 18px); }
+
+  /* ---- 2. timing ---- */
+  .timing .track{ height:18px; }
+  .timing .dot{ background:var(--blue); animation:tslide var(--d,.5s) ease-in-out infinite alternate; }
+  .timing[data-state="fast"]{ --d:.2s; }
+  .timing[data-state="right"]{ --d:.5s; }
+  .timing[data-state="slow"]{ --d:1s; }
+  @keyframes tslide{ from{ left:0; } to{ left:calc(100% - 18px); } }
+
+  /* ---- 3. choreography ---- */
+  .stagger{ display:flex; flex-direction:column; gap:.55rem; }
+  .stagger .bar{ height:15px; border-radius:4px; background:var(--ink); }
+  .stagger .bar:nth-child(1){ width:90%; } .stagger .bar:nth-child(2){ width:70%; }
+  .stagger .bar:nth-child(3){ width:82%; } .stagger .bar:nth-child(4){ width:60%; }
+  .stagger .bar:nth-child(5){ width:75%; }
+  .card.on .stagger .bar{ animation:barIn .55s cubic-bezier(.16,1,.3,1) both; }
+  .card.on .stagger .bar:nth-child(1){ animation-delay:0s; }
+  .card.on .stagger .bar:nth-child(2){ animation-delay:.08s; }
+  .card.on .stagger .bar:nth-child(3){ animation-delay:.16s; }
+  .card.on .stagger .bar:nth-child(4){ animation-delay:.24s; }
+  .card.on .stagger .bar:nth-child(5){ animation-delay:.32s; }
+  @keyframes barIn{ from{ opacity:0; transform:translateX(-26px); } to{ opacity:1; transform:translateX(0); } }
+
+  /* ---- 4. continuity ---- */
+  .continuity{ align-items:center; justify-content:center; }
+  .cont-card{ width:130px; height:66px; border-radius:10px; background:var(--surface); border:1px solid var(--line-2); display:flex; align-items:center; justify-content:center; overflow:hidden; transition:width .55s cubic-bezier(.16,1,.3,1), height .55s cubic-bezier(.16,1,.3,1), background .55s ease, border-color .55s ease; }
+  .cont-card span{ font-family:"Space Mono",monospace; font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-dim); }
+  .card.on .cont-card{ width:100%; height:140px; background:var(--surface); border-color:var(--blue); }
+
+  /* ---- 5. feedback ---- */
+  .feedback{ align-items:center; justify-content:center; }
+  .fb-btn{ position:relative; padding:.8rem 1.7rem; border-radius:50px; background:var(--ink); color:var(--bg); font-family:"Space Mono",monospace; font-size:.78rem; letter-spacing:.05em; display:flex; align-items:center; gap:.5rem; transition:transform .18s ease, background .3s ease, color .3s ease; }
+  .fb-check{ opacity:0; transform:scale(.3); transition:opacity .3s ease .1s, transform .4s cubic-bezier(.34,1.56,.64,1) .1s; font-weight:700; }
+  .card.on .fb-btn{ transform:scale(.93); background:var(--blue); color:#fff; }
+  .card.on .fb-check{ opacity:1; transform:scale(1); }
+
+  /* ---- 6. reduced motion ---- */
+  .reduced{ align-items:center; justify-content:center; }
+  .rm-box{ width:78px; height:78px; border-radius:14px; background:var(--yellow); animation:rmFull 1.9s ease-in-out infinite; }
+  @keyframes rmFull{ 0%,100%{ transform:translateX(-58px) scale(.78); opacity:.4; } 50%{ transform:translateX(58px) scale(1); opacity:1; } }
+  .card.on .rm-box{ animation:rmReduced 1.9s ease-in-out infinite; }
+  @keyframes rmReduced{ 0%,100%{ opacity:.4; } 50%{ opacity:1; } }
+
+  footer{ max-width:1080px; margin:0 auto; padding:0 1.5rem 5rem; }
+  .foot-top{ border-top:1px solid var(--line); padding-top:2rem; display:flex; justify-content:space-between; gap:1.5rem 2rem; flex-wrap:wrap; align-items:baseline; }
+  .cross{ display:flex; gap:1.5rem; flex-wrap:wrap; }
+  .cross a{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); text-decoration:none; transition:color .25s ease; display:inline-flex; align-items:center; gap:.55rem; }
+  .cross a:hover{ color:var(--ink); }
+  .cross a[aria-current]{ color:var(--ink); }
+  .cross a[aria-current]::before{ content:""; width:18px; height:2px; background:var(--red); display:inline-block; }
+  .cross a.here{ color:var(--red); }
+  .colophon{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.08em; color:var(--ink-faint); margin:0; }
+  .pillars{ margin-top:1.25rem; padding-top:1.15rem; border-top:1px solid var(--line); }
+
+  @keyframes rise{ to{ opacity:1; transform:translateY(0); } }
+  @media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; } .card{ opacity:1; transform:none; } header{ opacity:1; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Disney's 12 → the Interface</div>
+  <h1>Change,<br><em>Explained.</em></h1>
+  <p class="intro">Animation isn't decoration — it's how an interface explains change over time. Done well it orients, confirms and connects; done badly it distracts, or makes people ill. Toggle each to feel the difference between motion that works and motion that just moves.</p>
+</header>
+
+<main class="grid">
+
+  <section class="card">
+    <div class="card-head"><span class="num">01</span><h2>Easing</h2></div>
+    <p class="lede">Nothing in the real world starts or stops abruptly. Natural acceleration is what separates a living interface from a mechanical one.</p>
+    <div class="stage">
+      <div class="easing">
+        <div class="track"><span class="lab">linear</span><div class="dot e-lin"></div></div>
+        <div class="track"><span class="lab">ease-out</span><div class="dot e-out"></div></div>
+        <div class="track"><span class="lab">spring</span><div class="dot e-spr"></div></div>
+      </div>
+    </div>
+    <div class="ctrl">
+      <span class="state-tag" data-off="At rest" data-on="Three curves, compared">At rest</span>
+      <button class="toggle" data-on-label="Reset">Play</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><span class="num">02</span><h2>Timing</h2></div>
+    <p class="lede">Duration sets the mood. Too fast and a change goes unnoticed; too slow and the interface feels like it's wading through treacle.</p>
+    <div class="stage">
+      <div class="timing" data-state="right">
+        <div class="track"><div class="dot"></div></div>
+      </div>
+    </div>
+    <div class="ctrl">
+      <span class="state-tag" id="timing-tag">~300ms · natural</span>
+      <div class="seg" data-target="timing">
+        <button data-state="fast">Fast</button>
+        <button data-state="right" class="active">Right</button>
+        <button data-state="slow">Slow</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><span class="num">03</span><h2>Choreography</h2></div>
+    <p class="lede">Related elements shouldn't all arrive at once. A small stagger turns a jarring pop into a guided, readable sequence.</p>
+    <div class="stage">
+      <div class="stagger">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      </div>
+    </div>
+    <div class="ctrl">
+      <span class="state-tag" data-off="All at once" data-on="Staggered cascade">All at once</span>
+      <button class="toggle" data-on-label="Reset">Stagger them</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><span class="num">04</span><h2>Continuity</h2></div>
+    <p class="lede">When one thing becomes another, show the journey. Growing a card into its detail view keeps the user oriented — no teleporting.</p>
+    <div class="stage continuity">
+      <div class="cont-card"><span>Card</span></div>
+    </div>
+    <div class="ctrl">
+      <span class="state-tag" data-off="Collapsed card" data-on="Expanded in place">Collapsed card</span>
+      <button class="toggle" data-on-label="Collapse">Expand</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><span class="num">05</span><h2>Feedback</h2></div>
+    <p class="lede">Motion confirms that an action landed. A press that depresses and a result that springs in tell the user the system heard them.</p>
+    <div class="stage feedback">
+      <div class="fb-btn"><span class="fb-text">Submit</span><span class="fb-check">✓</span></div>
+    </div>
+    <div class="ctrl">
+      <span class="state-tag" data-off="Idle" data-on="Action confirmed">Idle</span>
+      <button class="toggle" data-on-label="Reset">Run action</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><span class="num">06</span><h2>Reduced Motion</h2></div>
+    <p class="lede">Large sliding, scaling motion can trigger nausea and migraines. Honour the user's setting by replacing movement with a gentle fade.</p>
+    <div class="stage reduced">
+      <div class="rm-box"></div>
+    </div>
+    <div class="ctrl">
+      <span class="state-tag" data-off="Full motion" data-on="Reduced · fade only">Full motion</span>
+      <button class="toggle" data-on-label="Restore">Reduce motion</button>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-top">
+    <nav class="cross">
+      <a href="motion-principles.html" aria-current="page">Interactive</a>
+      <a href="motion-docs.html">Docs &amp; Sources</a>
+    </nav>
+    <p class="colophon">MOTION // change, explained</p>
+  </div>
+  <nav class="cross pillars">
+    <a href="index.html">Foundations</a>
+    <a href="gestalt-principles.html">Gestalt</a>
+    <a href="typography-principles.html">Typography</a>
+    <a href="motion-principles.html" class="here">Motion</a>
+  </nav>
+</footer>
+
+<script>
+  document.querySelectorAll(".toggle").forEach(btn=>{
+    const card=btn.closest(".card"), tag=card.querySelector(".state-tag");
+    const onLabel=btn.dataset.onLabel, offLabel=btn.textContent;
+    btn.addEventListener("click",()=>{
+      const on=card.classList.toggle("on");
+      if(tag&&tag.dataset.on){ tag.textContent = on ? tag.dataset.on : tag.dataset.off; }
+      btn.textContent = on ? onLabel : offLabel;
+    });
+  });
+
+  const tags={ timing:{ fast:"~150ms · snappy", right:"~300ms · natural", slow:"~700ms · sluggish" } };
+  document.querySelectorAll(".seg").forEach(seg=>{
+    const target=seg.dataset.target, demo=document.querySelector("."+target), tag=document.getElementById(target+"-tag");
+    seg.querySelectorAll("button").forEach(b=>{
+      b.addEventListener("click",()=>{
+        seg.querySelectorAll("button").forEach(x=>x.classList.remove("active"));
+        b.classList.add("active");
+        demo.dataset.state=b.dataset.state;
+        if(tag) tag.textContent=tags[target][b.dataset.state];
+      });
+    });
+  });
+</script>
+</body>
+</html>
