@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Typography — Docs &amp; Sources</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Syne:wght@600;700&family=Hanken+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#100f0d; --surface:#1a1916; --surface-2:#232220;
+    --line:rgba(236,234,225,0.10); --line-2:rgba(236,234,225,0.18);
+    --ink:#ECEAE1; --ink-dim:#8d8a80; --ink-faint:#4f4d47;
+    --red:#E8503A; --blue:#3D6BFF; --yellow:#F2C14E;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Hanken Grotesk",sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(61,107,255,0.07), transparent 40%),
+      radial-gradient(circle at 88% 96%, rgba(232,80,58,0.06), transparent 42%);
+    background-attachment:fixed;
+  }
+  header{ max-width:1080px; margin:0 auto; padding:6rem 1.5rem 2.5rem; border-bottom:1px solid var(--line); opacity:0; animation:rise .8s .05s ease forwards; }
+  .eyebrow{ font-family:"Space Mono",monospace; font-size:.78rem; letter-spacing:.28em; text-transform:uppercase; color:var(--red); margin-bottom:1.4rem; display:flex; align-items:center; gap:.8rem; }
+  .eyebrow::before{ content:""; width:34px; height:2px; background:var(--red); display:inline-block; }
+  h1{ font-family:"Fraunces",serif; font-weight:900; font-optical-sizing:auto; font-size:clamp(2.8rem,7.5vw,5.6rem); line-height:.96; letter-spacing:-.025em; margin:0; }
+  h1 em{ font-style:italic; font-weight:600; color:var(--ink-faint); }
+  .intro{ max-width:64ch; color:var(--ink-dim); margin:1.6rem 0 0; font-size:1.05rem; }
+  main{ max-width:1080px; margin:0 auto; padding:1rem 1.5rem 4rem; }
+
+  .section{ padding:3rem 0; border-top:1px solid var(--line); }
+  .section:first-child{ border-top:none; }
+  .kicker{ font-family:"Space Mono",monospace; font-size:.76rem; letter-spacing:.22em; text-transform:uppercase; color:var(--red); display:flex; align-items:center; gap:.7rem; margin-bottom:.9rem; }
+  .kicker::before{ content:attr(data-n); color:var(--ink-faint); font-weight:700; }
+  .section > h2{ font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(1.5rem,3.2vw,2rem); letter-spacing:-.01em; margin:0 0 1.2rem; }
+  .lead{ color:var(--ink-dim); font-size:1.05rem; max-width:68ch; margin:0; }
+
+  .pcards{ display:grid; grid-template-columns:repeat(2,1fr); gap:1.25rem; }
+  .pcard{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:1.5rem; transition:border-color .3s ease; display:flex; flex-direction:column; }
+  .pcard:hover{ border-color:var(--line-2); }
+  .pcard h3{ font-family:"Syne",sans-serif; font-weight:700; font-size:1.12rem; margin:0 0 .5rem; }
+  .pcard .concept{ color:var(--ink-dim); font-size:.92rem; margin:0 0 1rem; }
+  .web{ margin-top:auto; }
+  .weblabel{ font-family:"Space Mono",monospace; font-size:.64rem; letter-spacing:.16em; text-transform:uppercase; color:var(--blue); display:block; margin-bottom:.4rem; }
+  code{ font-family:"Space Mono",monospace; font-size:.8rem; color:var(--ink); background:var(--surface-2); border:1px solid var(--line); border-radius:5px; padding:.5rem .7rem; display:block; white-space:pre-wrap; line-height:1.5; }
+  code .c{ color:var(--ink-faint); }
+
+  .defaults{ display:grid; grid-template-columns:repeat(2,1fr); gap:0 2.5rem; max-width:760px; }
+  .def{ display:flex; justify-content:space-between; gap:1rem; padding:.7rem 0; border-bottom:1px solid var(--line); }
+  .def .k{ color:var(--ink-dim); font-size:.92rem; }
+  .def .v{ font-family:"Space Mono",monospace; font-size:.82rem; color:var(--ink); white-space:nowrap; }
+  @media (max-width:560px){ .defaults{ grid-template-columns:1fr; gap:0; } }
+
+  .ref{ padding:1.4rem 0; border-top:1px solid var(--line); padding-left:1.2rem; position:relative; }
+  .ref:first-of-type{ border-top:none; }
+  .ref::before{ content:""; position:absolute; left:0; top:1.75rem; width:6px; height:6px; border-radius:50%; background:var(--ink-faint); }
+  .ref h3{ font-family:"Syne",sans-serif; font-weight:600; font-size:1.1rem; margin:0; }
+  .meta{ font-family:"Space Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-dim); margin:.35rem 0 0; }
+  .ref p{ color:var(--ink-dim); font-size:.94rem; margin:.5rem 0 0; max-width:72ch; }
+  .src{ font-family:"Space Mono",monospace; font-size:.73rem; letter-spacing:.04em; color:var(--blue); text-decoration:none; border-bottom:1px solid transparent; display:inline-block; margin-top:.55rem; transition:border-color .25s ease; }
+  .src:hover{ border-color:var(--blue); }
+  .grouplabel{ font-family:"Space Mono",monospace; font-size:.7rem; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-faint); margin:2rem 0 .4rem; }
+  .grouplabel:first-of-type{ margin-top:0; }
+
+  footer{ max-width:1080px; margin:0 auto; padding:0 1.5rem 5rem; }
+  .foot-top{ border-top:1px solid var(--line); padding-top:2rem; display:flex; justify-content:space-between; gap:1.5rem 2rem; flex-wrap:wrap; align-items:baseline; }
+  .cross{ display:flex; gap:1.5rem; flex-wrap:wrap; }
+  .cross a{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); text-decoration:none; transition:color .25s ease; display:inline-flex; align-items:center; gap:.55rem; }
+  .cross a:hover{ color:var(--ink); }
+  .cross a[aria-current]{ color:var(--ink); }
+  .cross a[aria-current]::before{ content:""; width:18px; height:2px; background:var(--red); display:inline-block; }
+  .cross a.here{ color:var(--red); }
+  .cross .soon{ color:var(--ink-faint); }
+  .cross .soon::after{ content:"soon"; font-size:.58rem; letter-spacing:.1em; border:1px solid var(--line); border-radius:3px; padding:0 .3rem; margin-left:.45rem; }
+  .colophon{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.08em; color:var(--ink-faint); margin:0; }
+  .pillars{ margin-top:1.25rem; padding-top:1.15rem; border-top:1px solid var(--line); }
+
+  @media (max-width:720px){ .pcards{ grid-template-columns:1fr; } header{ padding-top:4rem; } }
+  @keyframes rise{ to{ opacity:1; transform:translateY(0); } }
+  @media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; } header{ opacity:1; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Docs &amp; Sources</div>
+  <h1>Type, in<br><em>Practice.</em></h1>
+  <p class="intro">The web is overwhelmingly type and forms, so typography isn't decoration — it's the bulk of the user experience. These are the principles we hold to, the practical web equivalents, and the sources worth reading.</p>
+</header>
+
+<main>
+
+  <section class="section">
+    <div class="kicker" data-n="01">Principles</div>
+    <h2>Eight things that carry the read</h2>
+    <p class="lead" style="margin-bottom:1.8rem;">Each principle paired with how it lands in CSS. The interactive page lets you feel them; this is the reference.</p>
+    <div class="pcards">
+
+      <div class="pcard">
+        <h3>Vertical rhythm</h3>
+        <p class="concept">Tie line-height and spacing to multiples of one base unit so text sits on an even vertical cadence — the steadiest, most underrated lever in screen type.</p>
+        <div class="web"><span class="weblabel">On the web</span><code>line-height: 1.5;
+margin-block: 1.5rem; <span class="c">/* one rhythm unit */</span></code></div>
+      </div>
+
+      <div class="pcard">
+        <h3>Measure</h3>
+        <p class="concept">Line length drives reading comfort. Around 45–75 characters keeps the eye's return sweep reliable; wider and readers lose their place.</p>
+        <div class="web"><span class="weblabel">On the web</span><code>max-width: 66ch;</code></div>
+      </div>
+
+      <div class="pcard">
+        <h3>Modular scale &amp; hierarchy</h3>
+        <p class="concept">Derive every size from one ratio (1.2 minor third, 1.25 major third, 1.618 golden) so headings, body and captions read as one family — and hierarchy appears for free.</p>
+        <div class="web"><span class="weblabel">On the web</span><code>--step-0: 1rem;
+--step-1: 1.25rem;
+--step-2: 1.563rem; <span class="c">/* ×1.25 */</span></code></div>
+      </div>
+
+      <div class="pcard">
+        <h3>Leading</h3>
+        <p class="concept">Body copy wants room to breathe — roughly 1.5–1.6 unitless. Tighten it for large display, open it slightly for small text.</p>
+        <div class="web"><span class="weblabel">On the web</span><code>line-height: 1.55; <span class="c">/* unitless */</span></code></div>
+      </div>
+
+      <div class="pcard">
+        <h3>The grid</h3>
+        <p class="concept">The Swiss inheritance: a shared column structure aligns every element and removes a thousand arbitrary placement decisions.</p>
+        <div class="web"><span class="weblabel">On the web</span><code>display: grid;
+grid-template-columns: repeat(12, 1fr);
+gap: 24px;</code></div>
+      </div>
+
+      <div class="pcard">
+        <h3>Contrast</h3>
+        <p class="concept">Build hierarchy from size, weight, space and case — not colour alone. Contrast that survives greyscale survives accessibility.</p>
+        <div class="web"><span class="weblabel">On the web</span><code>font-weight: 700;
+text-transform: uppercase;
+letter-spacing: .12em;</code></div>
+      </div>
+
+      <div class="pcard">
+        <h3>Pairing &amp; restraint</h3>
+        <p class="concept">One or two families, a handful of weights. A confident system says more with less; sprawl reads as noise.</p>
+        <div class="web"><span class="weblabel">On the web</span><code>--display: "Fraunces", serif;
+--body: "Hanken Grotesk", sans-serif;</code></div>
+      </div>
+
+      <div class="pcard">
+        <h3>Alignment &amp; the rag</h3>
+        <p class="concept">Prefer left-aligned, ragged-right for long text; justification on the web opens rivers of white. Watch the rag for awkward shapes.</p>
+        <div class="web"><span class="weblabel">On the web</span><code>text-align: left;
+text-wrap: pretty;</code></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="kicker" data-n="02">House Defaults</div>
+    <h2>Sensible starting values</h2>
+    <p class="lead" style="margin-bottom:1.8rem;">Reach for these unless the design says otherwise — then deviate on purpose, not by accident.</p>
+    <div class="defaults">
+      <div class="def"><span class="k">Base size</span><span class="v">16px / 1rem</span></div>
+      <div class="def"><span class="k">Body leading</span><span class="v">1.5 – 1.6</span></div>
+      <div class="def"><span class="k">Measure</span><span class="v">60 – 75ch</span></div>
+      <div class="def"><span class="k">Scale ratio</span><span class="v">1.25 (major 3rd)</span></div>
+      <div class="def"><span class="k">Heading leading</span><span class="v">1.1 – 1.25</span></div>
+      <div class="def"><span class="k">Rhythm unit</span><span class="v">multiples of 8px</span></div>
+      <div class="def"><span class="k">Weights</span><span class="v">400 / 600 / 700</span></div>
+      <div class="def"><span class="k">Families</span><span class="v">1 display + 1 body</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="kicker" data-n="03">Sources</div>
+    <h2>Worth reading</h2>
+
+    <p class="grouplabel">Foundational books</p>
+    <div class="ref">
+      <h3>The Elements of Typographic Style</h3>
+      <p class="meta">Robert Bringhurst · 1992</p>
+      <p>The canonical text. Where the working principles — measure, scale, rhythm — are set out with unmatched clarity. The reference every other reference defers to.</p>
+    </div>
+    <div class="ref">
+      <h3>Grid Systems in Graphic Design</h3>
+      <p class="meta">Josef Müller-Brockmann · 1981</p>
+      <p>The Swiss bible on the grid as a tool for clarity and objectivity — the discipline behind everything we align.</p>
+    </div>
+    <div class="ref">
+      <h3>The New Typography</h3>
+      <p class="meta">Jan Tschichold · 1928</p>
+      <p>The Bauhaus-era manifesto for asymmetry, function and clarity over ornament — the root of the modern sensibility.</p>
+    </div>
+
+    <p class="grouplabel">On the web</p>
+    <div class="ref">
+      <h3>Practical Typography</h3>
+      <p class="meta">Matthew Butterick</p>
+      <p>The fastest way to get a team to "good." Start every newcomer on "Typography in ten minutes."</p>
+      <a class="src" href="https://practicaltypography.com/" target="_blank" rel="noopener">practicaltypography.com →</a>
+    </div>
+    <div class="ref">
+      <h3>The Elements of Typographic Style Applied to the Web</h3>
+      <p class="meta">Richard Rutter</p>
+      <p>Bringhurst's principles translated into HTML and CSS, with working technique for each — the bridge from book to browser.</p>
+      <a class="src" href="https://webtypography.net/" target="_blank" rel="noopener">webtypography.net →</a>
+    </div>
+    <div class="ref">
+      <h3>More Meaningful Typography</h3>
+      <p class="meta">Tim Brown · A List Apart</p>
+      <p>The article that popularised modular scales for the web — how to choose a ratio and design from the content out.</p>
+      <a class="src" href="https://alistapart.com/article/more-meaningful-typography/" target="_blank" rel="noopener">alistapart.com →</a>
+    </div>
+
+    <p class="grouplabel">System guides</p>
+    <div class="ref">
+      <h3>Human Interface Guidelines — Typography</h3>
+      <p class="meta">Apple</p>
+      <p>How a platform handles type styles, Dynamic Type and weight-based hierarchy at scale.</p>
+      <a class="src" href="https://developer.apple.com/design/human-interface-guidelines/typography" target="_blank" rel="noopener">developer.apple.com →</a>
+    </div>
+    <div class="ref">
+      <h3>Material 3 — Type system</h3>
+      <p class="meta">Google</p>
+      <p>A complete type scale mapped to roles (display, headline, body, label) — a useful model for a token-driven system.</p>
+      <a class="src" href="https://m3.material.io/styles/typography" target="_blank" rel="noopener">m3.material.io →</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-top">
+    <nav class="cross">
+      <a href="typography-principles.html">Interactive</a>
+      <a href="typography-docs.html" aria-current="page">Docs &amp; Sources</a>
+    </nav>
+    <p class="colophon">RHYTHM // type is most of what they read</p>
+  </div>
+  <nav class="cross pillars">
+    <a href="index.html">Foundations</a>
+    <a href="gestalt-principles.html">Gestalt</a>
+    <a href="typography-principles.html" class="here">Typography</a>
+    <a href="motion-principles.html">Motion</a>
+  </nav>
+</footer>
+
+</body>
+</html>

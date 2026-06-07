@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestalt — Further Reading</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Syne:wght@600;700&family=Hanken+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#100f0d; --surface:#1a1916; --surface-2:#232220;
+    --line:rgba(236,234,225,0.10); --line-2:rgba(236,234,225,0.18);
+    --ink:#ECEAE1; --ink-dim:#8d8a80; --ink-faint:#4f4d47;
+    --red:#E8503A; --blue:#3D6BFF; --yellow:#F2C14E;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Hanken Grotesk",sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(61,107,255,0.07), transparent 40%),
+      radial-gradient(circle at 88% 96%, rgba(232,80,58,0.06), transparent 42%);
+    background-attachment:fixed;
+  }
+  header{ max-width:1080px; margin:0 auto; padding:6rem 1.5rem 2.5rem; border-bottom:1px solid var(--line); opacity:0; animation:rise .8s .05s ease forwards; }
+  .eyebrow{ font-family:"Space Mono",monospace; font-size:.78rem; letter-spacing:.28em; text-transform:uppercase; color:var(--red); margin-bottom:1.4rem; display:flex; align-items:center; gap:.8rem; }
+  .eyebrow::before{ content:""; width:34px; height:2px; background:var(--red); display:inline-block; }
+  h1{ font-family:"Fraunces",serif; font-weight:900; font-optical-sizing:auto; font-size:clamp(2.8rem,7.5vw,5.6rem); line-height:.96; letter-spacing:-.025em; margin:0; }
+  h1 em{ font-style:italic; font-weight:600; color:var(--ink-faint); }
+  .intro{ max-width:64ch; color:var(--ink-dim); margin:1.6rem 0 0; font-size:1.05rem; }
+  main{ max-width:1080px; margin:0 auto; padding:1rem 1.5rem 4rem; }
+
+  .group{ padding:3rem 0; border-top:1px solid var(--line); }
+  .group:first-child{ border-top:none; }
+  .kicker{ font-family:"Space Mono",monospace; font-size:.76rem; letter-spacing:.22em; text-transform:uppercase; color:var(--red); display:flex; align-items:center; gap:.7rem; margin-bottom:.9rem; }
+  .kicker::before{ content:attr(data-n); color:var(--ink-faint); font-weight:700; }
+  .group h2{ font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(1.5rem,3.2vw,2rem); letter-spacing:-.01em; margin:0 0 1.2rem; }
+
+  .ref{ padding:1.5rem 0; border-top:1px solid var(--line); padding-left:1.2rem; position:relative; }
+  .ref:first-of-type{ border-top:none; }
+  .ref::before{ content:""; position:absolute; left:0; top:1.85rem; width:6px; height:6px; border-radius:50%; background:var(--ink-faint); }
+  .ref h3{ font-family:"Syne",sans-serif; font-weight:600; font-size:1.15rem; margin:0; letter-spacing:-.005em; }
+  .ref h3 .yr{ color:var(--ink-faint); font-weight:600; }
+  .meta{ font-family:"Space Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-dim); margin:.4rem 0 0; }
+  .ref p{ color:var(--ink-dim); font-size:.96rem; margin:.6rem 0 0; max-width:72ch; }
+  .src{ font-family:"Space Mono",monospace; font-size:.73rem; letter-spacing:.04em; color:var(--blue); text-decoration:none; border-bottom:1px solid transparent; display:inline-block; margin-top:.6rem; transition:border-color .25s ease; }
+  .src:hover{ border-color:var(--blue); }
+
+  footer{ max-width:1080px; margin:0 auto; padding:0 1.5rem 5rem; }
+  .foot-inner{ border-top:1px solid var(--line); padding-top:2rem; display:flex; justify-content:space-between; gap:1.5rem 2rem; flex-wrap:wrap; align-items:baseline; }
+  .cross{ display:flex; gap:1.5rem; flex-wrap:wrap; }
+  .cross a{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); text-decoration:none; transition:color .25s ease; display:inline-flex; align-items:center; gap:.55rem; }
+  .cross a:hover{ color:var(--ink); }
+  .cross a[aria-current]{ color:var(--ink); }
+  .cross a[aria-current]::before{ content:""; width:18px; height:2px; background:var(--red); display:inline-block; }
+  .colophon{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.08em; color:var(--ink-faint); margin:0; }
+  .cross a.here{ color:var(--red); }
+  .cross .soon{ color:var(--ink-faint); }
+  .cross .soon::after{ content:"soon"; font-size:.58rem; letter-spacing:.1em; border:1px solid var(--line); border-radius:3px; padding:0 .3rem; margin-left:.45rem; }
+  .pillars{ margin-top:1.25rem; padding-top:1.15rem; border-top:1px solid var(--line); }
+
+  @media (max-width:720px){ header{ padding-top:4rem; } }
+  @keyframes rise{ to{ opacity:1; transform:translateY(0); } }
+  @media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; } header{ opacity:1; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Academic Context · Sources</div>
+  <h1>Further<br><em>Reading.</em></h1>
+  <p class="intro">The lineage behind the principles: the psychology and art texts that formalised them, the modern UX guides that operationalised them, and the platforms that ship them at scale.</p>
+</header>
+
+<main>
+
+  <section class="group">
+    <div class="kicker" data-n="01">Classical Literature</div>
+    <h2>Academic foundations</h2>
+
+    <div class="ref">
+      <h3>Art and Visual Perception: A Psychology of the Creative Eye</h3>
+      <p class="meta">Rudolf Arnheim · <span>1954</span></p>
+      <p>The seminal textbook that formally adapted early German Gestalt psychological theory into frameworks for the visual arts and spatial composition.</p>
+    </div>
+
+    <div class="ref">
+      <h3>Language of Vision</h3>
+      <p class="meta">György Kepes · <span>1944</span></p>
+      <p>A historic text on visual communication, structural pattern recognition, and how the mind processes visual information.</p>
+    </div>
+
+    <div class="ref">
+      <h3>The Interaction of Color</h3>
+      <p class="meta">Josef Albers · <span>1963</span></p>
+      <p>An essential study of perception from a Bauhaus master, showing how colour similarity and figure-ground relationships alter what we see.</p>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="kicker" data-n="02">Industry Guides</div>
+    <h2>UX frameworks</h2>
+
+    <div class="ref">
+      <h3>The Laws of UX — Gestalt Principles</h3>
+      <p class="meta">lawsofux.com</p>
+      <p>An interactive, highly scannable repository mapping psychological heuristics directly to digital interaction design.</p>
+      <a class="src" href="https://lawsofux.com" target="_blank" rel="noopener">lawsofux.com →</a>
+    </div>
+
+    <div class="ref">
+      <h3>Visual Hierarchy Research</h3>
+      <p class="meta">Nielsen Norman Group</p>
+      <p>User-tested research detailing how proximity, similarity and common region affect cognitive load and usability.</p>
+      <a class="src" href="https://www.nngroup.com" target="_blank" rel="noopener">nngroup.com →</a>
+    </div>
+
+    <div class="ref">
+      <h3>Gestalt Principles Coverage</h3>
+      <p class="meta">Interaction Design Foundation</p>
+      <p>Detailed educational paths breaking down the foundational psychology for application in software interfaces.</p>
+      <a class="src" href="https://www.interaction-design.org" target="_blank" rel="noopener">interaction-design.org →</a>
+    </div>
+
+    <div class="ref">
+      <h3>Designing with Gestalt Principles (series)</h3>
+      <p class="meta">Smashing Magazine</p>
+      <p>A practical guide for front-end developers and designers, showing real-world interface successes and failures.</p>
+      <a class="src" href="https://www.smashingmagazine.com" target="_blank" rel="noopener">smashingmagazine.com →</a>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="kicker" data-n="03">Practical Case Studies</div>
+    <h2>Shipped at scale</h2>
+
+    <div class="ref">
+      <h3>Material Design Guidelines</h3>
+      <p class="meta">Google</p>
+      <p>Clear explanations of Common Region and Proximity through elevation, cards, and dynamic surface transitions.</p>
+      <a class="src" href="https://m3.material.io" target="_blank" rel="noopener">m3.material.io →</a>
+    </div>
+
+    <div class="ref">
+      <h3>Human Interface Guidelines</h3>
+      <p class="meta">Apple</p>
+      <p>Platform standards demonstrating Symmetry, Figure-Ground (via system blurs), and Uniform Connectedness in practice.</p>
+      <a class="src" href="https://developer.apple.com/design/human-interface-guidelines" target="_blank" rel="noopener">developer.apple.com →</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <nav class="cross">
+      <a href="gestalt-principles.html">Interactive</a>
+      <a href="gestalt-overview.html">Overview</a>
+      <a href="gestalt-reference.html">Reference</a>
+      <a href="gestalt-reading.html" aria-current="page">Further Reading</a>
+    </nav>
+    <p class="colophon">GESTALT // das Ganze ist mehr als die Summe seiner Teile</p>
+  </div>
+  <nav class="cross pillars">
+    <a href="index.html">Foundations</a>
+    <a href="gestalt-principles.html" class="here">Gestalt</a>
+    <a href="typography-principles.html">Typography</a>
+    <a href="motion-principles.html">Motion</a>
+  </nav>
+</footer>
+
+</body>
+</html>

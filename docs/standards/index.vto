@@ -1,0 +1,24 @@
+---
+layout: layouts/base.vto
+title: Engineering Standards & Practices
+url: /docs/standards/
+---
+<article class="home">
+  <header class="hero">
+    <div class="eyebrow">Sigma · Engineering</div>
+    <h1>Engineering<br><em>standards.</em></h1>
+    <p class="lede">What we hold ourselves — and any AI agent in our repos — to. The Sigma Ten, the security, resilience and supply-chain baselines, maturity tiers, and the per-language appendices that translate them into your stack.</p>
+  </header>
+
+  <div class="section-block">
+    <ul class="entry-list">
+      {{ for entry of search.pages("section=standards", "order") }}
+      <li>
+        <a href="{{ entry.url }}">
+          <span class="entry-title">{{ entry.title }}</span>
+        </a>
+      </li>
+      {{ /for }}
+    </ul>
+  </div>
+</article>

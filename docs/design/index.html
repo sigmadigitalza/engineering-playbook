@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sigma — Design Foundations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Syne:wght@600;700&family=Hanken+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#100f0d; --surface:#1a1916; --surface-2:#232220;
+    --line:rgba(236,234,225,0.10); --line-2:rgba(236,234,225,0.18);
+    --ink:#ECEAE1; --ink-dim:#8d8a80; --ink-faint:#4f4d47;
+    --red:#E8503A; --blue:#3D6BFF; --yellow:#F2C14E;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Hanken Grotesk",sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(61,107,255,0.07), transparent 40%),
+      radial-gradient(circle at 88% 96%, rgba(232,80,58,0.06), transparent 42%);
+    background-attachment:fixed;
+  }
+  header{ max-width:1080px; margin:0 auto; padding:6rem 1.5rem 2.5rem; border-bottom:1px solid var(--line); opacity:0; animation:rise .8s .05s ease forwards; }
+  .eyebrow{ font-family:"Space Mono",monospace; font-size:.78rem; letter-spacing:.28em; text-transform:uppercase; color:var(--red); margin-bottom:1.4rem; display:flex; align-items:center; gap:.8rem; }
+  .eyebrow::before{ content:""; width:34px; height:2px; background:var(--red); display:inline-block; }
+  h1{ font-family:"Fraunces",serif; font-weight:900; font-optical-sizing:auto; font-size:clamp(2.8rem,7.5vw,5.6rem); line-height:.96; letter-spacing:-.025em; margin:0; }
+  h1 em{ font-style:italic; font-weight:600; color:var(--ink-faint); }
+  .intro{ max-width:64ch; color:var(--ink-dim); margin:1.6rem 0 0; font-size:1.05rem; }
+  main{ max-width:1080px; margin:0 auto; padding:1.5rem 1.5rem 4rem; }
+
+  .pillar{ display:grid; grid-template-columns:auto 1fr; gap:1.5rem 2.2rem; padding:3rem 0; border-top:1px solid var(--line); }
+  .pillar:first-child{ border-top:none; }
+  .pnum{ font-family:"Fraunces",serif; font-weight:900; font-size:clamp(2.6rem,6vw,4rem); line-height:.85; }
+  .pnum.red{ color:var(--red); } .pnum.blue{ color:var(--blue); } .pnum.yellow{ color:var(--yellow); }
+  .pbody h2{ font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(1.8rem,4.2vw,2.7rem); margin:0; letter-spacing:-.01em; }
+  .pbody h2 a{ color:var(--ink); text-decoration:none; transition:color .25s ease; }
+  .pbody h2 a:hover{ color:var(--ink-dim); }
+  .ethos{ color:var(--ink-dim); font-size:1.06rem; margin:.55rem 0 1.3rem; max-width:54ch; }
+  .plinks{ display:flex; gap:1.5rem; flex-wrap:wrap; align-items:center; }
+  .plinks a{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-dim); text-decoration:none; border-bottom:1px solid var(--line-2); padding-bottom:3px; transition:color .25s, border-color .25s; }
+  .plinks a:hover{ color:var(--ink); border-color:var(--red); }
+  .soon-inline{ font-family:"Space Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); }
+  .soon-inline::after{ content:"in build"; font-size:.6rem; border:1px solid var(--line-2); border-radius:3px; padding:.05rem .35rem; margin-left:.55rem; color:var(--ink-faint); }
+
+  .note{ margin-top:3.4rem; padding-top:2.4rem; border-top:1px solid var(--line); max-width:70ch; }
+  .note .kicker{ font-family:"Space Mono",monospace; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--red); margin-bottom:.7rem; }
+  .note p{ color:var(--ink-dim); font-size:.96rem; margin:0 0 .8rem; }
+  .note code{ font-family:"Space Mono",monospace; font-size:.85em; color:var(--ink); background:var(--surface-2); border:1px solid var(--line); border-radius:4px; padding:.05rem .35rem; }
+
+  footer{ max-width:1080px; margin:0 auto; padding:0 1.5rem 5rem; }
+  .foot-top{ border-top:1px solid var(--line); padding-top:2rem; display:flex; justify-content:space-between; gap:1.5rem 2rem; flex-wrap:wrap; align-items:baseline; }
+  .foot-label{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); }
+  .cross{ display:flex; gap:1.5rem; flex-wrap:wrap; }
+  .cross a{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); text-decoration:none; transition:color .25s ease; display:inline-flex; align-items:center; gap:.55rem; }
+  .cross a:hover{ color:var(--ink); }
+  .cross a.here{ color:var(--red); }
+  .cross .soon{ color:var(--ink-faint); }
+  .cross .soon::after{ content:"soon"; font-size:.58rem; letter-spacing:.1em; border:1px solid var(--line); border-radius:3px; padding:0 .3rem; margin-left:.45rem; }
+  .colophon{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.08em; color:var(--ink-faint); margin:0; }
+  .pillars{ margin-top:1.25rem; padding-top:1.15rem; border-top:1px solid var(--line); }
+
+  @media (max-width:680px){ .pillar{ grid-template-columns:1fr; gap:.6rem; } header{ padding-top:4rem; } }
+  @keyframes rise{ to{ opacity:1; transform:translateY(0); } }
+  @media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; } header{ opacity:1; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Sigma · Design Foundations</div>
+  <h1>The<br><em>Foundations.</em></h1>
+  <p class="intro">Three sets of evergreen principles every interface we build rests on: how perception groups what it sees, how type carries meaning and rhythm, and how motion communicates over time. One shared language, one standard.</p>
+</header>
+
+<main>
+
+  <section class="pillar">
+    <div class="pnum red">01</div>
+    <div class="pbody">
+      <h2><a href="gestalt-principles.html">Gestalt</a></h2>
+      <p class="ethos">How perception groups what it sees. The cognitive shortcuts that turn marks on a screen into meaning — proximity, similarity, closure, figure-ground and the rest.</p>
+      <div class="plinks">
+        <a href="gestalt-principles.html">Interactive</a>
+        <a href="gestalt-overview.html">Overview</a>
+        <a href="gestalt-reference.html">Reference</a>
+        <a href="gestalt-reading.html">Further Reading</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="pillar">
+    <div class="pnum blue">02</div>
+    <div class="pbody">
+      <h2><a href="typography-principles.html">Typography</a></h2>
+      <p class="ethos">How type carries meaning, hierarchy and rhythm. Swiss and Bauhaus discipline applied to the web — measure, scale, leading and the baseline grid that holds it all together.</p>
+      <div class="plinks">
+        <a href="typography-principles.html">Interactive</a>
+        <a href="typography-docs.html">Docs &amp; Sources</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="pillar">
+    <div class="pnum yellow">03</div>
+    <div class="pbody">
+      <h2><a href="motion-principles.html">Motion</a></h2>
+      <p class="ethos">How change communicates over time. Purposeful animation — easing, timing, choreography and continuity — descended from Disney's twelve principles and adapted for the interface.</p>
+      <div class="plinks">
+        <a href="motion-principles.html">Interactive</a>
+        <a href="motion-docs.html">Docs &amp; Sources</a>
+      </div>
+    </div>
+  </section>
+
+
+</main>
+
+<footer>
+  <div class="foot-top">
+    <span class="foot-label">Sigma Design Foundations</span>
+    <p class="colophon">foundations for everything we build</p>
+  </div>
+  <nav class="cross pillars">
+    <a href="../../">Sigma Playbook</a>
+    <a href="index.html" class="here">Foundations</a>
+    <a href="gestalt-principles.html">Gestalt</a>
+    <a href="typography-principles.html">Typography</a>
+    <a href="motion-principles.html">Motion</a>
+  </nav>
+</footer>
+
+</body>
+</html>

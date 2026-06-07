@@ -80,6 +80,13 @@ site.data("layout", "layouts/page.vto");
 site.add("styles.css");
 site.add("copy.js");
 
+// The Design pillar is the self-contained Sigma Design Foundations bundle. Its
+// inline theme is the reference look the rest of the site is aligned to, so we
+// serve it verbatim: ignore it from the page pipeline, then copy it as static
+// files (each page keeps its own <head>, fonts, and styles).
+site.ignore("docs/design");
+site.add("docs/design");
+
 // Pull the H1 of each markdown file into `title` so layouts can render it in
 // <title> and breadcrumbs without us editing the canonical docs.
 site.preprocess([".md"], (pages) => {

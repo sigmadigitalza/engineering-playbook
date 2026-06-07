@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Motion — Docs &amp; Sources</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Syne:wght@600;700&family=Hanken+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#100f0d; --surface:#1a1916; --surface-2:#232220;
+    --line:rgba(236,234,225,0.10); --line-2:rgba(236,234,225,0.18);
+    --ink:#ECEAE1; --ink-dim:#8d8a80; --ink-faint:#4f4d47;
+    --red:#E8503A; --blue:#3D6BFF; --yellow:#F2C14E;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Hanken Grotesk",sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(61,107,255,0.07), transparent 40%),
+      radial-gradient(circle at 88% 96%, rgba(232,80,58,0.06), transparent 42%);
+    background-attachment:fixed;
+  }
+  header{ max-width:1080px; margin:0 auto; padding:6rem 1.5rem 2.5rem; border-bottom:1px solid var(--line); opacity:0; animation:rise .8s .05s ease forwards; }
+  .eyebrow{ font-family:"Space Mono",monospace; font-size:.78rem; letter-spacing:.28em; text-transform:uppercase; color:var(--red); margin-bottom:1.4rem; display:flex; align-items:center; gap:.8rem; }
+  .eyebrow::before{ content:""; width:34px; height:2px; background:var(--red); display:inline-block; }
+  h1{ font-family:"Fraunces",serif; font-weight:900; font-optical-sizing:auto; font-size:clamp(2.8rem,7.5vw,5.6rem); line-height:.96; letter-spacing:-.025em; margin:0; }
+  h1 em{ font-style:italic; font-weight:600; color:var(--ink-faint); }
+  .intro{ max-width:64ch; color:var(--ink-dim); margin:1.6rem 0 0; font-size:1.05rem; }
+  main{ max-width:1080px; margin:0 auto; padding:1rem 1.5rem 4rem; }
+
+  .section{ padding:3rem 0; border-top:1px solid var(--line); }
+  .section:first-child{ border-top:none; }
+  .kicker{ font-family:"Space Mono",monospace; font-size:.76rem; letter-spacing:.22em; text-transform:uppercase; color:var(--red); display:flex; align-items:center; gap:.7rem; margin-bottom:.9rem; }
+  .kicker::before{ content:attr(data-n); color:var(--ink-faint); font-weight:700; }
+  .section > h2{ font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(1.5rem,3.2vw,2rem); letter-spacing:-.01em; margin:0 0 1.2rem; }
+  .lead{ color:var(--ink-dim); font-size:1.05rem; max-width:68ch; margin:0; }
+
+  .pcards{ display:grid; grid-template-columns:repeat(2,1fr); gap:1.25rem; }
+  .pcard{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:1.5rem; transition:border-color .3s ease; display:flex; flex-direction:column; }
+  .pcard:hover{ border-color:var(--line-2); }
+  .pcard h3{ font-family:"Syne",sans-serif; font-weight:700; font-size:1.12rem; margin:0 0 .5rem; }
+  .pcard .concept{ color:var(--ink-dim); font-size:.92rem; margin:0 0 1rem; }
+  .web{ margin-top:auto; }
+  .weblabel{ font-family:"Space Mono",monospace; font-size:.64rem; letter-spacing:.16em; text-transform:uppercase; color:var(--blue); display:block; margin-bottom:.4rem; }
+  code{ font-family:"Space Mono",monospace; font-size:.78rem; color:var(--ink); background:var(--surface-2); border:1px solid var(--line); border-radius:5px; padding:.5rem .7rem; display:block; white-space:pre-wrap; line-height:1.5; }
+  code .c{ color:var(--ink-faint); }
+
+  .defaults{ display:grid; grid-template-columns:repeat(2,1fr); gap:0 2.5rem; max-width:780px; }
+  .def{ display:flex; justify-content:space-between; gap:1rem; padding:.7rem 0; border-bottom:1px solid var(--line); }
+  .def .k{ color:var(--ink-dim); font-size:.92rem; }
+  .def .v{ font-family:"Space Mono",monospace; font-size:.8rem; color:var(--ink); white-space:nowrap; }
+  @media (max-width:560px){ .defaults{ grid-template-columns:1fr; gap:0; } }
+
+  .ref{ padding:1.4rem 0; border-top:1px solid var(--line); padding-left:1.2rem; position:relative; }
+  .ref:first-of-type{ border-top:none; }
+  .ref::before{ content:""; position:absolute; left:0; top:1.75rem; width:6px; height:6px; border-radius:50%; background:var(--ink-faint); }
+  .ref h3{ font-family:"Syne",sans-serif; font-weight:600; font-size:1.1rem; margin:0; }
+  .meta{ font-family:"Space Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-dim); margin:.35rem 0 0; }
+  .ref p{ color:var(--ink-dim); font-size:.94rem; margin:.5rem 0 0; max-width:72ch; }
+  .src{ font-family:"Space Mono",monospace; font-size:.73rem; letter-spacing:.04em; color:var(--blue); text-decoration:none; border-bottom:1px solid transparent; display:inline-block; margin-top:.55rem; transition:border-color .25s ease; }
+  .src:hover{ border-color:var(--blue); }
+  .grouplabel{ font-family:"Space Mono",monospace; font-size:.7rem; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-faint); margin:2rem 0 .4rem; }
+  .grouplabel:first-of-type{ margin-top:0; }
+
+  footer{ max-width:1080px; margin:0 auto; padding:0 1.5rem 5rem; }
+  .foot-top{ border-top:1px solid var(--line); padding-top:2rem; display:flex; justify-content:space-between; gap:1.5rem 2rem; flex-wrap:wrap; align-items:baseline; }
+  .cross{ display:flex; gap:1.5rem; flex-wrap:wrap; }
+  .cross a{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); text-decoration:none; transition:color .25s ease; display:inline-flex; align-items:center; gap:.55rem; }
+  .cross a:hover{ color:var(--ink); }
+  .cross a[aria-current]{ color:var(--ink); }
+  .cross a[aria-current]::before{ content:""; width:18px; height:2px; background:var(--red); display:inline-block; }
+  .cross a.here{ color:var(--red); }
+  .colophon{ font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.08em; color:var(--ink-faint); margin:0; }
+  .pillars{ margin-top:1.25rem; padding-top:1.15rem; border-top:1px solid var(--line); }
+
+  @media (max-width:720px){ .pcards{ grid-template-columns:1fr; } header{ padding-top:4rem; } }
+  @keyframes rise{ to{ opacity:1; transform:translateY(0); } }
+  @media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; } header{ opacity:1; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Docs &amp; Sources</div>
+  <h1>Motion, in<br><em>Practice.</em></h1>
+  <p class="intro">Motion descends from Disney's twelve principles of animation, adapted for interfaces where it must earn its place. These are the principles we hold to, the CSS that delivers them, and the sources worth reading.</p>
+</header>
+
+<main>
+
+  <section class="section">
+    <div class="kicker" data-n="01">Principles</div>
+    <h2>Nine rules for motion that works</h2>
+    <p class="lead" style="margin-bottom:1.8rem;">The interactive page lets you feel them; this is the reference, each paired with how it lands in code.</p>
+    <div class="pcards">
+
+      <div class="pcard">
+        <h3>Purpose</h3>
+        <p class="concept">Every animation should orient, explain or confirm. If it does none of those, it's noise — cut it. Motion is a cost the user pays in time and attention.</p>
+        <div class="web"><span class="weblabel">Rule of thumb</span><code><span class="c">/* if it doesn't aid the
+   user, don't animate it */</span></code></div>
+      </div>
+
+      <div class="pcard">
+        <h3>Easing</h3>
+        <p class="concept">Real things accelerate and settle. Use ease-out for entrances, ease-in for exits, and reserve linear for things that genuinely move at constant speed (spinners, marquees).</p>
+        <div class="web"><span class="weblabel">On the web</span><code>transition: transform .3s
+  cubic-bezier(.16,1,.3,1);</code></div>
+      </div>
+
+      <div class="pcard">
+        <h3>Timing</h3>
+        <p class="concept">Keep it short — most UI transitions sit between 150 and 500ms. Scale duration to distance and size: a tooltip is quick, a full-screen panel is slower.</p>
+        <div class="web"><span class="weblabel">On the web</span><code>--dur-sm: 150ms;
+--dur-md: 300ms;
+--dur-lg: 500ms;</code></div>
+      </div>
+
+      <div class="pcard">
+        <h3>Choreography</h3>
+        <p class="concept">Sequence related elements with a small offset rather than moving everything at once. Stagger guides the eye and makes a busy change legible.</p>
+        <div class="web"><span class="weblabel">On the web</span><code>animation-delay:
+  calc(var(--i) * 60ms);</code></div>
+      </div>
+
+      <div class="pcard">
+        <h3>Continuity</h3>
+        <p class="concept">Preserve object identity across states. When one element becomes another, animate the transformation in place so the user never loses the thread.</p>
+        <div class="web"><span class="weblabel">On the web</span><code>/* shared-element transition */
+@view-transition { navigation: auto; }</code></div>
+      </div>
+
+      <div class="pcard">
+        <h3>Feedback</h3>
+        <p class="concept">Motion confirms an action was received and shows the system responding — a press that depresses, a result that arrives. Immediate, then out of the way.</p>
+        <div class="web"><span class="weblabel">On the web</span><code>button:active {
+  transform: scale(.97);
+}</code></div>
+      </div>
+
+      <div class="pcard">
+        <h3>Orientation</h3>
+        <p class="concept">Where a thing enters from implies where it belongs and where it'll return. Direction and origin carry meaning — a drawer slides from the edge it lives on.</p>
+        <div class="web"><span class="weblabel">On the web</span><code>/* enter from the panel's
+   home edge, not nowhere */</code></div>
+      </div>
+
+      <div class="pcard">
+        <h3>Performance</h3>
+        <p class="concept">Animate only the cheap properties — transform and opacity — so the GPU can hold 60fps. Animating layout (width, top, margin) drops frames and feels broken.</p>
+        <div class="web"><span class="weblabel">On the web</span><code>/* compositor-friendly */
+transform / opacity ✓
+width / top / margin ✗</code></div>
+      </div>
+
+      <div class="pcard">
+        <h3>Accessibility</h3>
+        <p class="concept">Large motion can trigger nausea and migraines. Always honour the reduced-motion setting — remove or replace movement with a fade, never just ignore it.</p>
+        <div class="web"><span class="weblabel">On the web</span><code>@media (prefers-reduced-motion:
+  reduce) { * { animation: none;
+  transition: none; } }</code></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="kicker" data-n="02">House Defaults</div>
+    <h2>Sensible starting values</h2>
+    <p class="lead" style="margin-bottom:1.8rem;">A small, opinionated set of motion tokens. Reach for these, then deviate on purpose.</p>
+    <div class="defaults">
+      <div class="def"><span class="k">Small / hover</span><span class="v">150ms</span></div>
+      <div class="def"><span class="k">Standard transition</span><span class="v">300ms</span></div>
+      <div class="def"><span class="k">Large / page</span><span class="v">500ms</span></div>
+      <div class="def"><span class="k">Enter easing</span><span class="v">cubic-bezier(.16,1,.3,1)</span></div>
+      <div class="def"><span class="k">Exit easing</span><span class="v">ease-in (faster)</span></div>
+      <div class="def"><span class="k">Stagger step</span><span class="v">40 – 80ms</span></div>
+      <div class="def"><span class="k">Animate only</span><span class="v">transform · opacity</span></div>
+      <div class="def"><span class="k">Frame budget</span><span class="v">≤ 16ms (60fps)</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="kicker" data-n="03">Sources</div>
+    <h2>Worth reading</h2>
+
+    <p class="grouplabel">Foundational</p>
+    <div class="ref">
+      <h3>The Illusion of Life: Disney Animation</h3>
+      <p class="meta">Frank Thomas &amp; Ollie Johnston · 1981</p>
+      <p>The origin of the twelve basic principles of animation — squash &amp; stretch, anticipation, follow-through, slow in/out. Every UI motion idea traces back here.</p>
+    </div>
+    <div class="ref">
+      <h3>Creating Usability with Motion: The UX in Motion Manifesto</h3>
+      <p class="meta">Issara Willenskomer · 2017</p>
+      <p>The bridge from Disney to the interface — twelve principles framed around usability: how motion supports expectation, continuity, narrative and relationship.</p>
+      <a class="src" href="https://medium.com/ux-in-motion/creating-usability-with-motion-the-ux-in-motion-manifesto-a87a4584ddc" target="_blank" rel="noopener">medium.com/ux-in-motion →</a>
+    </div>
+
+    <p class="grouplabel">Books</p>
+    <div class="ref">
+      <h3>Designing Interface Animation</h3>
+      <p class="meta">Val Head · Rosenfeld Media, 2016</p>
+      <p>The practitioner's handbook: meaningful motion for feedback, orientation and brand — including a clear-eyed chapter on accessibility and motion sensitivity.</p>
+      <a class="src" href="https://valhead.com/books/" target="_blank" rel="noopener">valhead.com/books →</a>
+    </div>
+    <div class="ref">
+      <h3>Animation at Work</h3>
+      <p class="meta">Rachel Nabors · A Book Apart, 2017</p>
+      <p>Starts with the science of human perception, then turns it into patterns, an anatomy of web animation, and how to communicate motion across a team.</p>
+      <a class="src" href="https://abookapart.com/products/animation-at-work" target="_blank" rel="noopener">abookapart.com →</a>
+    </div>
+
+    <p class="grouplabel">System guides</p>
+    <div class="ref">
+      <h3>Material 3 — Motion</h3>
+      <p class="meta">Google</p>
+      <p>A complete motion system: easing and duration tokens, transition patterns, and the "motion provides meaning" philosophy mapped to components.</p>
+      <a class="src" href="https://m3.material.io/styles/motion" target="_blank" rel="noopener">m3.material.io →</a>
+    </div>
+    <div class="ref">
+      <h3>Human Interface Guidelines — Motion</h3>
+      <p class="meta">Apple</p>
+      <p>How a platform uses motion for hierarchy and vitality while deferring to content — and how it respects the system Reduce Motion setting.</p>
+      <a class="src" href="https://developer.apple.com/design/human-interface-guidelines/motion" target="_blank" rel="noopener">developer.apple.com →</a>
+    </div>
+
+    <p class="grouplabel">Accessibility</p>
+    <div class="ref">
+      <h3>prefers-reduced-motion</h3>
+      <p class="meta">MDN Web Docs</p>
+      <p>The media feature reference and patterns — including the no-motion-first approach of styling statically, then adding motion under <code>no-preference</code>.</p>
+      <a class="src" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-reduced-motion" target="_blank" rel="noopener">developer.mozilla.org →</a>
+    </div>
+    <div class="ref">
+      <h3>Using prefers-reduced-motion (C39)</h3>
+      <p class="meta">W3C · WCAG 2.1</p>
+      <p>The official technique for WCAG Success Criterion 2.3.3, Animation from Interactions — how to suppress motion triggered by interaction.</p>
+      <a class="src" href="https://www.w3.org/WAI/WCAG21/Techniques/css/C39" target="_blank" rel="noopener">w3.org/WAI →</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-top">
+    <nav class="cross">
+      <a href="motion-principles.html">Interactive</a>
+      <a href="motion-docs.html" aria-current="page">Docs &amp; Sources</a>
+    </nav>
+    <p class="colophon">MOTION // change, explained</p>
+  </div>
+  <nav class="cross pillars">
+    <a href="index.html">Foundations</a>
+    <a href="gestalt-principles.html">Gestalt</a>
+    <a href="typography-principles.html">Typography</a>
+    <a href="motion-principles.html" class="here">Motion</a>
+  </nav>
+</footer>
+
+</body>
+</html>
