@@ -1,12 +1,12 @@
 # Git Repo Setup & Review Playbook
 
-A strategy and Claude Code prompt for auditing or bootstrapping a GitHub repo's *configuration* surface — branch and tag rulesets, CODEOWNERS, collaborator roles, default token scope, secret scanning, contribution gates, merge settings — separately from the workflow YAML inside it. Posture-aware (open-source / public-distribution / private-team / personal). Companion to `github-actions-review`.
+A strategy and Claude Code prompt for auditing or bootstrapping a GitHub repo's *configuration* surface — branch and tag rulesets, CODEOWNERS, collaborator roles, default token scope, secret scanning, contribution gates, merge settings — separately from the workflow YAML inside it. Posture-aware (open-source / public-distribution / private-team / personal). Companion to [`github-actions-review`](./github-actions-review.md).
 
 ---
 
 ## Strategy
 
-**Workflow review and repo-configuration review are different jobs.** `github-actions-review` covers the YAML *inside* `.github/workflows/`. This playbook covers what surrounds those workflows: who can push, what ruleset gates the default branch, who owns the code, whether the floating major-version tag can be force-pushed, which app installations get to bypass review. A perfectly-hardened workflow file inside a perfectly-permissive repo configuration is still a single push from compromise — the supply-chain blast radius depends on both. Pair these two playbooks for any release-engineering repo.
+**Workflow review and repo-configuration review are different jobs.** [`github-actions-review`](./github-actions-review.md) covers the YAML *inside* `.github/workflows/`. This playbook covers what surrounds those workflows: who can push, what ruleset gates the default branch, who owns the code, whether the floating major-version tag can be force-pushed, which app installations get to bypass review. A perfectly-hardened workflow file inside a perfectly-permissive repo configuration is still a single push from compromise — the supply-chain blast radius depends on both. Pair these two playbooks for any release-engineering repo.
 
 **Reconnaissance before recommendations.** Same shape as the workflow playbook — push Claude Code through inventory before analysis. Repo config has more knobs than people realise (visibility, archived, default branch, fork policy, sha-pinning enforcement, default GITHUB_TOKEN scope, can-Actions-approve-PRs, classic branch protection, rulesets, tag rulesets, secret scanning, push protection, custom-pattern scanning, dependabot tiers, interaction limits, CODEOWNERS, environments, deploy keys, webhook secrets). A reviewer who starts editing settings without enumerating runs out of context fast.
 
