@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+## [0.6.3] - 2026-06-07
+
 ### Fixed
 
 - cache-bust the stylesheet; add heading descender room (#35 by @Pushplaybang)
