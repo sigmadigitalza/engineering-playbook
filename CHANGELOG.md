@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Removed
+
+## [0.4.0] - 2026-06-07
+
+### Added
+
 - engineering standards, repo-setup-review skill, and playbook review sweep (#20 by @Pushplaybang)
 - render the engineering standards on the docs site (#21 by @Pushplaybang)
 - three-pillar Sigma Playbook on the design-foundations theme (#22 by @Pushplaybang)
