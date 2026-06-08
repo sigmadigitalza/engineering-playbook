@@ -1,6 +1,6 @@
 # Appendix — Android / Kotlin
 
-*Stack appendix for the [Sigma Engineering Standards](./sigma-engineering-standards.md). Covers Android applications and Kotlin code targeting the Android runtime. Most rules also apply to JVM-only Kotlin; sections marked **(Android)** are platform-specific.*
+*Stack appendix for the [Sigma Engineering Standards](./sigma-engineering-standards.md). Covers Android applications and Kotlin code targeting the Android runtime. Most rules also apply to JVM-only Kotlin; sections marked **(Android)** are platform-specific. This is developer best practice first — how a Sigma engineer writes idiomatic Kotlin by hand. It is also the bar an AI agent writing Kotlin in our repos is held to: match these idioms, and surface any deviation (see §8 of the standard, AI Agent Rules of Engagement).*
 
 ---
 

@@ -179,7 +179,7 @@ Findings that cannot be applied with a `gh api` call alone. Most commonly: the r
 ## Section E — Summary
 
 - Top 3 quick wins (where "win" weights *security* × *implementation cost* × *posture-alignment*).
-- The single most important security finding, posture-tagged.
+- The most important security finding, posture-tagged.
 - Distribution-tag fanout — present or absent? If present, name the tag and the consumers affected.
 - Open questions for the user that block further hardening.
 
