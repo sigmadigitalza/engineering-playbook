@@ -107,14 +107,14 @@
 <header>
   <div class="eyebrow">Docs &amp; Sources</div>
   <h1>Type, in<br><em>Practice.</em></h1>
-  <p class="intro">The web is overwhelmingly type and forms, so typography isn't decoration — it's the bulk of the user experience. These are the principles we hold to, the practical web equivalents, and the sources worth reading.</p>
+  <p class="intro">The web is overwhelmingly type and forms, so typography isn't decoration. It's most of what the user actually reads.. These are the principles we hold to, the practical web equivalents, and the sources worth reading.</p>
 </header>
 
 <main>
 
   <section class="section">
     <div class="kicker" data-n="01">Principles</div>
-    <h2>Eight things that carry the read</h2>
+    <h2>Eight things that make text readable</h2>
     <p class="lead" style="margin-bottom:1.8rem;">Each principle paired with how it lands in CSS. The interactive page lets you feel them; this is the reference.</p>
     <div class="pcards">
 
@@ -133,7 +133,7 @@ margin-block: 1.5rem; <span class="c">/* one rhythm unit */</span></code></div>
 
       <div class="pcard">
         <h3>Modular scale &amp; hierarchy</h3>
-        <p class="concept">Derive every size from one ratio (1.2 minor third, 1.25 major third, 1.618 golden) so headings, body and captions read as one family — and hierarchy appears for free.</p>
+        <p class="concept">Derive every size from one ratio (1.2 minor third, 1.25 major third, 1.618 golden) so headings, body and captions read as one family — and the size steps between heading, body and caption are obvious without tuning each one.</p>
         <div class="web"><span class="weblabel">On the web</span><code>--step-0: 1rem;
 --step-1: 1.25rem;
 --step-2: 1.563rem; <span class="c">/* ×1.25 */</span></code></div>
@@ -141,13 +141,13 @@ margin-block: 1.5rem; <span class="c">/* one rhythm unit */</span></code></div>
 
       <div class="pcard">
         <h3>Leading</h3>
-        <p class="concept">Body copy wants room to breathe — roughly 1.5–1.6 unitless. Tighten it for large display, open it slightly for small text.</p>
+        <p class="concept">Body copy needs looser line spacing — roughly 1.5–1.6 unitless. Tighten it for large display, open it slightly for small text.</p>
         <div class="web"><span class="weblabel">On the web</span><code>line-height: 1.55; <span class="c">/* unitless */</span></code></div>
       </div>
 
       <div class="pcard">
         <h3>The grid</h3>
-        <p class="concept">The Swiss inheritance: a shared column structure aligns every element and removes a thousand arbitrary placement decisions.</p>
+        <p class="concept">A shared column structure aligns everything and kills most arbitrary placement decisions.</p>
         <div class="web"><span class="weblabel">On the web</span><code>display: grid;
 grid-template-columns: repeat(12, 1fr);
 gap: 24px;</code></div>
@@ -163,7 +163,7 @@ letter-spacing: .12em;</code></div>
 
       <div class="pcard">
         <h3>Pairing &amp; restraint</h3>
-        <p class="concept">One or two families, a handful of weights. A confident system says more with less; sprawl reads as noise.</p>
+        <p class="concept">One or two families, a handful of weights. Two families and a few weights look intentional; a dozen fonts just look noisy.</p>
         <div class="web"><span class="weblabel">On the web</span><code>--display: "Fraunces", serif;
 --body: "Hanken Grotesk", sans-serif;</code></div>
       </div>
@@ -202,12 +202,12 @@ text-wrap: pretty;</code></div>
     <div class="ref">
       <h3>The Elements of Typographic Style</h3>
       <p class="meta">Robert Bringhurst · 1992</p>
-      <p>The canonical text. Where the working principles — measure, scale, rhythm — are set out with unmatched clarity. The reference every other reference defers to.</p>
+      <p>The canonical text. Where the working principles — measure, scale, rhythm — are set out with unmatched clarity. Dense, but it's where the vocabulary comes from.</p>
     </div>
     <div class="ref">
       <h3>Grid Systems in Graphic Design</h3>
       <p class="meta">Josef Müller-Brockmann · 1981</p>
-      <p>The Swiss bible on the grid as a tool for clarity and objectivity — the discipline behind everything we align.</p>
+      <p>Müller-Brockmann's case for the grid — still the clearest argument for why structure beats taste — the discipline behind everything we align.</p>
     </div>
     <div class="ref">
       <h3>The New Typography</h3>
