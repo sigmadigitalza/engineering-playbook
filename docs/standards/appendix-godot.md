@@ -1,6 +1,6 @@
 # Appendix — Godot
 
-*Stack appendix for the [Sigma Engineering Standards](./sigma-engineering-standards.md). Covers Godot 4.x projects in GDScript (primary) and C# (where used). Game and interactive content have failure modes that differ from services — corrupted saves, vanished assets, frame-rate cliffs — so this appendix leans into those.*
+*Stack appendix for the [Sigma Engineering Standards](./sigma-engineering-standards.md). Covers Godot 4.x projects in GDScript (primary) and C# (where used). Game and interactive content have failure modes that differ from services — corrupted saves, vanished assets, frame-rate cliffs — so this appendix leans into those. This is developer best practice first — how a Sigma engineer writes idiomatic GDScript by hand. It is also the bar an AI agent writing GDScript in our repos is held to: match these idioms, and surface any deviation (see §8 of the standard, AI Agent Rules of Engagement).*
 
 ---
 
@@ -95,7 +95,7 @@ This is where Godot bugs live. Internalise these.
 
 ## 5. Async / `await`
 
-GDScript 4's `await` is powerful and also a footgun.
+GDScript 4's `await` is convenient and also a footgun.
 
 - **Every `await` has a defined wake-up condition.** A signal, a `Timer`, or `get_tree().create_timer(...).timeout`.
 - **Bound it.** For awaits that *could* hang (network, file IO, user input), use a `Timer` race or check `is_inside_tree()` after the wake-up — the node may have been freed.
@@ -240,7 +240,7 @@ Godot's asset library is the equivalent of npm. Apply the same discipline.
 - **Vetted, narrow, active.** Same bar as main standard §6.
 - **Vendored** into `addons/` rather than fetched at build time. The version is what's in the repo.
 - **Read the source** of every addon at least once. They run with full project permissions.
-- **Default: zero.** The engine is unusually capable on its own. Reach for an addon only when justified.
+- **Default: zero.** The engine does a great deal on its own. Reach for an addon only when justified.
 
 ---
 

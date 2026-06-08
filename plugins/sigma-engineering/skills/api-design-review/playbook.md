@@ -26,7 +26,7 @@ A strategy and Claude Code prompt for reviewing REST and GraphQL API designs —
 
 **GraphQL errors: typed errors via schema, not the errors array.** The top-level `errors` array is for protocol failures (auth, parse errors, server crashes). Business errors (validation failures, not-found, permission-denied) belong in the schema as union return types — `MutationPayload = SuccessShape | ValidationError | NotFoundError`. A GraphQL schema with no error types is a schema that has not been designed for failure; the prompt treats this as a Major finding, not a nit.
 
-**Contract drift is the silent killer.** OpenAPI files written by hand always lie. SDL files that aren't snapshot-tested drift when resolvers change. The prompt always asks: where does the contract live, who generates whom, what enforces the link? If the answer is "we update the OpenAPI when we remember to," that is a finding.
+**Contract drift breaks consumers quietly.** OpenAPI files written by hand always lie. SDL files that aren't snapshot-tested drift when resolvers change. The prompt always asks: where does the contract live, who generates whom, what enforces the link? If the answer is "we update the OpenAPI when we remember to," that is a finding.
 
 **Two traps to encode:**
 

@@ -1,6 +1,6 @@
 # Appendix — Go
 
-*Stack appendix for the [Sigma Engineering Standards](./sigma-engineering-standards.md). Covers services, CLIs, and tooling written in Go.*
+*Stack appendix for the [Sigma Engineering Standards](./sigma-engineering-standards.md). Covers services, CLIs, and tooling written in Go. This is developer best practice first — how a Sigma engineer writes idiomatic Go by hand. It is also the bar an AI agent writing Go in our repos is held to: match these idioms, and surface any deviation (see §8 of the standard, AI Agent Rules of Engagement).*
 
 ---
 
@@ -79,7 +79,7 @@ case err != nil:
 - **Every goroutine has a defined exit condition** tied to a context, a closed channel, or a `sync.WaitGroup`. Fire-and-forget goroutines are a leak waiting to happen.
 - **`go test -race` in CI.** Always.
 - **Prefer `errgroup.Group`** (`golang.org/x/sync/errgroup`) over hand-rolled `WaitGroup` + error channel for grouped goroutines.
-- **Bounded concurrency** via a semaphore channel or `errgroup.SetLimit`. Unbounded fan-out is a denial-of-service waiting to happen.
+- **Bounded concurrency** via a semaphore channel or `errgroup.SetLimit`. Unbounded fan-out is a denial-of-service you ship to yourself.
 - **Bounded channels.** Unbuffered or sized — never let "buffer = arbitrary large number" be the answer to backpressure.
 - **No `sync.Mutex` embedded in exported types** unless the locking discipline is part of the documented API. Prefer narrow internal locks.
 - **Don't share by communicating *and* communicate by sharing.** Pick one per concern.
@@ -156,7 +156,7 @@ For retry / circuit-breaking, prefer a small handwritten wrapper around `*http.C
 
 ### When a framework is warranted
 
-For services with non-trivial routing, middleware composition, or many handlers, **Labstack Echo** (`github.com/labstack/echo/v4`) is the team default. It's minimalist, middleware-clean, and doesn't fight stdlib idioms — Echo wraps `http.Server`, so the timeout discipline above is unchanged.
+For services with non-trivial routing, middleware composition, or many handlers, **Labstack Echo** (`github.com/labstack/echo/v4`) is the team default. It's middleware-clean and doesn't fight stdlib idioms — Echo wraps `http.Server`, so the timeout discipline above is unchanged.
 
 ```go
 e := echo.New()

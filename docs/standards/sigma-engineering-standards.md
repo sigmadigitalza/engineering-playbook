@@ -107,7 +107,7 @@ Linters, type-checkers, static analysers, and dependency audits are green in CI 
 
 ## 4. Security Baseline
 
-These are non-negotiable for any code shipped to a user or to production infrastructure. Language-specific tooling is in the appendices; the frontend trust boundary and the review procedure are in the [web-security](../playbooks/web-security.md) playbook.
+These hold for any code shipped to a user or to production infrastructure, no exceptions. Language-specific tooling is in the appendices; the frontend trust boundary and the review procedure are in the [web-security](../playbooks/web-security.md) playbook.
 
 ### Secrets
 - **Never** in source, never in client-side bundles, never in logs, never in error messages, never in URLs.

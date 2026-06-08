@@ -23,7 +23,7 @@ One prompt covering both works if the first thing it does is *route* between the
 
 **Hypothesis-driven diagnosis, not feature-walking.** Junior incident responders walk every feature of a system looking for what's broken. Senior SREs form hypotheses ranked by base rate ("most outages are caused by the most recent change") and falsify the cheap ones first. The prompt encodes this: form 3–5 ranked hypotheses, name the cheapest falsifiable check for each, run those before deeper investigation. This also dramatically reduces the number of probes needed, which matters for a probe-gated prompt.
 
-**The "what changed" view is the highest-leverage internal tool.** After upstream is ruled out, for 80% of remaining incidents the answer is in the diff between last-known-good and current. The prompt makes `git log` / PR diff inspection a first-class step in incident mode, before any application probing.
+**The "what changed" view is the fastest path to root cause.** After upstream is ruled out, for 80% of remaining incidents the answer is in the diff between last-known-good and current. The prompt makes `git log` / PR diff inspection a first-class step in incident mode, before any application probing.
 
 **Three-bucket reporting, but the buckets shift meaning:**
 

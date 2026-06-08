@@ -6,13 +6,13 @@ A strategy and Claude Code prompt for auditing web application performance again
 
 ## Strategy
 
-**Performance is the playbook with the most authoritative substrate.** Unlike security or docs review (mostly judgment), performance has Core Web Vitals as concrete pass/fail thresholds, Lighthouse as a reproducible measurement tool, and CrUX (Chrome User Experience Report) for real-world field data. The prompt leans harder on numbers than the other prompts do. Findings include "this will likely improve LCP by ~Xs because Y," not vague directional advice.
+**Performance is the most measurable review in the set.** Unlike security or docs review (mostly judgment), performance has Core Web Vitals as concrete pass/fail thresholds, Lighthouse as a reproducible measurement tool, and CrUX (Chrome User Experience Report) for real-world field data. The prompt leans harder on numbers than the other prompts do. Findings include "this will likely improve LCP by ~Xs because Y," not vague directional advice.
 
 **Lab vs field is the most important distinction to encode.** Lighthouse gives lab data — synthetic, single run, controlled throttling. CrUX gives field data — 75th percentile of real Chrome users over the trailing 28 days. They often disagree. A 2.0s LCP in Lighthouse with 4.5s in CrUX means real users hit slow paths the lab test doesn't simulate (cold caches, real networks, real devices, real third-party variance). The prompt has to ask about field data, not just generate lab numbers and call them truth.
 
 **Mode routing, same shape as the SRE and security prompts:**
 - **Mode 1 — Static code review.** PR / pre-deploy. Read the repo, identify performance anti-patterns, predict CWV impact. No live measurement.
-- **Mode 2 — Live site audit.** Run or consume Lighthouse output against a deployed URL. Combine with field data (CrUX / PageSpeed Insights) if available. The richest mode, where lab and field can be triangulated.
+- **Mode 2 — Live site audit.** Run or consume Lighthouse output against a deployed URL. Combine with field data (CrUX / PageSpeed Insights) if available. The mode where lab and field can be triangulated.
 
 **Lighthouse integration with a preference order.** The prompt prefers, in order: (1) existing Lighthouse JSON if the user provides it, (2) running Lighthouse via `npx` if available in the environment, (3) PageSpeed Insights API which gives both lab and field, (4) pure code review if none of the above. Each tier produces different-fidelity findings — the prompt names which tier it's working from in the report so the user knows the confidence level.
 
