@@ -11,7 +11,7 @@
 The largest source of pain in software is complexity we created ourselves. These name the pattern and propose the antidote.
 
 **[The Grug Brain Developer](https://grugbrain.dev/)** — Carson Gross
-Grug think complexity demon big bad. Grug think factory factories and "clever" abstractions invite complexity demon to project. Grug recommend simple code, say no often, sometimes hit production with club. Re-read every six months. The single most-quoted essay on the team Slack for a reason.
+Grug think complexity demon big bad. Grug think factory factories and "clever" abstractions invite complexity demon to project. Grug recommend simple code, say no often, sometimes hit production with club. Re-read every six months. The one essay everyone here ends up quoting, for a reason.
 
 **[The Twelve-Factor App](https://12factor.net/)** — Adam Wiggins
 Twelve operational principles for cloud-native services. Config in env, stateless processes, port binding, disposable workers, dev/prod parity. Most of its advice has aged better than the platforms it was written on.
@@ -130,7 +130,7 @@ Most of it applies to Kotlin too. Builders, "favour composition over inheritance
 Software is a human craft. The best writing about it doesn't pretend otherwise.
 
 **[The Story of Mel](https://users.cs.utah.edu/~elb/folklore/mel.html)** — Ed Nather (1983)
-A poem about a Real Programmer optimising drum-memory loops by hand. The genre is "ballads about programmers who are no longer with us." Read it aloud at the company offsite.
+A poem about a Real Programmer optimising drum-memory loops by hand. The genre is "ballads about programmers who are no longer with us." Read it aloud sometime — it holds up.
 
 **[The Rise of "Worse is Better"](https://www.dreamsongs.com/RiseOfWorseIsBetter.html)** — Richard Gabriel
 The original essay plus the author's own decades of arguing with himself in followups. If you've ever felt torn between "the right thing" and "shipping," Gabriel has been there longer than you.
@@ -164,7 +164,7 @@ For when you want long-form.
 
 ## 9. How To Use This
 
-- One per quarter. Pick something from this list, read it, discuss in a guild meeting, agree what (if anything) changes in how we work.
+- One per quarter. Pick something from this list, read it, talk it over with the team, agree what (if anything) changes in how we work.
 - Onboarding minimum: §1 in full. Grug, 12 Factor, Choose Boring, Locality of Behaviour, No Silver Bullet. These are the cultural baseline.
 - Add to this list. Anything any Sigma engineer finds genuinely changed-how-they-think gets a PR. The bar is real impact, not citation completeness.
 

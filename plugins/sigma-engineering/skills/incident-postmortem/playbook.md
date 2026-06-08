@@ -25,11 +25,11 @@ A strategy, a copy-paste postmortem template, and a Claude Code prompt for writi
 
 **One prompt covers both because the rubric is the same in both directions.** The drafting mode applies the rubric forwards (produce a document that meets it); the review mode applies the same rubric backwards (audit a document for compliance). Splitting them into two prompts duplicates the criteria and risks drift between them.
 
-**Approval-gated, but the gates are different from SRE.** The SRE prompt gates network probes against production. The postmortem prompt gates *people-and-systems* actions: contacting individuals for clarification, posting in Slack channels, filing tickets in Jira / Linear, modifying alerts or dashboards, sending email summaries. None of these happen without explicit, in-conversation authorization, even if the assistant has the access. Reading repo content, deployment logs, exported chat transcripts, and alert history that the user provides is free.
+**Approval-gated, but the gates are different from SRE.** The SRE prompt gates network probes against production. The postmortem prompt gates *people-and-systems* actions: contacting individuals for clarification, posting in chat, filing tickets in Jira / Linear, modifying alerts or dashboards, sending email summaries. None of these happen without explicit, in-conversation authorization, even if the assistant has the access. Reading repo content, deployment logs, exported chat transcripts, and alert history that the user provides is free.
 
 **Privacy and redaction posture.** Postmortems get circulated more widely than incident-channel discussion. Customer data that appeared in error logs, employee names tied to specific actions where blame might attach, vendor confidentiality where a SaaS dependency contributed — all need redaction or anonymization in the published version. The prompt has a redaction pass before producing the final draft, not as a separate step.
 
-**Distribution and follow-through is part of the system, not a footnote.** A postmortem that nobody reads and whose action items nobody tracks is theatre. The playbook spells out where postmortems live (the team's docs repo or wiki), who's expected to read each one (the team that owns the system, plus broader engineering for high-severity), how action items are tracked through to completion (linked to tickets, owner accountable in standups), and the cadence for revisiting old postmortems (quarterly review for trends, repeat causes, and unfinished action items). The prompt produces a distribution checklist alongside the document.
+**Distribution and follow-through is part of the system, not a footnote.** A postmortem that nobody reads and whose action items nobody tracks is theatre. The playbook spells out where postmortems live (the team's docs repo or wiki), who's expected to read each one (the team that owns the system, plus broader engineering for high-severity), how action items are tracked through to completion (linked to tickets, with an accountable owner), and the cadence for revisiting old postmortems (quarterly review for trends, repeat causes, and unfinished action items). The prompt produces a distribution checklist alongside the document.
 
 **Specific traps to encode:**
 
@@ -63,7 +63,7 @@ Copy this into your team's docs / wiki when an incident hits the threshold below
 - **Authors:** <names>
 - **Incident commander:** <name>
 - **On-call responder(s):** <names>
-- **Stakeholders informed during incident:** <list — eng leadership, support, sales, customers if applicable>
+- **People kept informed during incident:** <list — eng leads, support, sales, customers if applicable>
 
 ## Summary
 
@@ -159,7 +159,7 @@ Two to four bullets. The durable takeaways someone reading this in six months sh
 
 - Posted to: <wiki link / docs repo path>
 - Read by: <team that owns the system>
-- Wider read: <list — engineering all-hands, leadership digest, etc.>
+- Wider read: <list — the wider eng team, a summary for leads, etc.>
 - Action items tracked in: <Jira/Linear project>
 - Quarterly review: <which review cycle this rolls up to>
 ````
@@ -198,7 +198,7 @@ You are a senior site reliability engineer running a blameless post-incident rev
 - **Multiple contributing factors, not one root cause.** Most incidents are a chain of small failures. If the analysis lands on a single cause — especially "human error" or "bad deploy" — the analysis is not done. Keep asking "and why was that possible?" until the answer is a system property the team can act on.
 - **Hindsight-free timeline.** The timeline records what the responders observed in the order they observed it, not what we now know. Every timeline entry has a source (alert ID, message link, commit SHA, log query, dashboard link). No inferred or reconstructed entries without a source.
 - **Action items must be specific, owned, dated, and classified.** Each as Prevention, Detection, or Mitigation. Reject any that fail this bar. Better to ship 5 real action items than 15 shape-shifting ones.
-- **Approval-gated for people-and-systems actions.** Reading the repo, deployment history, exported chat transcripts, alert exports, and dashboard data the user provides is free. Do NOT contact individuals, post in Slack channels, file tickets, modify alerts or dashboards, or send email without explicit in-conversation authorization. List proposed actions in batches and wait.
+- **Approval-gated for people-and-systems actions.** Reading the repo, deployment history, exported chat transcripts, alert exports, and dashboard data the user provides is free. Do NOT contact individuals, post in chat, file tickets, modify alerts or dashboards, or send email without explicit in-conversation authorization. List proposed actions in batches and wait.
 - **Redact before publishing.** Customer data that appeared in logs, employee names where blame might attach, vendor confidentiality. Apply redaction in the draft, not as a separate step.
 - **Don't fabricate.** If a chat message, commit, or alert is not in the provided artifacts, do not invent it. If a section can't be filled from the artifacts, say so explicitly and flag it for the author to provide.
 
@@ -210,7 +210,7 @@ Begin by asking which mode applies. If I've already told you, skip the question.
 - **Mode 2 — Review postmortem.** Audit an existing draft against the rubric.
 
 Ask for the inputs that mode needs:
-- Mode 1: incident brief (1–3 sentences), severity, detected and resolved timestamps in UTC, exported chat transcripts (incident channel), alert history, deployment timeline (commits / SHAs around the window), dashboard or log links if available, list of people involved (commander, on-call, stakeholders).
+- Mode 1: incident brief (1–3 sentences), severity, detected and resolved timestamps in UTC, exported chat transcripts (incident channel), alert history, deployment timeline (commits / SHAs around the window), dashboard or log links if available, list of people involved (commander, on-call, and anyone kept informed).
 - Mode 2: the existing postmortem draft (path or pasted content), and any of the Mode 1 inputs the reviewer has access to for cross-checking.
 
 # PHASE 1 — RECONNAISSANCE (all modes)
@@ -220,7 +220,7 @@ Do this before any drafting or review. Report briefly.
 1. **Artifact inventory.** What did I actually receive? Chat transcripts (timeframe, channel, completeness — were quiet hours included?), alert exports (with IDs), deployment timeline (commit list with timestamps), dashboard snapshots, prior runbook references, customer comms posted. Note gaps.
 2. **System under incident.** From the repo: which service(s), which dependencies (link out to the SRE playbook's service-dependency map if present in the repo), which deploy mechanism, which on-call rotation owns it.
 3. **Severity & impact framing.** From the brief: severity classification, customer-facing impact scope (count or %, geography, segment if known), duration, SLO context (was the error budget already strained?). Flag if any of these are not stated and need confirmation.
-4. **People involved.** Identify by role: incident commander, on-call responder(s), engineers who joined, stakeholders informed. Confirm names against chat transcripts.
+4. **People involved.** Identify by role: incident commander, on-call responder(s), engineers who joined, who was kept informed. Confirm names against chat transcripts.
 5. **Existing artifacts to cross-reference.** Prior postmortems for similar incidents in this system (search `docs/postmortems/`, `docs/incidents/`, wiki path the user provides). Outstanding action items from prior postmortems that may have been relevant.
 6. **What I'm missing.** End Phase 1 with a list of gaps and what changes if each is provided. Do not proceed to drafting / review while critical gaps are outstanding (e.g., chat transcript missing for the period the timeline needs to cover) without explicit instruction.
 
@@ -231,7 +231,7 @@ Do this before any drafting or review. Report briefly.
 Populate the standard template (in the playbook). Approach:
 
 ### Header
-Severity, dates, detected/resolved UTC timestamps, duration of customer impact (note if different from detect-to-resolve — e.g., partial degradation started earlier), authors, incident commander, on-call responder(s), stakeholders informed.
+Severity, dates, detected/resolved UTC timestamps, duration of customer impact (note if different from detect-to-resolve — e.g., partial degradation started earlier), authors, incident commander, on-call responder(s), who was kept informed.
 
 ### Summary
 3–4 lines, no jargon. What happened, who was affected, what was done. A non-engineer reader should grasp the shape of the event from the summary alone.
@@ -335,7 +335,7 @@ Audit the provided draft against the rubric. Produce findings in the four-sectio
 For each action item, check:
 - **Specific** — names a concrete change, not "improve X."
 - **Owned** — single named person, not a team or "TBD."
-- **Dated** — specific date, not "soon" or "next sprint."
+- **Dated** — specific date, not "soon" or "later."
 - **Classified** — Prevention, Detection, or Mitigation, named.
 - **Tied to a contributing factor.** Each action should reduce the chance of recurrence, shorten time-to-know, or reduce blast radius for one of the named factors. If an action item doesn't trace to a factor, ask why it's here.
 
@@ -392,13 +392,13 @@ Possible drafts you can offer to produce (not execute):
 Do NOT:
 - Post the document anywhere.
 - File tickets.
-- Send Slack / email summaries.
+- Send chat / email summaries.
 - Modify alerts, dashboards, or monitoring config.
 - Contact individuals named in the postmortem for clarification — return that as a question to the user.
 
 # CONSTRAINTS
 
-- Do not contact individuals, post in Slack, file tickets, send email, or modify monitoring without explicit in-conversation approval.
+- Do not contact individuals, post in chat, file tickets, send email, or modify monitoring without explicit in-conversation approval.
 - Do not invent timeline entries, alert IDs, commit SHAs, dashboard URLs, on-call handles, ticket numbers, or runbook content.
 - Do not allow the contributing-factors section to terminate at "human error" or "operator mistake" — these are starting points, keep asking why.
 - Do not allow action items that fail the specific / owned / dated / classified bar. Reject "be more careful," "improve communication," "consider," "review."
