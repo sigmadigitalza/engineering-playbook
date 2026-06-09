@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Removed
+
+## [0.8.0] - 2026-06-09
+
+### Added
+
 - add the <doc-outline> reading sidebar to doc pages (#41 by @Pushplaybang)
 
 ## [0.7.0] - 2026-06-09
