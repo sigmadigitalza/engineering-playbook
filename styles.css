@@ -150,13 +150,6 @@ main.wrap { padding-block: 3rem 4rem; }
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-}
-.brand::before {
-  content: "";
-  width: 22px;
-  height: 2px;
-  background: var(--red);
 }
 .primary {
   display: flex;
@@ -248,6 +241,10 @@ main.wrap { padding-block: 3rem 4rem; }
   background: var(--red);
   flex: none;
 }
+/* In .prose, the generic `.prose p` rule would bump the eyebrow to 1rem; pin it back to
+   the eyebrow size so it matches the landing eyebrows exactly. */
+.prose .eyebrow { font-size: 0.78rem; }
+
 .eyebrow a,
 .prose .eyebrow a {
   color: inherit;
@@ -264,9 +261,15 @@ main.wrap { padding-block: 3rem 4rem; }
 
 .prose { max-width: var(--measure); }
 
-/* Doc-page two-column layout: prose + sticky <doc-outline> rail (rail self-hides < 1100px). */
-.doc-layout { display: flex; gap: 3rem; align-items: flex-start; }
+/* Doc-page two-column layout: prose + sticky <doc-outline> rail (rail self-hides < 1100px).
+   On wide screens the prose fills to the rail's gutter, so the rail's outer edge lines up
+   with the page (nav) edge; padding-top matches the hero so the eyebrow sits at the same
+   height as on landing pages. */
+.doc-layout { display: flex; gap: 4rem; align-items: flex-start; padding-top: 2rem; }
 .doc-layout .prose { flex: 1 1 auto; min-width: 0; }
+@media (min-width: 1100px) {
+  .doc-layout .prose { max-width: none; }
+}
 
 .prose > * + * { margin-top: 1rem; }
 .prose > * + h2 { margin-top: 2.75rem; }
@@ -588,6 +591,71 @@ main.wrap { padding-block: 3rem 4rem; }
 }
 @media (max-width: 680px) {
   .entry-list { grid-template-columns: 1fr; }
+}
+
+/* ─── Standards landing: feature + language cards ─────────────────────────── */
+
+.std-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+.std-card {
+  display: flex;
+  gap: 1rem;
+  padding: 1.4rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+.std-card:hover {
+  border-color: var(--line-2);
+  transform: translateY(-2px);
+}
+.std-feature {
+  grid-column: span 2;
+  align-items: flex-start;
+}
+.std-lang {
+  grid-column: span 1;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.std-icon {
+  flex: none;
+  color: var(--ink-dim);
+  transition: color 0.3s ease;
+}
+.std-feature .std-icon { width: 30px; height: 30px; }
+.std-lang .std-icon { width: 26px; height: 26px; }
+.std-card:hover .std-icon { color: var(--red); }
+.std-icon svg { display: block; width: 100%; height: 100%; }
+.std-card-text { display: flex; flex-direction: column; gap: 0.3rem; }
+.std-card-title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.std-feature .std-card-title { font-size: 1.15rem; }
+.std-lang .std-card-title { font-size: 1rem; }
+.std-card-desc {
+  color: var(--ink-dim);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+.std-feature .std-card-desc { font-size: 0.92rem; }
+
+@media (max-width: 860px) {
+  .std-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 520px) {
+  .std-grid { grid-template-columns: 1fr; }
+  .std-feature { grid-column: span 1; }
 }
 
 /* ─── Motion ──────────────────────────────────────────────────────────────── */
