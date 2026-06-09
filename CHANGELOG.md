@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+## [0.8.1] - 2026-06-09
+
 ### Fixed
 
 - match doc-page eyebrow to the landing eyebrow (#43 by @Pushplaybang)
