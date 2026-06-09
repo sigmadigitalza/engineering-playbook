@@ -27,6 +27,6 @@ mkdir -p .github/instructions
 cp /tmp/eng-pb/.github/instructions/*.instructions.md .github/instructions/
 ```
 
-There is no marketplace for Copilot instructions — distribution is per-repo. For org-wide rollout, mirror this directory via a sync GitHub Action or include it in your repo template.
+There is no marketplace for Copilot instructions — distribution is per-repo. For org-wide rollout — or to keep a repo's Copilot coding-agent reviews on our latest guidance — use the ready-made sync workflow in the [main README](../../README.md#github-copilot), or include this directory in your repo template.
 
 [1]: https://github.com/sigmadigitalza/engineering-playbook
