@@ -1,9 +1,13 @@
 ---
 layout: layouts/base.vto
 ---
-<article class="prose">
-  {{ if section }}
-  <p class="eyebrow"><a href="/docs/{{ section }}/">Sigma · {{ sectionLabel }}</a></p>
-  {{ /if }}
-  {{ content |> safe }}
-</article>
+<div class="doc-layout">
+  <article class="prose">
+    {{ if section }}
+    <p class="eyebrow"><a href="/docs/{{ section }}/">Sigma · {{ sectionLabel }}</a></p>
+    {{ /if }}
+    {{ content |> safe }}
+  </article>
+  <doc-outline selector=".prose h2, .prose h3"></doc-outline>
+</div>
+<script src="/doc-outline.js" defer></script>
