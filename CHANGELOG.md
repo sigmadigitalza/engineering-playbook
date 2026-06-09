@@ -9,11 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Fraunces headings, consistent doc eyebrows, even principle cards (#39 by @Pushplaybang)
+
 ### Changed
 
-### Fixed
-
-### Removed
+- tighten prose voice; frame standards as dev practice that also grounds agents (#37 by @Pushplaybang)
+- authentic-voice pass on design foundations; strip corporate-isms (#38 by @Pushplaybang)
 
 ## [0.6.3] - 2026-06-07
 
