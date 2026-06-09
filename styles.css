@@ -27,6 +27,13 @@
   --blue: #3d6bff;
   --yellow: #f2c14e;
 
+  /* Theme bridge for the <doc-outline> web component. */
+  --color-border: var(--line);
+  --color-heading: var(--ink);
+  --color-dim: var(--ink-dim);
+  --color-accent: var(--red);
+  --color-accent-hover: var(--ink);
+
   /* Light — warm paper. */
   --bg: #f5f1e7;
   --surface: #fffdf6;
@@ -254,6 +261,10 @@ main.wrap { padding-block: 3rem 4rem; }
 /* ─── Prose ───────────────────────────────────────────────────────────────── */
 
 .prose { max-width: var(--measure); }
+
+/* Doc-page two-column layout: prose + sticky <doc-outline> rail (rail self-hides < 1100px). */
+.doc-layout { display: flex; gap: 3rem; align-items: flex-start; }
+.doc-layout .prose { flex: 1 1 auto; min-width: 0; }
 
 .prose > * + * { margin-top: 1rem; }
 .prose > * + h2 { margin-top: 2.75rem; }

@@ -79,6 +79,7 @@ site.data("layout", "layouts/page.vto");
 // Static assets: the stylesheet and the small copy-to-clipboard script.
 site.add("styles.css");
 site.add("copy.js");
+site.add("doc-outline.js");
 
 // Cache-bust the stylesheet: hash its contents and expose the digest as
 // `cssVersion`, which the base layout appends to the stylesheet URL as a query
@@ -148,6 +149,35 @@ site.preprocess([".md"], (pages) => {
 
 site.use(code_highlight({ languages: { gdscript } }));
 site.use(nav());
+
+// Give doc-page headings stable slug ids so the <doc-outline> component (and
+// in-page anchors) can target them. Silent — no visible anchor links or icons.
+site.process([".html"], (pages) => {
+  const slugify = (s: string) =>
+    s.toLowerCase().trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/[\s_]+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  for (const page of pages) {
+    const { document } = page;
+    if (!document) continue;
+    const seen = new Set<string>();
+    for (const h of document.querySelectorAll(".prose h2, .prose h3")) {
+      if (h.id) {
+        seen.add(h.id);
+        continue;
+      }
+      const base = slugify(h.textContent || "");
+      if (!base) continue;
+      let id = base;
+      let n = 2;
+      while (seen.has(id)) id = `${base}-${n++}`;
+      seen.add(id);
+      h.setAttribute("id", id);
+    }
+  }
+});
 
 // Rewrite intra-repo `.md` links (the standards docs cross-link each other with
 // `.md` paths so they resolve on GitHub) to their built pretty-URL form, so they
