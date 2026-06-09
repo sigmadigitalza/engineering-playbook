@@ -14,13 +14,22 @@ In every install path below, skills auto-activate by description match — say "
 
 Install as a plugin via our marketplace:
 
-```bash
+```text
 /plugin marketplace add sigmadigitalza/engineering-playbook
 /plugin install sigma-engineering@sigma-engineering-playbook
-/reload-plugins
+/reload-plugins          # activate now — optional; restarting Claude Code also works
 ```
 
 The plugin source is checked in at [`plugins/sigma-engineering/`](plugins/sigma-engineering) — no build step required to install.
+
+**Updating.** Git-marketplace plugins don't auto-update by default, so pull the latest skills explicitly:
+
+```text
+/plugin marketplace update sigma-engineering-playbook
+/plugin install sigma-engineering@sigma-engineering-playbook
+```
+
+`claude plugin list` shows your installed version. To stay current automatically, open `/plugin` → **Marketplaces** and enable auto-update for `sigma-engineering-playbook`. A marketplace update only pulls a new build when the plugin `version` changes — which we bump whenever the skills change.
 
 ### Claude Desktop and Claude.ai
 
@@ -37,7 +46,7 @@ Restart Claude Desktop after the copy. To upgrade later, re-run the same command
 
 ### GitHub Copilot
 
-Each skill is also published as a Copilot custom-instructions file at [`.github/instructions/<name>.instructions.md`](.github/instructions). These are read by Copilot Chat (in your editor), Copilot Code Review, and Copilot Coding Agent, with description- and `applyTo`-based triggering.
+Each skill is also published as a Copilot custom-instructions file at [`.github/instructions/<name>.instructions.md`](.github/instructions). They're read by Copilot Chat (in your editor), Copilot code review, and the **Copilot coding agent** — the cloud agent that works issues and PRs from inside GitHub Actions. Triggering is automatic, from each file's `description` and `applyTo` glob; the coding agent reads whatever is in the repo's `.github/instructions/`, so there's nothing to wire up beyond adding the files.
 
 To use them in your own repo, copy the relevant files into your repo's `.github/instructions/` directory:
 
@@ -51,7 +60,44 @@ gh repo clone sigmadigitalza/engineering-playbook /tmp/eng-pb
 cp -r /tmp/eng-pb/.github/instructions/. .github/instructions/
 ```
 
-For org-wide rollout, mirror the directory via a sync action or include it in your repo template. There is no "marketplace" for Copilot instructions — distribution is per-repo.
+**Keep them current automatically.** For a repo where the coding agent runs cloud reviews, a scheduled workflow that opens a PR when our instructions change keeps the agent on the latest guidance:
+
+```yaml
+# .github/workflows/sync-sigma-instructions.yml
+name: Sync Sigma engineering instructions
+on:
+  schedule: [{ cron: "0 6 * * 1" }]   # Mondays, 06:00 UTC
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pull the latest instructions
+        run: |
+          tmp="$(mktemp -d)"
+          git clone --depth 1 https://github.com/sigmadigitalza/engineering-playbook "$tmp"
+          mkdir -p .github/instructions
+          cp "$tmp"/.github/instructions/*.instructions.md .github/instructions/
+          rm -rf "$tmp"
+      - name: Open a PR if anything changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c chore/sync-sigma-instructions
+          git add .github/instructions/*.instructions.md
+          git diff --cached --quiet && { echo "Already up to date."; exit 0; }
+          git commit -m "chore: sync Sigma engineering Copilot instructions"
+          git push -fu origin chore/sync-sigma-instructions
+          gh pr create --fill --base "${GITHUB_REF_NAME}" || true
+```
+
+There is no "marketplace" for Copilot instructions — distribution is per-repo. For org-wide rollout, run the workflow above from a template repo, or vendor the directory into your repo template.
 
 > The `SKILL.md` format used by Claude and the `*.instructions.md` format used by Copilot are different file conventions, but the prompt body is identical between them. The generator keeps them in sync.
 
@@ -116,8 +162,9 @@ The normative spine — what we hold ourselves, and any AI agent in our repos, t
 
 1. Branch from `main`.
 2. Keep playbooks and prompts in sync — if you add a check to a playbook, update the corresponding prompt (and vice versa).
-3. Use Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:` …) for commit messages.
-4. Open a PR and request review from the engineering team.
+3. If you change a skill's body (`docs/prompts/`, `docs/playbooks/`) or metadata (`scripts/skills-meta.json`), run `deno task build:skills` to regenerate the plugin and Copilot instructions, and bump `version` in [`plugins/sigma-engineering/.claude-plugin/plugin.json`](plugins/sigma-engineering/.claude-plugin/plugin.json) so installed plugins pick up the change.
+4. Use Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:` …) for commit messages.
+5. Open a PR and request review from the engineering team.
 
 ## Roadmap
 

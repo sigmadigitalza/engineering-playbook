@@ -1,6 +1,6 @@
 {
   "name": "sigma-engineering",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Sigma Digital's engineering playbook — review skills covering API design, code review, database schema and migrations, documentation, frontend accessibility, GitHub Actions, incident postmortems, repo setup and configuration, web performance, web security, and web SRE.",
   "author": {
     "name": "Sigma Digital",
