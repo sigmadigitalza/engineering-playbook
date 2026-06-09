@@ -6,7 +6,7 @@
 <title>Typography — Docs &amp; Sources</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Syne:wght@600;700&family=Hanken+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,600&family=Hanken+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="chrome.css">
 <style>
   :root{
@@ -45,13 +45,13 @@
   .section:first-child{ border-top:none; }
   .kicker{ font-family:"Space Mono",monospace; font-size:.76rem; letter-spacing:.22em; text-transform:uppercase; color:var(--red); display:flex; align-items:center; gap:.7rem; margin-bottom:.9rem; }
   .kicker::before{ content:attr(data-n); color:var(--ink-faint); font-weight:700; }
-  .section > h2{ font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(1.5rem,3.2vw,2rem); letter-spacing:-.01em; margin:0 0 1.2rem; }
+  .section > h2{ font-family:"Fraunces",sans-serif; font-weight:700; font-size:clamp(1.5rem,3.2vw,2rem); letter-spacing:-.01em; margin:0 0 1.2rem; }
   .lead{ color:var(--ink-dim); font-size:1.05rem; max-width:68ch; margin:0; }
 
   .pcards{ display:grid; grid-template-columns:repeat(2,1fr); gap:1.25rem; }
   .pcard{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:1.5rem; transition:border-color .3s ease; display:flex; flex-direction:column; }
   .pcard:hover{ border-color:var(--line-2); }
-  .pcard h3{ font-family:"Syne",sans-serif; font-weight:700; font-size:1.12rem; margin:0 0 .5rem; }
+  .pcard h3{ font-family:"Fraunces",sans-serif; font-weight:700; font-size:1.12rem; margin:0 0 .5rem; }
   .pcard .concept{ color:var(--ink-dim); font-size:.92rem; margin:0 0 1rem; }
   .web{ margin-top:auto; }
   .weblabel{ font-family:"Space Mono",monospace; font-size:.64rem; letter-spacing:.16em; text-transform:uppercase; color:var(--blue); display:block; margin-bottom:.4rem; }
@@ -67,7 +67,7 @@
   .ref{ padding:1.4rem 0; border-top:1px solid var(--line); padding-left:1.2rem; position:relative; }
   .ref:first-of-type{ border-top:none; }
   .ref::before{ content:""; position:absolute; left:0; top:1.75rem; width:6px; height:6px; border-radius:50%; background:var(--ink-faint); }
-  .ref h3{ font-family:"Syne",sans-serif; font-weight:600; font-size:1.1rem; margin:0; }
+  .ref h3{ font-family:"Fraunces",sans-serif; font-weight:600; font-size:1.1rem; margin:0; }
   .meta{ font-family:"Space Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-dim); margin:.35rem 0 0; }
   .ref p{ color:var(--ink-dim); font-size:.94rem; margin:.5rem 0 0; max-width:72ch; }
   .src{ font-family:"Space Mono",monospace; font-size:.73rem; letter-spacing:.04em; color:var(--blue); text-decoration:none; border-bottom:1px solid transparent; display:inline-block; margin-top:.55rem; transition:border-color .25s ease; }

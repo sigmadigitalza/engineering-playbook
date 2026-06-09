@@ -123,10 +123,13 @@ site.preprocess([".md"], (pages) => {
     if (typeof url !== "string") continue;
     if (url.startsWith("/docs/playbooks/")) {
       page.data.section = "playbooks";
+      page.data.sectionLabel = "Playbooks";
     } else if (url.startsWith("/docs/prompts/")) {
       page.data.section = "prompts";
+      page.data.sectionLabel = "Prompts";
     } else if (url.startsWith("/docs/standards/")) {
       page.data.section = "standards";
+      page.data.sectionLabel = "Engineering";
       // Spine first, then appendices in reading order.
       page.data.order = url.includes("/sigma-engineering-standards/")
         ? 0

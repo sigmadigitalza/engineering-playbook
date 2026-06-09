@@ -5,7 +5,7 @@
    as punctuation (red leads; blue/yellow support). Light is a warm-paper
    counterpart with the same ink/accent relationships inverted.
 
-   Type voices: Fraunces (display) · Syne (headings) · Hanken Grotesk (body) ·
+   Type voices: Fraunces (display + headings) · Hanken Grotesk (body) ·
    Space Mono (labels/eyebrows). */
 
 :root {
@@ -18,7 +18,7 @@
   --header-height: 60px;
 
   --font-display: "Fraunces", ui-serif, Georgia, serif;
-  --font-heading: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Fraunces", ui-serif, Georgia, serif;
   --font-body: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: "Space Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
@@ -244,7 +244,11 @@ main.wrap { padding-block: 3rem 4rem; }
 .eyebrow a {
   color: inherit;
   text-decoration: none;
-  border-bottom: 1px solid currentColor;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+.eyebrow a:hover {
+  border-bottom-color: currentColor;
 }
 
 /* ─── Prose ───────────────────────────────────────────────────────────────── */
@@ -262,8 +266,8 @@ main.wrap { padding-block: 3rem 4rem; }
   font-family: var(--font-heading);
   font-weight: 700;
   letter-spacing: -0.01em;
-  /* Syne has deep descenders (g, p, y); a tight line box cramps them and reads
-     as clipped. 1.4 gives them room with margin across browsers. */
+  /* Roomy line height so headings with descenders (g, p, y) and the odd
+     two-line heading sit comfortably. */
   line-height: 1.4;
   color: var(--ink);
 }
