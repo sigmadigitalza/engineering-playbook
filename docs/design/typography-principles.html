@@ -6,7 +6,7 @@
 <title>Typography — How type reads on screen</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Syne:wght@600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="chrome.css">
 <style>
   :root{
@@ -47,8 +47,8 @@
   .card:hover{ border-color:var(--line-2); }
   .card-head{ display:flex; align-items:baseline; gap:.75rem; margin-bottom:.2rem; }
   .num{ font-family:"Space Mono",monospace; font-size:.8rem; color:var(--ink-faint); font-weight:700; }
-  .card h2{ font-family:"Syne",sans-serif; font-weight:700; font-size:1.35rem; margin:0; letter-spacing:-.01em; }
-  .card .lede{ color:var(--ink-dim); font-size:.92rem; margin:.5rem 0 1.2rem; min-height:2.6em; }
+  .card h2{ font-family:"Fraunces",sans-serif; font-weight:700; font-size:1.35rem; margin:0; letter-spacing:-.01em; }
+  .card .lede{ color:var(--ink-dim); font-size:.92rem; margin:.5rem 0 1.2rem; min-height:4.6em; text-wrap:pretty; }
 
   .stage{ background:var(--surface-2); border:1px solid var(--line); border-radius:11px; min-height:200px; position:relative; overflow:hidden; padding:1.4rem 1.5rem; display:flex; flex-direction:column; justify-content:center; }
 
@@ -69,7 +69,7 @@
   .card.on .rhythm .lines{ opacity:1; }
   .rhythm p{ position:relative; margin:0 0 28px; font-size:15px; line-height:28px; color:var(--ink); }
   .rhythm p:last-child{ margin-bottom:0; }
-  .rhythm h4{ position:relative; margin:0 0 28px; font-family:"Syne",sans-serif; font-weight:700; font-size:19px; line-height:28px; }
+  .rhythm h4{ position:relative; margin:0 0 28px; font-family:"Fraunces",sans-serif; font-weight:700; font-size:19px; line-height:28px; }
 
   /* ---- demo 2: measure ---- */
   .measure{ display:flex; flex-direction:column; align-items:flex-start; }
@@ -80,7 +80,7 @@
 
   /* ---- demo 3: scale & hierarchy ---- */
   .scale > *{ margin:0 0 .55rem; transition:font-size .4s ease, font-weight .4s ease, letter-spacing .4s ease, color .4s ease; }
-  .scale .t{ font-family:"Syne",sans-serif; font-size:1rem; font-weight:400; color:var(--ink-dim); letter-spacing:0; }
+  .scale .t{ font-family:"Fraunces",sans-serif; font-size:1rem; font-weight:400; color:var(--ink-dim); letter-spacing:0; }
   .scale .s{ font-size:1rem; font-weight:400; color:var(--ink-dim); }
   .scale .b{ font-size:1rem; font-weight:400; color:var(--ink-dim); }
   .scale .c{ font-size:1rem; font-weight:400; color:var(--ink-dim); }
