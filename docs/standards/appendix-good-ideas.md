@@ -2,7 +2,7 @@
 
 *Companion to the [Sigma Engineering Standards](./sigma-engineering-standards.md). The other appendices are about how we ship; this one is about why we think this way. An annotated reading list — essays, papers, books, and one or two jokes — that have shaped good engineering thinking, and ours.*
 
-*Some of these are arguments. Some are warnings. A few are just funny. All of them earn their place by changing how a thoughtful reader works the week after.*
+*Some of these are arguments. Some are warnings. A few are just funny. All of them earn their place by changing how a thoughtful engineer works after encountering it.*
 
 ---
 
@@ -167,7 +167,7 @@ For when you want long-form.
 
 ## 9. How To Use This
 
-- One per quarter. Pick something from this list, read it, talk it over with the team, agree what (if anything) changes in how we work.
+- One a week. Pick something from this list, read it, talk it over with the team, agree what (if anything) changes in how we work.
 - Onboarding minimum: §1 in full. Grug, 12 Factor, Choose Boring, Locality of Behaviour, No Silver Bullet. These are the cultural baseline.
 - Add to this list. Anything any Sigma engineer finds genuinely changed-how-they-think gets a PR. The bar is real impact, not citation completeness.
 

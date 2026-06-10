@@ -142,7 +142,17 @@ site.preprocess([".md"], (pages) => {
         ? 3
         : url.includes("godot")
         ? 4
-        : 5;
+        : url.includes("version-control")
+        ? 5
+        : url.includes("ci-cd")
+        ? 6
+        : url.includes("accessibility")
+        ? 7
+        : url.includes("working-with-ai")
+        ? 8
+        : url.includes("good-ideas")
+        ? 9
+        : 10;
     }
   }
 });
