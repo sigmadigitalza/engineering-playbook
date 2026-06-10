@@ -76,7 +76,6 @@
   .measure p{ margin:0; color:var(--ink); font-size:.95rem; transition:max-width .4s ease; }
   .measure[data-state="narrow"] p{ max-width:17em; }
   .measure[data-state="ideal"] p{ max-width:34em; }
-  .measure[data-state="wide"] p{ max-width:100%; }
 
   /* ---- demo 3: scale & hierarchy ---- */
   .scale > *{ margin:0 0 .55rem; transition:font-size .4s ease, font-weight .4s ease, letter-spacing .4s ease, color .4s ease; }
@@ -173,7 +172,6 @@
       <div class="seg" data-target="measure">
         <button data-state="narrow">Narrow</button>
         <button data-state="ideal" class="active">Ideal</button>
-        <button data-state="wide">Wide</button>
       </div>
     </div>
   </section>
@@ -251,7 +249,7 @@
 
   // segmented demos
   const tags={
-    measure:{ narrow:"~38 characters · too short", ideal:"~66 characters · ideal", wide:"110+ characters · too wide" },
+    measure:{ narrow:"~38 characters · too short", ideal:"~66 characters · ideal" },
     leading:{ tight:"line-height 1.15 · cramped", comfy:"line-height 1.6 · comfortable", loose:"line-height 2.15 · stripey" }
   };
   document.querySelectorAll(".seg").forEach(seg=>{
