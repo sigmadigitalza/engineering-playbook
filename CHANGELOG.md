@@ -9,11 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- four practice appendices + standards landing polish (#51 by @Pushplaybang)
+
 ### Changed
 
-### Fixed
-
-### Removed
+- plugin install/update instructions + publish plugin v0.2.0 (#48 by @Pushplaybang)
+- add a Command-Line Tools section to the Go appendix (#49 by @Pushplaybang)
+- appendix references + cross-links, Kotlin Compose, Godot GDScript-only, Sagas (#50 by @Pushplaybang)
 
 ## [0.9.0] - 2026-06-09
 
