@@ -7,13 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-### Changed
-
 ### Fixed
 
-### Removed
+- drop the no-op "wide" option from the measure demo (#53 by @Pushplaybang)
 
 ## [0.10.0] - 2026-06-10
 
