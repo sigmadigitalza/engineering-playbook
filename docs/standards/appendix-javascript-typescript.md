@@ -1,6 +1,6 @@
 # Appendix — JavaScript / TypeScript
 
-*Stack appendix for the [Sigma Engineering Standards](./sigma-engineering-standards.md). Covers Deno services, frontend web, and any TypeScript codebase. The driving stance: **dependency-minimal, platform-native first.** This is developer best practice first — how a Sigma engineer writes idiomatic TypeScript by hand. It is also the bar an AI agent writing TypeScript in our repos is held to: match these idioms, and surface any deviation (see §8 of the standard, AI Agent Rules of Engagement).*
+*Stack appendix for the [Sigma Engineering Standards](./sigma-engineering-standards.md). Covers Deno services, frontend web, and any TypeScript codebase. The driving stance: **dependency-minimal, platform-native first.** This is developer best practice first — how a Sigma engineer writes idiomatic TypeScript by hand. It is also the bar an AI agent writing TypeScript in our repos is held to: match these idioms, and surface any deviation (see [§8 of the standard, AI Agent Rules of Engagement](./sigma-engineering-standards.md#8-ai-agent-rules-of-engagement)).*
 
 ---
 
@@ -298,4 +298,15 @@ Before opening a PR in a TS/JS project, the author confirms:
 
 ---
 
-*Sigma JS/TS Appendix — v1.2 · pairs with [main standard](./sigma-engineering-standards.md) v1.3*
+## References
+
+Authoritative references for the TypeScript stack:
+
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html).
+- [tsconfig reference](https://www.typescriptlang.org/tsconfig/).
+- [MDN Web Docs — JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript).
+- [Deno documentation](https://docs.deno.com/runtime/).
+
+---
+
+*Sigma JS/TS Appendix — v1.3 · pairs with [main standard](./sigma-engineering-standards.md) v1.3*
