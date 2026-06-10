@@ -612,7 +612,7 @@ main.wrap { padding-block: 3rem 4rem; }
   transition: border-color 0.3s ease, transform 0.3s ease;
 }
 .std-card:hover {
-  border-color: var(--line-2);
+  border-color: var(--accent, var(--line-2));
   transform: translateY(-2px);
 }
 .std-feature {
@@ -631,8 +631,25 @@ main.wrap { padding-block: 3rem 4rem; }
 }
 .std-feature .std-icon { width: 30px; height: 30px; }
 .std-lang .std-icon { width: 26px; height: 26px; }
-.std-card:hover .std-icon { color: var(--red); }
+.std-card:hover .std-icon { color: var(--accent, var(--red)); }
 .std-icon svg { display: block; width: 100%; height: 100%; }
+
+/* Per-language brand accent (border + icon on hover) and Go logo sizing —
+   the Go mark is wider than tall, so it needs a nudge to read the same height. */
+.std-ts { --accent: #f7df1e; }
+.std-go { --accent: #00add8; }
+.std-kotlin { --accent: #7f52ff; }
+.std-godot { --accent: #478cbf; }
+.std-go .std-icon { width: 68px; }
+
+/* Divider between the two feature cards and the rest of the grid. */
+.std-divider {
+  grid-column: 1 / -1;
+  height: 1px;
+  border: 0;
+  margin: 0.4rem 0;
+  background: var(--line);
+}
 .std-card-text { display: flex; flex-direction: column; gap: 0.3rem; }
 .std-card-title {
   font-family: var(--font-heading);
