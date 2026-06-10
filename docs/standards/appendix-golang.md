@@ -191,7 +191,47 @@ if err := e.StartServer(srv); err != nil && !errors.Is(err, http.ErrServerClosed
 
 ---
 
-## 7. Types & Interfaces
+## 7. Command-Line Tools
+
+The same discipline as a service, pointed at a terminal instead of a socket. A CLI still has a process boundary: argument parsing is input validation, the exit code is your status line, and stdout is an API other programs pipe into.
+
+- **`main` stays thin; the work lives in `run(ctx, args, stdout, stderr) error`.** `main` wires signals, calls `run`, maps its error to an exit code, and does nothing else — so the whole tool is testable without spawning a process.
+
+```go
+func main() {
+    ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+    defer stop()
+    if err := run(ctx, os.Args[1:], os.Stdout, os.Stderr); err != nil {
+        fmt.Fprintln(os.Stderr, "error:", err)
+        os.Exit(1)
+    }
+}
+```
+
+- **`os.Exit` only in `main`.** It runs no deferred functions; call it deeper and you skip every cleanup. Return errors and let `main` choose the code. Reserve distinct non-zero codes for distinct failure classes (`1` general, `2` usage — the default `flag` parse-error code) and document them, because scripts and CI branch on them.
+- **Signals cancel the context.** `signal.NotifyContext` with `os.Interrupt` and `syscall.SIGTERM` is the whole pattern. Thread that `ctx` through everything `run` does, so Ctrl-C unwinds in-flight work instead of killing it mid-write.
+- **Parse args with the stdlib `flag` package until you genuinely can't.** A `flag.FlagSet` per subcommand carries most tools. Reach for **`spf13/cobra`** only when a real subcommand tree, shell completions, and generated help earn their dependency weight; **`urfave/cli`** is the lighter middle ground. Don't pull a forty-package framework to read three flags.
+- **Config precedence is explicit and resolved once: flag > env > file > default.** Validate the result at startup and pass a plain config struct down — the same "don't read the environment from deep in the stack" rule services follow.
+- **stdout is data; stderr is everything else.** Logs, progress, prompts, and errors go to stderr so stdout stays a clean, pipeable result. Offer `--json` / `--format` for machine-readable output, and detect a non-terminal (`golang.org/x/term`'s `IsTerminal`) to drop colour and spinners automatically. Honour `NO_COLOR`.
+- **Interactive prompts are a convenience, never the only way in.** Every prompt needs a flag equivalent so the tool scripts cleanly and runs in CI. Guard prompts behind a TTY check; with no terminal, fail fast with a "missing `--thing`" message rather than blocking on a read that never returns.
+
+**Building and distributing**
+
+- **Static, reproducible builds.** `CGO_ENABLED=0` for a portable static binary, `-trimpath` to strip local paths, and version metadata stamped via `-ldflags` rather than hard-coded.
+
+```bash
+CGO_ENABLED=0 go build -trimpath \
+  -ldflags="-s -w -X main.version=${VERSION} -X main.commit=${COMMIT}" \
+  -o bin/tool ./cmd/tool
+```
+
+- **Cross-compile from one machine.** With `CGO_ENABLED=0`, `GOOS` / `GOARCH` cover the matrix — `linux/amd64`, `linux/arm64`, `darwin/arm64`, `windows/amd64` — with no cross-toolchain. It's one of Go's real advantages; use it.
+- **`goreleaser` is the team default for cutting releases.** One `.goreleaser.yaml` in CI owns the build matrix, checksums, archives, SBOM, and — where they apply — signing, a Homebrew tap, and container images. Hand-rolled release scripts are a maintenance tax; reach for them only for something goreleaser can't express.
+- **Entrypoints under `cmd/<tool>/`, logic in importable packages.** Keep `main` thin enough that the same logic can back a CLI today and a service tomorrow.
+
+---
+
+## 8. Types & Interfaces
 
 - **No `any` / `interface{}` in domain types.** Use concrete types or narrow interfaces defined at the *consumer*, not the producer.
 - **Accept interfaces, return structs.** Standard Go advice; we hold to it.
@@ -200,7 +240,7 @@ if err := e.StartServer(srv); err != nil && !errors.Is(err, http.ErrServerClosed
 
 ---
 
-## 8. Dependencies
+## 9. Dependencies
 
 Go's standard library is unusually rich; lean on it.
 
@@ -214,7 +254,7 @@ Common acceptable additions: `github.com/labstack/echo/v4` (the team-default web
 
 ---
 
-## 9. Testing
+## 10. Testing
 
 - **Table-driven tests** by default — see `examples_test.go` in stdlib for the canonical pattern.
 - **Subtests** with `t.Run("descriptive_case", ...)` so failures are precise.
@@ -226,7 +266,7 @@ Common acceptable additions: `github.com/labstack/echo/v4` (the team-default web
 
 ---
 
-## 10. Observability
+## 11. Observability
 
 - **`log/slog`** (Go ≥ 1.21) for structured logging. Pass `ctx` so request-scoped attributes propagate.
 - **OpenTelemetry SDK** for traces and metrics. Span every outbound call.
@@ -235,7 +275,7 @@ Common acceptable additions: `github.com/labstack/echo/v4` (the team-default web
 
 ---
 
-## 11. Anti-Pattern Quick List
+## 12. Anti-Pattern Quick List
 
 - `_ = someFunc()` discarding an error — never (without a comment).
 - `panic` in a library — never; return an error.
@@ -248,7 +288,7 @@ Common acceptable additions: `github.com/labstack/echo/v4` (the team-default web
 
 ---
 
-## 12. The Checklist (PR-time)
+## 13. The Checklist (PR-time)
 
 - [ ] `go vet`, `gofmt`, `golangci-lint`, `staticcheck`, `govulncheck`, `go test -race` all green
 - [ ] Every new exported function has a doc comment
@@ -260,4 +300,4 @@ Common acceptable additions: `github.com/labstack/echo/v4` (the team-default web
 
 ---
 
-*Sigma Go Appendix — v1.2 · pairs with [main standard](./sigma-engineering-standards.md) v1.3*
+*Sigma Go Appendix — v1.3 · pairs with [main standard](./sigma-engineering-standards.md) v1.3*
