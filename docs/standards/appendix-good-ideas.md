@@ -64,11 +64,14 @@ Eight false beliefs: the network is reliable, latency is zero, bandwidth is infi
 **[How Complex Systems Fail](https://how.complexsystems.fail/)** — Richard I. Cook (1998)
 Eighteen brief observations from a medical-safety researcher. None is about software; all of them are. "Catastrophe is always just around the corner." "Hindsight biases post-accident assessments." Worth re-reading after every postmortem.
 
+**[Sagas](https://www.cs.cornell.edu/andru/cs711/2002fa/reading/sagas.pdf)** — Hector Garcia-Molina & Kenneth Salem (1987)
+The original paper on the saga: break a long-lived transaction into a sequence of smaller ones, each with a compensating action that undoes it on failure. When you can't hold a lock or a two-phase commit across services, you make forward progress and *compensate* instead. Four decades on, it's the pattern under every multi-step, cross-service workflow that has to unwind cleanly when a later step fails.
+
 **[Designing Data-Intensive Applications](https://dataintensive.net/)** — Martin Kleppmann (book)
 The reference work for backend engineers in the age of distributed databases, streaming, and consistency trade-offs. Not light reading. Worth the investment.
 
 **[Release It!](https://pragprog.com/titles/mnee2/release-it-second-edition/)** — Michael Nygard (book)
-The stability patterns we lean on in main-standard §5 — circuit breaker, bulkhead, fail fast, steady state — come from here. Reads like a war diary.
+The stability patterns we lean on in [main-standard §5](./sigma-engineering-standards.md#5-resilience-patterns) — circuit breaker, bulkhead, fail fast, steady state — come from here. Reads like a war diary.
 
 ---
 
@@ -170,4 +173,4 @@ For when you want long-form.
 
 ---
 
-*Sigma Good Ideas Appendix — v1.1 · pairs with [main standard](./sigma-engineering-standards.md) v1.3*
+*Sigma Good Ideas Appendix — v1.2 · pairs with [main standard](./sigma-engineering-standards.md) v1.3*

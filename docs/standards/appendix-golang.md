@@ -1,6 +1,6 @@
 # Appendix — Go
 
-*Stack appendix for the [Sigma Engineering Standards](./sigma-engineering-standards.md). Covers services, CLIs, and tooling written in Go. This is developer best practice first — how a Sigma engineer writes idiomatic Go by hand. It is also the bar an AI agent writing Go in our repos is held to: match these idioms, and surface any deviation (see §8 of the standard, AI Agent Rules of Engagement).*
+*Stack appendix for the [Sigma Engineering Standards](./sigma-engineering-standards.md). Covers services, CLIs, and tooling written in Go. This is developer best practice first — how a Sigma engineer writes idiomatic Go by hand. It is also the bar an AI agent writing Go in our repos is held to: match these idioms, and surface any deviation (see [§8 of the standard, AI Agent Rules of Engagement](./sigma-engineering-standards.md#8-ai-agent-rules-of-engagement)).*
 
 ---
 
@@ -152,7 +152,7 @@ var apiClient = &http.Client{
 }
 ```
 
-For retry / circuit-breaking, prefer a small handwritten wrapper around `*http.Client` over a heavy dependency. The patterns in the main standard §5 are 30–50 lines of Go.
+For retry / circuit-breaking, prefer a small handwritten wrapper around `*http.Client` over a heavy dependency. The patterns in the [main standard §5](./sigma-engineering-standards.md#5-resilience-patterns) are 30–50 lines of Go.
 
 ### When a framework is warranted
 
@@ -246,7 +246,7 @@ Go's standard library is unusually rich; lean on it.
 
 - **Default to stdlib** for HTTP, crypto, JSON, SQL, templating, encoding, sync primitives, OS interaction.
 - **`golang.org/x/...`** is a near-extension of stdlib — `errgroup`, `semaphore`, `sync/singleflight` are routine additions.
-- **External dependencies** allowed when they pass the bar in main standard §6: narrow, mature, active, justified.
+- **External dependencies** allowed when they pass the bar in [main standard §6](./sigma-engineering-standards.md#6-supply-chain-integrity): narrow, mature, active, justified.
 - **No deep import paths** to internal packages of dependencies. If a library forces this, it's a smell.
 - **`go.mod` minimal-version-selection** is a feature — don't fight it. Pin exact versions of security-sensitive deps via `replace` if needed.
 
@@ -300,4 +300,15 @@ Common acceptable additions: `github.com/labstack/echo/v4` (the team-default web
 
 ---
 
-*Sigma Go Appendix — v1.3 · pairs with [main standard](./sigma-engineering-standards.md) v1.3*
+## References
+
+Authoritative references for the Go stack:
+
+- [Effective Go](https://go.dev/doc/effective_go) — idiom and structure.
+- [The Go Programming Language Specification](https://go.dev/ref/spec).
+- [Go Code Review Comments](https://go.dev/wiki/CodeReviewComments).
+- [Standard library](https://pkg.go.dev/std).
+
+---
+
+*Sigma Go Appendix — v1.4 · pairs with [main standard](./sigma-engineering-standards.md) v1.3*

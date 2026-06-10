@@ -1,6 +1,6 @@
 # Appendix — Godot
 
-*Stack appendix for the [Sigma Engineering Standards](./sigma-engineering-standards.md). Covers Godot 4.x projects in GDScript (primary) and C# (where used). Game and interactive content have failure modes that differ from services — corrupted saves, vanished assets, frame-rate cliffs — so this appendix leans into those. This is developer best practice first — how a Sigma engineer writes idiomatic GDScript by hand. It is also the bar an AI agent writing GDScript in our repos is held to: match these idioms, and surface any deviation (see §8 of the standard, AI Agent Rules of Engagement).*
+*Stack appendix for the [Sigma Engineering Standards](./sigma-engineering-standards.md). Covers Godot 4.x projects in GDScript. We don't currently use C# in Godot, so it's out of scope here. Game and interactive content have failure modes that differ from services — corrupted saves, vanished assets, frame-rate cliffs — so this appendix leans into those. This is developer best practice first — how a Sigma engineer writes idiomatic GDScript by hand. It is also the bar an AI agent writing GDScript in our repos is held to: match these idioms, and surface any deviation (see [§8 of the standard, AI Agent Rules of Engagement](./sigma-engineering-standards.md#8-ai-agent-rules-of-engagement)).*
 
 ---
 
@@ -15,8 +15,6 @@ Required for every Godot repo:
 - **Editor warnings as errors** for release exports — set in Project Settings → Debug → GDScript → Warnings to `Error` on the categories listed in §2.
 - **Unit tests** via **GUT** (Godot Unit Test) for logic; integration scenes for behaviour.
 - **Reproducible export presets** committed to the repo (see §10).
-
-For C# Godot projects, additionally: `dotnet format`, `Microsoft.CodeAnalysis.NetAnalyzers`, treat warnings as errors.
 
 ---
 
@@ -222,7 +220,7 @@ Code that is fine in the editor will embarrass us in production.
 
 ## 12. Game-Specific Resilience
 
-Some patterns are specific enough to gaming that they don't fit the main standard §5.
+Some patterns are specific enough to gaming that they don't fit the [main standard §5](./sigma-engineering-standards.md#5-resilience-patterns).
 
 - **Frame-rate independence.** Use `delta` everywhere. Code that assumes 60 FPS will be wrong on a Steam Deck running at 40.
 - **Pause-aware logic.** Decide per-node whether `process_mode` is `INHERIT`, `PAUSABLE`, `WHEN_PAUSED`, or `ALWAYS`. UI, audio fades, and reminders often need `ALWAYS`.
@@ -237,7 +235,7 @@ Some patterns are specific enough to gaming that they don't fit the main standar
 
 Godot's asset library is the equivalent of npm. Apply the same discipline.
 
-- **Vetted, narrow, active.** Same bar as main standard §6.
+- **Vetted, narrow, active.** Same bar as [main standard §6](./sigma-engineering-standards.md#6-supply-chain-integrity).
 - **Vendored** into `addons/` rather than fetched at build time. The version is what's in the repo.
 - **Read the source** of every addon at least once. They run with full project permissions.
 - **Default: zero.** The engine does a great deal on its own. Reach for an addon only when justified.
@@ -274,4 +272,14 @@ Godot's asset library is the equivalent of npm. Apply the same discipline.
 
 ---
 
-*Sigma Godot Appendix — v1.1 · pairs with [main standard](./sigma-engineering-standards.md) v1.3*
+## References
+
+Authoritative references for the Godot stack:
+
+- [Godot documentation](https://docs.godotengine.org/en/stable/).
+- [GDScript style guide](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_styleguide.html).
+- [Godot best practices](https://docs.godotengine.org/en/stable/tutorials/best_practices/index.html).
+
+---
+
+*Sigma Godot Appendix — v1.2 · pairs with [main standard](./sigma-engineering-standards.md) v1.3*

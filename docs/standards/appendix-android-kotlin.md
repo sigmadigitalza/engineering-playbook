@@ -1,6 +1,6 @@
 # Appendix — Android / Kotlin
 
-*Stack appendix for the [Sigma Engineering Standards](./sigma-engineering-standards.md). Covers Android applications and Kotlin code targeting the Android runtime. Most rules also apply to JVM-only Kotlin; sections marked **(Android)** are platform-specific. This is developer best practice first — how a Sigma engineer writes idiomatic Kotlin by hand. It is also the bar an AI agent writing Kotlin in our repos is held to: match these idioms, and surface any deviation (see §8 of the standard, AI Agent Rules of Engagement).*
+*Stack appendix for the [Sigma Engineering Standards](./sigma-engineering-standards.md). Covers Android applications and Kotlin code targeting the Android runtime. Most rules also apply to JVM-only Kotlin; sections marked **(Android)** are platform-specific. This is developer best practice first — how a Sigma engineer writes idiomatic Kotlin by hand. It is also the bar an AI agent writing Kotlin in our repos is held to: match these idioms, and surface any deviation (see [§8 of the standard, AI Agent Rules of Engagement](./sigma-engineering-standards.md#8-ai-agent-rules-of-engagement)).*
 
 ---
 
@@ -109,7 +109,49 @@ At UI boundaries, map errors to displayable states. Never let a coroutine crash 
 
 ---
 
-## 6. Background Work (Android)
+## 6. Jetpack Compose & UI
+
+Compose is the default for new UI. The §5 architecture rules still hold — state hoisted, no business logic in a `@Composable`; what follows are the Compose-specific mechanics on top.
+
+```kotlin
+@Composable
+fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    UserContent(state, onRetry = viewModel::retry)   // stateful wrapper
+}
+
+@Composable
+private fun UserContent(state: UserState, onRetry: () -> Unit) {
+    // pure and stateless: UI as a function of `state`, no logic here
+}
+```
+
+**Composition is pure.**
+- **No side effects in the composable body.** A `@Composable` runs often, in any order, on any thread, and may be abandoned mid-flight. Don't launch coroutines, mutate shared state, or do I/O directly in it.
+- **Effects go through the effect APIs, keyed correctly:**
+  - **`LaunchedEffect(key)`** — coroutine work tied to composition; cancels and restarts when `key` changes. Key it on what should restart it, not `Unit` unless you mean "once."
+  - **`DisposableEffect(key)`** — register/unregister pairs (listeners, callbacks); clean up in `onDispose`.
+  - **`rememberCoroutineScope()`** — to launch from a callback (a click), never from composition.
+  - **`rememberUpdatedState`** — read the latest value inside a long-lived effect without restarting it.
+
+**State.**
+- **`remember`** survives recomposition; **`rememberSaveable`** survives configuration change and process death. Hoist anything a caller or ViewModel owns (§5).
+- **`derivedStateOf`** for state computed from other state — don't recompute it in the body.
+- **`collectAsStateWithLifecycle()`**, not `collectAsState()`, so flow collection stops when the UI isn't visible. **(Android)**
+
+**Recomposition is the performance model.**
+- **Keep `@Composable` parameters stable.** Unstable types — mutable collections, unstable lambdas, classes the compiler can't prove stable — defeat skipping. Reach for `@Immutable` / `@Stable` deliberately, persistent collections (`kotlinx.collections.immutable`), and stable lambda references.
+- **`key(...)`** items in lazy lists so reordering doesn't re-key everything below.
+- **Defer state reads** to the latest point — lambda-based modifiers (`Modifier.offset { ... }`) read in layout, not composition.
+- Measure recomposition counts with the **Layout Inspector** and the Compose compiler's stability report before optimising; don't guess.
+
+**Previews and tests.**
+- **`@Preview`** every visually-meaningful component — light/dark and key states. They're documentation and a fast feedback loop.
+- **`compose-ui-test`** for screens with non-trivial state (§11); **Paparazzi / Roborazzi** for screenshot-stable components.
+
+---
+
+## 7. Background Work (Android)
 
 - **`WorkManager`** for deferrable, guaranteed-to-execute work (sync, uploads, periodic tasks).
 - **`Service` / `Foreground Service`** only when the user-visible activity model demands it (audio, navigation, fitness). Foreground service types declared in the manifest with the appropriate permission.
@@ -118,7 +160,7 @@ At UI boundaries, map errors to displayable states. Never let a coroutine crash 
 
 ---
 
-## 7. Security (Android)
+## 8. Security (Android)
 
 ### Manifest hygiene
 - `android:exported` declared explicitly on every component (required from API 31+).
@@ -151,7 +193,7 @@ At UI boundaries, map errors to displayable states. Never let a coroutine crash 
 
 ---
 
-## 8. Dependencies
+## 9. Dependencies
 
 Android force-feeds a baseline (AndroidX, Jetpack, Compose, Kotlin stdlib). Beyond that:
 
@@ -161,13 +203,13 @@ Android force-feeds a baseline (AndroidX, Jetpack, Compose, Kotlin stdlib). Beyo
 - **DI** — Hilt for Android. Manual constructor injection acceptable for small modules and library code.
 - **Image loading** — Coil (Kotlin-first, coroutines-native) preferred over Glide.
 - **Database** — Room. Avoid raw SQLite outside Room unless justified.
-- Anything else, follow main standard §6 criteria.
+- Anything else, follow [main standard §6](./sigma-engineering-standards.md#6-supply-chain-integrity) criteria.
 
 Lockfile (`gradle.lockfile`) committed. Renovate / Dependabot configured.
 
 ---
 
-## 9. Build & Variants
+## 10. Build & Variants
 
 - **Build variants** declared in `build.gradle(.kts)` per flavour (dev / staging / prod / per-client). Each has its own `applicationIdSuffix`, signing config, network config, and obfuscation rules.
 - **Signing keys** never in the repo. Stored in the secret manager; injected by CI.
@@ -177,7 +219,7 @@ Lockfile (`gradle.lockfile`) committed. Renovate / Dependabot configured.
 
 ---
 
-## 10. Testing
+## 11. Testing
 
 - **Unit tests** for ViewModels, repositories, and pure-Kotlin logic — `kotlinx-coroutines-test` for time control.
 - **Hand-written fakes** by default (e.g. `FakeUserRepository`). MockK / Mockito only when a fake is genuinely impractical.
@@ -188,7 +230,7 @@ Lockfile (`gradle.lockfile`) committed. Renovate / Dependabot configured.
 
 ---
 
-## 11. Anti-Pattern Quick List
+## 12. Anti-Pattern Quick List
 
 - `GlobalScope.launch { ... }` anywhere in app code.
 - `runBlocking` outside `main` / tests.
@@ -203,7 +245,7 @@ Lockfile (`gradle.lockfile`) committed. Renovate / Dependabot configured.
 
 ---
 
-## 12. The Checklist (PR-time)
+## 13. The Checklist (PR-time)
 
 - [ ] `ktlint`, `detekt`, Android Lint, `gradle test`, instrumented tests (where applicable) all green
 - [ ] No new `!!`, `lateinit` (in domain), `GlobalScope`, or empty catches
@@ -212,8 +254,20 @@ Lockfile (`gradle.lockfile`) committed. Renovate / Dependabot configured.
 - [ ] Manifest changes reviewed for `exported`, `permission`, deep links
 - [ ] No secrets in code or resources
 - [ ] R8 rules updated if APIs added that need keeping; release build verified
-- [ ] No new dependency, *or* justified in PR description against §8
+- [ ] No new dependency, *or* justified in PR description against §9
 
 ---
 
-*Sigma Android/Kotlin Appendix — v1.1 · pairs with [main standard](./sigma-engineering-standards.md) v1.3*
+## References
+
+Authoritative references for the Android / Kotlin stack:
+
+- [Kotlin documentation](https://kotlinlang.org/docs/home.html).
+- [Coroutines guide](https://kotlinlang.org/docs/coroutines-guide.html).
+- [Kotlin coding conventions](https://kotlinlang.org/docs/coding-conventions.html).
+- [Guide to app architecture](https://developer.android.com/topic/architecture).
+- [Jetpack Compose documentation](https://developer.android.com/develop/ui/compose/documentation).
+
+---
+
+*Sigma Android/Kotlin Appendix — v1.2 · pairs with [main standard](./sigma-engineering-standards.md) v1.3*
