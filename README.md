@@ -141,11 +141,11 @@ Each playbook has a paired prompt designed to be handed to an LLM (Claude, ChatG
 
 ### Engineering standards — [`docs/standards`](docs/standards)
 
-The normative spine — what we hold ourselves to. Stack appendices translate the principles into per-language idioms.
+Our shared engineering foundation — the principles and defaults we build from. Stack appendices translate them into per-language idioms.
 
 | Document | What it covers |
 |----------|----------------|
-| [Sigma Engineering Standards](docs/standards/sigma-engineering-standards.md) | The spine: the Sigma Ten, security / resilience / supply-chain baselines, maturity tiers, and engineering rules. |
+| [Sigma Engineering Standards](docs/standards/sigma-engineering-standards.md) | The Sigma Ten, security / resilience / supply-chain baselines, maturity tiers, and per-language engineering guidelines. |
 | [JavaScript / TypeScript appendix](docs/standards/appendix-javascript-typescript.md) | Deno-first, dependency-minimal idioms for services and frontend. |
 | [Go appendix](docs/standards/appendix-golang.md) | Services, CLIs, and tooling. |
 | [Android / Kotlin appendix](docs/standards/appendix-android-kotlin.md) | Mobile and JVM Kotlin. |
