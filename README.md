@@ -153,7 +153,7 @@ Our shared engineering foundation — the principles and defaults we build from.
 | [Version Control appendix](docs/standards/appendix-version-control.md) | Git, Conventional Commits, PR workflow, changelog, repo hygiene, tooling. |
 | [CI/CD appendix](docs/standards/appendix-ci-cd.md) | Pipeline, automated releases and notes, push-vs-pull deploys, observability, small-team DevOps. |
 | [Accessibility appendix](docs/standards/appendix-accessibility.md) | Accessible by default — WCAG 2.2 AA and inclusive practice. |
-| [Working With AI appendix](docs/standards/appendix-working-with-ai.md) | Using AI agents responsibly, plus a kickoff prompt that maps the handbook. |
+| [Working With AI appendix](docs/standards/appendix-working-with-ai.md) | Using AI agents responsibly, plus a kickoff prompt that maps the playbook. |
 | [Good Ideas appendix](docs/standards/appendix-good-ideas.md) | Annotated reading list — the influences behind the standard. |
 
 ## How to use this repo
