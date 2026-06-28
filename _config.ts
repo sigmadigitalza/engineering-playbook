@@ -60,6 +60,7 @@ site.ignore(
   "README.md",
   "CHANGELOG.md",
   "LICENSE",
+  "SECURITY.md",
   ".github",
   ".claude",
   ".claude-plugin",
@@ -97,6 +98,11 @@ try {
   // Fall back to a static token if the file can't be read at config time.
 }
 site.data("cssVersion", cssVersion);
+
+// Expose a production flag to templates. The strict Content-Security-Policy in
+// the base layout is emitted only for production builds — `deno task serve`
+// injects an inline live-reload script + websocket that a strict CSP would block.
+site.data("isProd", !isServing);
 
 // The Design pillar is the self-contained Sigma Design Foundations bundle. Its
 // inline theme is the reference look the rest of the site is aligned to, so we

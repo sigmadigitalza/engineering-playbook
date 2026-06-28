@@ -88,9 +88,20 @@ class DocOutline extends HTMLElement {
     if (headings.length === 0) return;
 
     const root = this.shadowRoot;
-    const style = document.createElement("style");
-    style.textContent = STYLES;
-    root.appendChild(style);
+    // Apply styles via a constructable stylesheet so a strict Content-Security-
+    // Policy (style-src 'self', no 'unsafe-inline') doesn't block them — an
+    // injected <style> element is treated as inline and would be refused.
+    try {
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync(STYLES);
+      root.adoptedStyleSheets = [sheet];
+    } catch {
+      // Engines without constructable stylesheets: fall back to a <style>
+      // element (left unstyled if a CSP blocks it, but the links still work).
+      const style = document.createElement("style");
+      style.textContent = STYLES;
+      root.appendChild(style);
+    }
 
     const title = document.createElement("div");
     title.className = "title";
