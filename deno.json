@@ -19,7 +19,6 @@
       "lume/types.ts"
     ]
   },
-  "lock": false,
   "fmt": {
     "include": [
       "_config.ts",
