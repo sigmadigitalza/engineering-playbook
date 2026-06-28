@@ -143,11 +143,9 @@
   .base.fade-out{ transition:opacity .55s ease; }
   .card.on .base.fade-out{ opacity:0; }
 
-  /* Rubin figure-ground swap */
-  .rubin-ground{ fill:var(--blue); transition:fill .6s ease; }
-  .rubin-vase{ fill:var(--ink); transition:fill .6s ease; }
-  .card.on .rubin-ground{ fill:var(--ink); }
-  .card.on .rubin-vase{ fill:var(--blue); }
+  /* Figure-Ground: the elevated modal surface (theme-aware fill; light override must follow the base rule to win) */
+  .fg-panel{ fill:#2c2a26; }
+  @media (prefers-color-scheme:light){ .fg-panel{ fill:#fffdf6; } }
 
   /* Common Fate: synchronised drift */
   @keyframes cfdrift{ 0%,100%{ transform:translateX(-28px); } 50%{ transform:translateX(28px); } }
@@ -193,18 +191,6 @@
 const NS = "http://www.w3.org/2000/svg";
 const el = (n,a={})=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e;};
 const VB = "0 0 320 200";
-
-/* ---- Catmull-Rom -> bezier path (for the Rubin vase) ---- */
-function smooth(pts){ // pts: array of [x,y], path assumed already at pts[0]
-  let d="";
-  for(let i=0;i<pts.length-1;i++){
-    const p0=pts[i-1]||pts[i], p1=pts[i], p2=pts[i+1], p3=pts[i+2]||pts[i+1];
-    const c1x=p1[0]+(p2[0]-p0[0])/6, c1y=p1[1]+(p2[1]-p0[1])/6;
-    const c2x=p2[0]-(p3[0]-p1[0])/6, c2y=p2[1]-(p3[1]-p1[1])/6;
-    d+=`C${c1x.toFixed(1)},${c1y.toFixed(1)} ${c2x.toFixed(1)},${c2y.toFixed(1)} ${p2[0]},${p2[1]} `;
-  }
-  return d;
-}
 
 /* ===== demo builders ===== */
 const demos = {
@@ -278,14 +264,22 @@ const demos = {
   },
 
   figureground(stage){
-    const svg=el("svg",{viewBox:"0 0 200 200",class:"layer"});
-    svg.appendChild(el("rect",{x:0,y:0,width:200,height:200,class:"rubin-ground"}));
-    // right-edge profile points (x = 100 + d). Mirror for left.
-    const right=[[146,22],[140,42],[149,66],[128,90],[121,108],[145,120],[133,129],[143,137],[133,147],[129,166],[151,186],[140,196]];
-    const left=right.map(p=>[200-p[0],p[1]]).reverse();
-    let d=`M54,22 L146,22 ${smooth(right)} L60,196 ${smooth(left)} Z`;
-    svg.appendChild(el("path",{d, class:"rubin-vase"}));
-    stage.appendChild(svg);
+    // off: a flat field of equal rows — nothing reads as "in front"
+    const base=el("svg",{viewBox:VB,class:"layer base"});
+    [34,70,106,142].forEach(y=>
+      base.appendChild(el("rect",{x:46,y,width:228,height:24,rx:6,fill:"var(--ink-faint)"})));
+    // on: a scrim dims the field and one surface lifts forward with a shadow
+    const reveal=el("svg",{viewBox:VB,class:"layer reveal"});
+    const defs=el("defs"), filt=el("filter",{id:"fg-shadow",x:"-40%",y:"-40%",width:"180%",height:"180%"});
+    filt.appendChild(el("feDropShadow",{dx:0,dy:7,stdDeviation:9,"flood-color":"#000","flood-opacity":0.5}));
+    defs.appendChild(filt); reveal.appendChild(defs);
+    reveal.appendChild(el("rect",{x:0,y:0,width:320,height:200,fill:"#000",opacity:0.55}));                                          // backdrop scrim
+    reveal.appendChild(el("rect",{x:84,y:52,width:152,height:96,rx:12,class:"fg-panel",stroke:"var(--line-2)","stroke-width":1,filter:"url(#fg-shadow)"})); // elevated modal
+    reveal.appendChild(el("rect",{x:100,y:70,width:74,height:11,rx:3,fill:"var(--ink)"}));                                          // heading
+    reveal.appendChild(el("rect",{x:100,y:90,width:120,height:7,rx:3,fill:"var(--ink-dim)"}));                                      // line
+    reveal.appendChild(el("rect",{x:100,y:103,width:96,height:7,rx:3,fill:"var(--ink-faint)"}));                                    // line
+    reveal.appendChild(el("rect",{x:168,y:122,width:52,height:16,rx:8,fill:"var(--red)"}));                                         // action
+    stage.append(base,reveal);
   },
 
   commonregion(stage){
@@ -352,7 +346,7 @@ const cards=[
   {key:"proximity",    title:"Proximity",             lede:"Objects placed near each other read as one group — spacing alone, no lines or colour, splits a flat field into clusters.", off:"Even field", on:"Three groups", btn:"Cluster them"},
   {key:"similarity",   title:"Similarity",            lede:"Elements that share a visual trait are grouped together. Identical spacing, but shared colour pulls the dots into vertical bands.", off:"Uniform field", on:"Grouped by colour", btn:"Match colours"},
   {key:"closure",      title:"Closure",               lede:"Given enough of an edge, the mind completes the shape — three notched discs imply a triangle that was never drawn.", off:"Three discs", on:"Hidden triangle", btn:"Reveal it"},
-  {key:"figureground", title:"Figure-Ground",         lede:"Perception splits a scene into subject and backdrop — and can flip which is which. A vase, or two faces in profile — the same shape reads as both.", off:"A vase", on:"Two faces", btn:"Flip it"},
+  {key:"figureground", title:"Figure-Ground",         lede:"The eye separates a focal subject from the surroundings behind it. Lift one surface with a shadow and dim the rest, and it jumps forward while the app falls back.", off:"One flat plane", on:"Modal in front", btn:"Bring it forward"},
   {key:"continuity",   title:"Continuity",            lede:"The eye follows the smoothest path. At the crossing we don't see a corner — we see two flowing strands that pass through each other.", off:"A tangle", on:"Two strands", btn:"Trace the flow"},
   {key:"commonregion", title:"Common Region",         lede:"A shared boundary outranks distance. Enclose the dots and they regroup by region, ignoring how evenly they're spaced.", off:"Six equal dots", on:"Two regions", btn:"Draw regions"},
   {key:"focal",        title:"Focal Point",           lede:"One break in the pattern captures attention instantly. A single deviation in a uniform field becomes the place your eye lands first.", off:"All alike", on:"One stands out", btn:"Break the grid"},
