@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+## [0.10.3] - 2026-06-28
+
 ### Fixed
 
 - production CSP, dependency lockfile, and SECURITY.md (#58 by @Pushplaybang)
