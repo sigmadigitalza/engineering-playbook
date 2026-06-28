@@ -7,13 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
 ### Changed
+
+- friendlier tone on main pages — principles and defaults over rules (#55)
 
 ### Fixed
 
-### Removed
+- replace the figure-ground gestalt demo with a modal/elevation example (#56 by @Pushplaybang)
 
 ## [0.10.1] - 2026-06-10
 
