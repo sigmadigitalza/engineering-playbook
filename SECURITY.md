@@ -40,8 +40,8 @@ defence-in-depth / best-practice items.
 | --- | --------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
 | B-4 | Build dependencies were not integrity-pinned (`"lock": false`)   | Low      | **Resolved** — lockfile enabled and `deno.lock` committed.                                                     |
 | B-1 | No Content-Security-Policy                                       | Low      | **Resolved** — a strict CSP `<meta>` is emitted on every layout-rendered page in production builds (see below). |
-| B-3 | Self-contained design pages are not yet covered by the CSP       | Low      | Open — the standalone pages under `docs/design/` carry inline `<script>`/`<style>` and ship without their own policy. A follow-up will extract those assets or add a per-page CSP. |
-| B-2 | Google Fonts loaded without Subresource Integrity                | Low      | Open — SRI is impractical for Google's dynamically generated stylesheet. Self-hosting the (OFL-licensed) fonts is the planned mitigation and would also let the CSP drop the external font origins. |
+| B-3 | Self-contained design pages were not covered by the CSP          | Low      | **Resolved** — the standalone `docs/design/` pages now carry their own CSP `<meta>`. Because they embed inline demo `<script>`/`<style>`, that policy permits `'unsafe-inline'` for script and style while keeping the rest strict (no external scripts, `object-src`/`frame-src 'none'`, `base-uri 'self'`). |
+| B-2 | Google Fonts loaded without Subresource Integrity                | Low      | Accepted — the Google Fonts origins are explicitly allow-listed in the CSP (`style-src`/`font-src`), not wildcarded, and SRI is impractical for Google's dynamically generated stylesheet. Self-hosting the (OFL-licensed) fonts would remove the third-party dependency but is not currently planned. |
 | B-5 | Rendered Markdown is trusted (`\|> safe`)                        | Low      | Accepted — by design; mitigated by PR review.                                                                  |
 
 ### Content-Security-Policy
@@ -60,6 +60,10 @@ custom response headers; consequently `frame-ancestors` and reporting directives
 are unavailable. The policy is emitted for production builds only — the local
 development server's live-reload tooling relies on inline scripts that a strict
 policy would block.
+
+The self-contained design pages under `docs/design/` carry a companion policy
+that additionally allows `'unsafe-inline'` for their embedded demo `<script>` and
+`<style>`; every other directive matches the strict policy above.
 
 ## Supported Versions
 
