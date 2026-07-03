@@ -7,13 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-### Changed
-
 ### Fixed
 
-### Removed
+- add CSP to the standalone design pages (#60 by @Pushplaybang)
 
 ## [0.10.3] - 2026-06-28
 
