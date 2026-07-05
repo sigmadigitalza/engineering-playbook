@@ -61,6 +61,7 @@ site.ignore(
   "CHANGELOG.md",
   "LICENSE",
   "SECURITY.md",
+  "REFERENCES.md",
   ".github",
   ".claude",
   ".claude-plugin",
