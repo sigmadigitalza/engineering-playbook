@@ -293,7 +293,7 @@ A few things to tune per repo:
 - [About rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets) — newer, superseding protection mechanism. Supports tag rulesets, bypass actors, and more granular targeting.
 - [Managing rulesets for a repository](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/managing-rulesets-for-a-repository) — UI walkthrough including the bypass-actors picker.
 - [Repository ruleset API](https://docs.github.com/en/rest/repos/rules) — REST endpoints for create/list/update/delete.
-- [About code owners](https://docs.github.com/en/repositories/managing-your-repositories-settings-and-customizations/customizing-your-repository/about-code-owners) — CODEOWNERS syntax and file-location precedence.
+- [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) — CODEOWNERS syntax and file-location precedence.
 - [GitHub Actions Secure Use Reference](https://docs.github.com/en/actions/reference/security/secure-use) — the canonical doc that the `github-actions-review` playbook anchors to; relevant here for the default-token-scope and can-approve-PRs settings.
 - [Configuring private vulnerability reporting](https://docs.github.com/en/code-security/security-advisories/working-with-repository-security-advisories/configuring-private-vulnerability-reporting-for-a-repository).
 
@@ -305,7 +305,7 @@ A few things to tune per repo:
 ### Practical guidance
 
 - [GitHub: keeping your actions up to date with Dependabot](https://docs.github.com/en/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot) — the SHA-with-version-comment pattern this playbook recommends in concert with `sha_pinning_required: true`.
-- [GitHub: managing security and analysis settings](https://docs.github.com/en/repositories/managing-your-repositories-settings-and-customizations/customizing-your-repository/managing-security-and-analysis-settings-for-your-repository) — the secret scanning / push protection / dependabot toggles surfaced in Phase 1.
+- [GitHub: securing your repository](https://docs.github.com/en/code-security/getting-started/securing-your-repository) — the secret scanning / push protection / dependabot toggles surfaced in Phase 1.
 
 ### Companion playbooks
 
