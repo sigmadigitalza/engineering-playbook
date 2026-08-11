@@ -15,6 +15,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.11.0] - 2026-08-11
+
+### Added
+
+- adopt sigma-feature-run tiered-orchestration skill (#64 by @Pushplaybang)
+
+### Changed
+
+- fix two moved GitHub docs links in repo-setup-review (#62 by @Pushplaybang)
+- track REFERENCES.md — consolidated playbook bibliography (#63 by @Pushplaybang)
+
 ## [0.10.4] - 2026-07-03
 
 ### Fixed
