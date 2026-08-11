@@ -18,11 +18,11 @@
  *   deno run --allow-read --allow-write scripts/link-agents.ts
  */
 
-import { relative } from "jsr:@std/path@^1";
+import { dirname, fromFileUrl, join, relative } from "jsr:@std/path@^1";
 import { ensureDir, expandGlob } from "jsr:@std/fs@^1";
 
-const REPO_ROOT = new URL("..", import.meta.url).pathname;
-const AGENTS_DIR = `${REPO_ROOT}.claude/agents`;
+const REPO_ROOT = dirname(dirname(fromFileUrl(import.meta.url)));
+const AGENTS_DIR = join(REPO_ROOT, ".claude", "agents");
 const AGENT_GLOB = "plugins/*/skills/*/agents/*.md";
 
 async function main(): Promise<void> {
@@ -45,7 +45,7 @@ async function main(): Promise<void> {
     }
     seen.set(entry.name, entry.path);
 
-    const linkPath = `${AGENTS_DIR}/${entry.name}`;
+    const linkPath = join(AGENTS_DIR, entry.name);
     // Relative target so the link resolves the same in the main checkout and in
     // any worktree.
     const target = relative(AGENTS_DIR, entry.path);

@@ -26,10 +26,10 @@
  *   deno run --allow-read scripts/build-skills.ts --check
  */
 
-import { dirname, join, relative } from "jsr:@std/path@^1";
+import { dirname, fromFileUrl, join, relative } from "jsr:@std/path@^1";
 import { ensureDir } from "jsr:@std/fs@^1";
 
-const REPO_ROOT = new URL("..", import.meta.url).pathname;
+const REPO_ROOT = dirname(dirname(fromFileUrl(import.meta.url)));
 const PROMPTS_DIR = join(REPO_ROOT, "docs", "prompts");
 const PLAYBOOKS_DIR = join(REPO_ROOT, "docs", "playbooks");
 const META_FILE = join(REPO_ROOT, "scripts", "skills-meta.json");
