@@ -5,7 +5,7 @@ groups what it sees), **Typography** (how type carries meaning and rhythm), and 
 change communicates over time). Point this at a component, screen, page, codebase, or live URL and
 surface where design practice can improve.
 
-**Tier.** This is judgement work. Run it at the author's tier or above; never dispatch it below the tier that produced the design (see the [Tiered Orchestration appendix](../standards/appendix-tiered-orchestration.md)).
+**Tier.** This is judgement work. Run it at the author's tier or above; never dispatch it below the tier that produced the design (see [Tiered Orchestration](../standards/appendix-working-with-ai.md#4-tiered-orchestration)).
 
 ---
 
