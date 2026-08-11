@@ -1,7 +1,7 @@
 {
   "name": "sigma-engineering",
   "version": "0.2.0",
-  "description": "Sigma Digital's engineering playbook — review skills covering API design, code review, database schema and migrations, documentation, frontend accessibility, GitHub Actions, incident postmortems, repo setup and configuration, web performance, web security, and web SRE.",
+  "description": "Sigma Digital's engineering playbook — review skills covering API design, code review, database schema and migrations, documentation, frontend accessibility, GitHub Actions, incident postmortems, repo setup and configuration, web performance, web security, and web SRE, plus a tiered-orchestration skill (sigma-feature-run) for running features across model tiers.",
   "author": {
     "name": "Sigma Digital",
     "url": "https://github.com/sigmadigitalza"

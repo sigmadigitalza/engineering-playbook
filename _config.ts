@@ -62,6 +62,8 @@ site.ignore(
   "LICENSE",
   "SECURITY.md",
   "REFERENCES.md",
+  "AGENTS.md",
+  "CLAUDE.md",
   ".github",
   ".claude",
   ".claude-plugin",
@@ -157,9 +159,11 @@ site.preprocess([".md"], (pages) => {
         ? 7
         : url.includes("working-with-ai")
         ? 8
-        : url.includes("good-ideas")
+        : url.includes("tiered-orchestration")
         ? 9
-        : 10;
+        : url.includes("good-ideas")
+        ? 10
+        : 11;
     }
   }
 });

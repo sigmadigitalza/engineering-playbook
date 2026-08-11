@@ -26,10 +26,10 @@
  *   deno run --allow-read scripts/build-skills.ts --check
  */
 
-import { dirname, join, relative } from "jsr:@std/path@^1";
+import { dirname, fromFileUrl, join, relative } from "jsr:@std/path@^1";
 import { ensureDir } from "jsr:@std/fs@^1";
 
-const REPO_ROOT = new URL("..", import.meta.url).pathname;
+const REPO_ROOT = dirname(dirname(fromFileUrl(import.meta.url)));
 const PROMPTS_DIR = join(REPO_ROOT, "docs", "prompts");
 const PLAYBOOKS_DIR = join(REPO_ROOT, "docs", "playbooks");
 const META_FILE = join(REPO_ROOT, "scripts", "skills-meta.json");
@@ -44,9 +44,20 @@ const COPILOT_DIR = join(REPO_ROOT, ".github", "instructions");
 const REFERENCE_LINE =
   "**Reference**: The full Sigma Digital playbook is in `playbook.md` next to this file. Load it for the complete checklist, threat model, and rationale behind each check.";
 
+// Optional per-skill tier floor. `author-or-above` marks a review as judgement
+// work that must not be dispatched below the tier that produced the code under
+// review (see docs/standards/appendix-tiered-orchestration.md). Rendered into
+// SKILL.md only — tiered dispatch is a Claude Code orchestration concern, so the
+// single-model Copilot instructions omit it.
+const TIER_LINES: Record<string, string> = {
+  "author-or-above":
+    "**Tier**: This review performs judgement work. Run it at the author's tier or above — never dispatch it below the tier that produced the code under review. See the [tiered orchestration standard](https://github.com/sigmadigitalza/engineering-playbook/blob/main/docs/standards/appendix-tiered-orchestration.md).",
+};
+
 interface SkillMeta {
   description: string;
   applyTo?: string;
+  tier?: string;
 }
 
 interface MetaFile {
@@ -105,13 +116,15 @@ function buildSkillMd(name: string, meta: SkillMeta, body: string): string {
   // YAML frontmatter: `description` is the only field that matters for
   // auto-trigger matching. We intentionally write it inline (not folded) so
   // the diff stays human-readable when descriptions are tweaked.
+  const preamble = [REFERENCE_LINE];
+  if (meta.tier) preamble.push("", TIER_LINES[meta.tier]);
   return [
     "---",
     `name: ${name}`,
     `description: ${meta.description}`,
     "---",
     "",
-    REFERENCE_LINE,
+    ...preamble,
     "",
     body,
   ].join("\n");
@@ -211,6 +224,22 @@ async function main(): Promise<void> {
       `\n✗ Missing metadata in scripts/skills-meta.json for:\n  ${
         missingMeta.join(", ")
       }\n  Add a description before re-running.\n`,
+    );
+    Deno.exit(2);
+  }
+
+  // A typo in `tier` would otherwise silently drop the Tier line — fail loudly.
+  const badTier: string[] = [];
+  for (const [name, m] of Object.entries(metaFile.skills)) {
+    if (m.tier && !Object.hasOwn(TIER_LINES, m.tier)) {
+      badTier.push(`${name} (tier: ${m.tier})`);
+    }
+  }
+  if (badTier.length) {
+    console.error(
+      `\n✗ Unknown tier value(s) in scripts/skills-meta.json:\n  ${
+        badTier.join(", ")
+      }\n  Known tiers: ${Object.keys(TIER_LINES).join(", ")}\n`,
     );
     Deno.exit(2);
   }

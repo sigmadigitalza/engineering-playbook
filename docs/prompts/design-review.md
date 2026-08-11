@@ -5,6 +5,8 @@ groups what it sees), **Typography** (how type carries meaning and rhythm), and 
 change communicates over time). Point this at a component, screen, page, codebase, or live URL and
 surface where design practice can improve.
 
+**Tier.** This is judgement work. Run it at the author's tier or above; never dispatch it below the tier that produced the design (see the [Tiered Orchestration appendix](../standards/appendix-tiered-orchestration.md)).
+
 ---
 
 ## Prime directive
@@ -115,7 +117,7 @@ Produce a concise, skimmable report. No edits unless authorised.
 - When unsure whether something is a problem or a preference, it's an **Opportunity**, not an Issue.
 - Reserve `Issue` for accessibility, usability, performance, and **[measurable]** threshold breaks.
   Aesthetics are never errors.
-- Prioritise a handful of high-impact items; don't nitpick. A report of forty trivia helps no one.
+- Prioritise in the report, don't suppress in the analysis. Surface every genuine finding; lead with a handful of high-impact items and group the long tail rather than dropping it. A wall of forty trivia buries the signal — but so does silently omitting a real issue.
 - Match the project's existing design language; don't migrate it to a different aesthetic uninvited.
 - Keep the report itself well-typeset: minimal formatting, scannable, prose over walls of bullets
   where it reads better. Practise the pillars you're reviewing against.

@@ -1,6 +1,6 @@
 # sigma-engineering
 
-A Claude Code plugin packaging Sigma Digital's engineering review skills. Each skill pairs an LLM-ready review prompt (`SKILL.md`) with the human-readable playbook it derives from (`playbook.md`).
+A Claude Code plugin packaging Sigma Digital's engineering skills — a set of review skills plus the `sigma-feature-run` orchestration skill. Each review skill pairs an LLM-ready prompt (`SKILL.md`) with the human-readable playbook it derives from (`playbook.md`).
 
 ## How it works
 
@@ -25,7 +25,8 @@ If you're using Copilot, copy from `.github/instructions/`, not from this direct
 - **web-performance** — Core Web Vitals audit, quick wins, change-impact prediction
 - **web-security** — frontend security review (XSS, CSP, auth, supply chain, framework footguns)
 - **web-sre** — release readiness, post-release verification, incident diagnosis
+- **sigma-feature-run** — *(orchestration, not review)* running a feature end-to-end across tiered Claude models with delegated verification, recon, and review-gathering
 
 ## Source
 
-Canonical playbooks and prompts live in [`docs/`](../../docs) at the repo root. The skill folders here are generated copies — open issues or PRs against `docs/` and the plugin will be regenerated.
+Canonical playbooks and prompts live in [`docs/`](../../docs) at the repo root. The review skill folders here are generated copies — open issues or PRs against `docs/` and the plugin will be regenerated. The one exception is `sigma-feature-run`, which is hand-maintained in place (it has no `docs/` pair); edit it under `skills/sigma-feature-run/` directly.
