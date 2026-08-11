@@ -12,7 +12,7 @@
         "url": "https://github.com/sigmadigitalza/engineering-playbook.git",
         "path": "plugins/sigma-engineering"
       },
-      "description": "Engineering review skills for the Sigma Digital team — security, SRE, CI/CD, documentation, and more.",
+      "description": "Engineering review and orchestration skills for the Sigma Digital team — security, SRE, CI/CD, documentation, tiered model orchestration, and more.",
       "category": "engineering",
       "keywords": ["code-review", "playbook", "engineering"]
     }
