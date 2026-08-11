@@ -43,7 +43,17 @@ is non-obvious; and ask when scope or a trade-off is unclear.
 
 Trim the list to what's relevant — a backend task doesn't need the design baselines; a UI task does.
 
-## 4. The Checklist (PR-time)
+## 4. Tiered Orchestration
+
+Running a feature across model tiers — planning at the top tier, implementing in the middle, verifying deterministically at the bottom — without burning the main session's context or overpaying for mechanical work. When a task spans planning, implementation and verification in one session, reach for the **[`sigma-feature-run`](https://github.com/sigmadigitalza/engineering-playbook/blob/main/plugins/sigma-engineering/skills/sigma-feature-run/SKILL.md)** skill — it installs with the plugin, and its entry points are the [`/feature-run` and `/orchestration-eval`](../prompts/) prompts.
+
+The rule that matters most: capability flows down, evidence flows up — nothing below the author's tier signs off on the author's design, and a shell command beats a model call whenever one answers the question. The canonical references live with the skill, one place each so nothing drifts:
+
+- **[Tiering — class, effort, and when to delegate](https://github.com/sigmadigitalza/engineering-playbook/blob/main/plugins/sigma-engineering/skills/sigma-feature-run/references/tiering.md)** — the class/effort matrix, escalation triggers, and when a subagent earns its context window.
+- **[Prompting by model](https://github.com/sigmadigitalza/engineering-playbook/blob/main/plugins/sigma-engineering/skills/sigma-feature-run/references/prompting.md)** — per-model prompting guidance; the instructions that help one tier hurt another, so read it before authoring a prompt bound to a model.
+- **[Return contracts](https://github.com/sigmadigitalza/engineering-playbook/blob/main/plugins/sigma-engineering/skills/sigma-feature-run/references/return-contracts.md)** — the schema every delegated task returns, so a subagent's omissions are visible rather than silent.
+
+## 5. The Checklist (PR-time)
 
 - [ ] Every line reviewed and understood, not just accepted
 - [ ] Behaviour verified — run, read, tested — not assumed
@@ -61,4 +71,4 @@ Trim the list to what's relevant — a backend task doesn't need the design base
 
 ---
 
-*Sigma Working With AI Appendix — v1.0 · pairs with [main standard](./sigma-engineering-standards.md) v1.3*
+*Sigma Working With AI Appendix — v1.1 · pairs with [main standard](./sigma-engineering-standards.md) v1.3*

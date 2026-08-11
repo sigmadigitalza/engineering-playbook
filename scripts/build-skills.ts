@@ -46,12 +46,13 @@ const REFERENCE_LINE =
 
 // Optional per-skill tier floor. `author-or-above` marks a review as judgement
 // work that must not be dispatched below the tier that produced the code under
-// review (see docs/standards/appendix-tiered-orchestration.md). Rendered into
+// review (see docs/standards/appendix-working-with-ai.md#4-tiered-orchestration).
+// Rendered into
 // SKILL.md only — tiered dispatch is a Claude Code orchestration concern, so the
 // single-model Copilot instructions omit it.
 const TIER_LINES: Record<string, string> = {
   "author-or-above":
-    "**Tier**: This review performs judgement work. Run it at the author's tier or above — never dispatch it below the tier that produced the code under review. See the [tiered orchestration standard](https://github.com/sigmadigitalza/engineering-playbook/blob/main/docs/standards/appendix-tiered-orchestration.md).",
+    "**Tier**: This review performs judgement work. Run it at the author's tier or above — never dispatch it below the tier that produced the code under review. See the [tiered orchestration standard](https://github.com/sigmadigitalza/engineering-playbook/blob/main/docs/standards/appendix-working-with-ai.md#4-tiered-orchestration).",
 };
 
 interface SkillMeta {

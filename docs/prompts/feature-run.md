@@ -9,6 +9,6 @@ This page is a pointer so the prompt is discoverable alongside the review prompt
 
 - **Prompt:** [`prompts/feature-run.prompt.md`](https://github.com/sigmadigitalza/engineering-playbook/blob/main/plugins/sigma-engineering/skills/sigma-feature-run/prompts/feature-run.prompt.md)
 - **Skill:** [`sigma-feature-run/SKILL.md`](https://github.com/sigmadigitalza/engineering-playbook/blob/main/plugins/sigma-engineering/skills/sigma-feature-run/SKILL.md)
-- **Standard:** [Tiered Orchestration appendix](../standards/appendix-tiered-orchestration.md) — the class/effort matrix and per-model prompting references.
+- **Standard:** [Tiered Orchestration — Working With AI appendix](../standards/appendix-working-with-ai.md#4-tiered-orchestration) — the class/effort matrix and per-model prompting references.
 
 Install the [Sigma engineering plugin](https://github.com/sigmadigitalza/engineering-playbook#use-in-your-ai-assistant) and the skill auto-loads whenever a task spans planning, implementation and verification; this prompt is how you drive it.

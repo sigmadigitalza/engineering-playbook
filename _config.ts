@@ -159,11 +159,9 @@ site.preprocess([".md"], (pages) => {
         ? 7
         : url.includes("working-with-ai")
         ? 8
-        : url.includes("tiered-orchestration")
-        ? 9
         : url.includes("good-ideas")
-        ? 10
-        : 11;
+        ? 9
+        : 10;
     }
   }
 });

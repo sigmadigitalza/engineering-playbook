@@ -27,8 +27,7 @@ This standard is deliberately small. It is the spine. Stack-specific translation
 - **[Version Control](./appendix-version-control.md)** — Git, commits, PRs, releases.
 - **[CI/CD](./appendix-ci-cd.md)** — pipelines, releases, observability.
 - **[Accessibility](./appendix-accessibility.md)** — inclusive by default; WCAG AA.
-- **[Working With AI](./appendix-working-with-ai.md)** — agents, responsibly; a kickoff prompt.
-- **[Tiered Orchestration](./appendix-tiered-orchestration.md)** — running a feature end-to-end across tiered Claude models with delegated verification. A pointer to the `sigma-feature-run` skill, not a summary of it.
+- **[Working With AI](./appendix-working-with-ai.md)** — agents, responsibly; a kickoff prompt, and running features across model tiers (the `sigma-feature-run` skill).
 
 ### Cultural appendix
 - **[Good Ideas](./appendix-good-ideas.md)** — annotated reading list. The influences behind this standard.
@@ -322,5 +321,5 @@ PRODUCTION ADDS
 
 *Sigma Engineering Standards — v1.3*
 *Stack appendices: [JS/TS](./appendix-javascript-typescript.md) · [Go](./appendix-golang.md) · [Android/Kotlin](./appendix-android-kotlin.md) · [Godot](./appendix-godot.md)*
-*Practice appendices: [Version Control](./appendix-version-control.md) · [CI/CD](./appendix-ci-cd.md) · [Accessibility](./appendix-accessibility.md) · [Working With AI](./appendix-working-with-ai.md) · [Tiered Orchestration](./appendix-tiered-orchestration.md)*
+*Practice appendices: [Version Control](./appendix-version-control.md) · [CI/CD](./appendix-ci-cd.md) · [Accessibility](./appendix-accessibility.md) · [Working With AI](./appendix-working-with-ai.md)*
 *Cultural appendix: [Good Ideas](./appendix-good-ideas.md)*

@@ -10,4 +10,4 @@ This page is a pointer. The canonical prompt lives with the skill, so there is o
 
 - **Prompt:** [`prompts/orchestration-eval.prompt.md`](https://github.com/sigmadigitalza/engineering-playbook/blob/main/plugins/sigma-engineering/skills/sigma-feature-run/prompts/orchestration-eval.prompt.md)
 - **Skill:** [`sigma-feature-run/SKILL.md`](https://github.com/sigmadigitalza/engineering-playbook/blob/main/plugins/sigma-engineering/skills/sigma-feature-run/SKILL.md)
-- **Standard:** [Tiered Orchestration appendix](../standards/appendix-tiered-orchestration.md) — the class/effort matrix this harness is built to defend.
+- **Standard:** [Tiered Orchestration — Working With AI appendix](../standards/appendix-working-with-ai.md#4-tiered-orchestration) — the class/effort matrix this harness is built to defend.
