@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.11.1] - 2026-08-11
+
+### Fixed
+
+- fold tiered orchestration into the Working With AI appendix (#66 by @Pushplaybang)
+
 ## [0.11.0] - 2026-08-11
 
 ### Added
