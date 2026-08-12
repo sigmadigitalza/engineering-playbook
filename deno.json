@@ -13,6 +13,8 @@
     "build:skills": "deno run --allow-read --allow-write scripts/build-skills.ts",
     "build:skills:check": "deno run --allow-read scripts/build-skills.ts --check",
     "link:agents": "deno run --allow-read --allow-write scripts/link-agents.ts",
+    "sync:plugin-version": "deno run --allow-read --allow-write scripts/sync-plugin-version.ts",
+    "sync:plugin-version:check": "deno run --allow-read scripts/sync-plugin-version.ts --check",
     "release:version": "deno run -A jsr:@sigmadigitalza/rational-release@^1 read-version deno.json"
   },
   "compilerOptions": {

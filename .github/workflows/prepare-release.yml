@@ -34,3 +34,11 @@ jobs:
       pre-tasks: |
         deno task build:skills:check
         deno task build
+      # After the version bump lands in deno.json, mirror it into the Claude
+      # Code plugin manifest so the plugin's own version tracks each release,
+      # then stage that file into the release commit. post-mirror-tasks runs
+      # after the bump; pre-tasks would run one release behind.
+      post-mirror-tasks: |
+        deno task sync:plugin-version
+      commit-paths: |
+        plugins/sigma-engineering/.claude-plugin/plugin.json
