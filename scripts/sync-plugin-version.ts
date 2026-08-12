@@ -52,12 +52,13 @@ function main(): void {
     Deno.exit(1);
   }
 
-  // Targeted replace of the first (top-level) "version" field so nothing else
-  // in plugin.json is reformatted.
-  const next = text.replace(/("version"\s*:\s*)"[^"]*"/, `$1"${target}"`);
+  // Replace only the top-level "version" line (two-space indent) so a nested
+  // "version" elsewhere in the manifest can't be hit, and nothing else is
+  // reformatted.
+  const next = text.replace(/^( {2}"version"\s*:\s*)"[^"]*"/m, `$1"${target}"`);
   if (next === text) {
     throw new Error(
-      `could not find a "version" field to update in ${PLUGIN_MANIFEST}`,
+      `could not find a top-level "version" line to update in ${PLUGIN_MANIFEST}`,
     );
   }
   Deno.writeTextFileSync(PLUGIN_MANIFEST, next);
