@@ -45,7 +45,7 @@ Trim the list to what's relevant — a backend task doesn't need the design base
 
 ## 4. Tiered Orchestration
 
-Running a feature across model tiers — planning at the top tier, implementing in the middle, verifying deterministically at the bottom — without burning the main session's context or overpaying for mechanical work. When a task spans planning, implementation and verification in one session, reach for the **[`sigma-feature-run`](https://github.com/sigmadigitalza/engineering-playbook/blob/main/plugins/sigma-engineering/skills/sigma-feature-run/SKILL.md)** skill — it installs with the plugin, and its entry points are the [`/feature-run` and `/orchestration-eval`](../prompts/) prompts.
+Running a feature across model tiers — planning at the top tier, implementing in the middle, verifying deterministically at the bottom — without burning the main session's context or overpaying for mechanical work. When a task spans planning, implementation and verification in one session, reach for the **[`sigma-feature-run`](https://github.com/sigmadigitalza/engineering-playbook/blob/main/plugins/sigma-engineering/skills/sigma-feature-run/SKILL.md)** skill — it installs with the plugin, and its entry points are the [`/sigma-engineering:feature-run` and `/sigma-engineering:orchestration-eval`](../prompts/) commands.
 
 The rule that matters most: capability flows down, evidence flows up — nothing below the author's tier signs off on the author's design, and a shell command beats a model call whenever one answers the question. The canonical references live with the skill, one place each so nothing drifts:
 
