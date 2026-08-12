@@ -41,5 +41,10 @@ jobs:
         # without re-running `deno task build:skills`.
         run: deno task build:skills:check
 
+      - name: Plugin manifest version in sync with deno.json
+        # prepare-release keeps plugin.json in lockstep via post-mirror-tasks;
+        # this guards against a manual edit or a wiring regression.
+        run: deno task sync:plugin-version:check
+
       - name: Lume build smoke test
         run: deno task build
