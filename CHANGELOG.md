@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.12.1] - 2026-08-12
+
+### Fixed
+
+- keep the plugin manifest version in lockstep with releases (#70 by @Pushplaybang)
+
 ## [0.12.0] - 2026-08-12
 
 ### Added
