@@ -143,7 +143,9 @@ Stop and hand back to the user when:
 - `references/return-contracts.md` — required return schemas for delegated work.
 - `agents/recon.md`, `agents/verifier.md`, `agents/review-gatherer.md` —
   subagent definitions. Drop into `.claude/agents/` to make them dispatchable.
-- `prompts/feature-run.prompt.md` — the executable entry point.
-- `prompts/orchestration-eval.prompt.md` — harness for measuring whether a tier
-  configuration is actually cheaper. Run before standardising any change to the
-  matrix.
+- The `/sigma-engineering:feature-run` command (`../../commands/feature-run.md`) —
+  the executable entry point for a run.
+- The `/sigma-engineering:orchestration-eval` command
+  (`../../commands/orchestration-eval.md`) — the harness for measuring whether a
+  tier configuration is actually cheaper. Run before standardising any change to
+  the matrix.

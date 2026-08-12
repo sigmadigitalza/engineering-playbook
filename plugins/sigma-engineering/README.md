@@ -27,6 +27,13 @@ If you're using Copilot, copy from `.github/instructions/`, not from this direct
 - **web-sre** — release readiness, post-release verification, incident diagnosis
 - **sigma-feature-run** — *(orchestration, not review)* running a feature end-to-end across tiered Claude models with delegated verification, recon, and review-gathering
 
+## Commands
+
+Two slash commands install with the plugin, namespaced under `sigma-engineering`:
+
+- **`/sigma-engineering:feature-run [mode] <feature>`** — run a feature end-to-end under the tiered-orchestration standard (`plan` · `execute` · `verify` · `review` · `gather` · `report`); drives the `sigma-feature-run` skill.
+- **`/sigma-engineering:orchestration-eval <config>`** — measure whether a tier configuration is actually cheaper before it becomes the standard.
+
 ## Source
 
-Canonical playbooks and prompts live in [`docs/`](../../docs) at the repo root. The review skill folders here are generated copies — open issues or PRs against `docs/` and the plugin will be regenerated. The one exception is `sigma-feature-run`, which is hand-maintained in place (it has no `docs/` pair); edit it under `skills/sigma-feature-run/` directly.
+Canonical playbooks and prompts live in [`docs/`](../../docs) at the repo root. The review skill folders here are generated copies — open issues or PRs against `docs/` and the plugin will be regenerated. The exceptions are the `sigma-feature-run` skill and the two `commands/`, hand-maintained in place (no `docs/` pair) — edit them under `skills/sigma-feature-run/` and `commands/` directly.
