@@ -9,14 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Writing appendix (`docs/standards/appendix-writing.md`): the house prose style, the banned-phrase list, install steps.
-- `writing-style` skill, Copilot instruction, and the `sigma-terse` Claude Code output style, all generated from one prompt.
-
 ### Changed
 
 ### Fixed
 
 ### Removed
+
+## [0.13.0] - 2026-09-03
+
+### Added
+
+- adopt the Sigma writing style — appendix, skill, and sigma-terse output style (#72 by @Pushplaybang)
 
 ## [0.12.1] - 2026-08-12
 
