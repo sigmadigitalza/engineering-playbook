@@ -1,6 +1,6 @@
 # Writing Style Playbook
 
-A style standard and Claude Code prompt for everything an engineer or an agent writes for another reader: replies, PR bodies, commits, docs, comments, plans, handoffs. Literal, active, one idea per sentence, one term per concept. The rules live in the [Writing appendix](../standards/appendix-writing.md); this playbook is how to apply and review them.
+A style standard and Claude Code prompt for everything an engineer or an agent writes for another reader: replies, PR bodies, commits, docs, comments, plans, handoffs. Literal, active, one idea per sentence, one term per concept. The rules live in the [Writing appendix](https://github.com/sigmadigitalza/engineering-playbook/blob/main/docs/standards/appendix-writing.md); this playbook is how to apply and review them.
 
 ---
 
@@ -14,7 +14,7 @@ A style standard and Claude Code prompt for everything an engineer or an agent w
 
 **Agent output is in scope.** An agent's chat reply is the first draft of the PR body and the commit message. If the reply is padded, the artefacts inherit the padding. The style ships as a Claude Code output style (main session), a skill (fires on writing and review tasks, reaches subagents through `AGENTS.md`), and a Copilot instruction (`applyTo: "**"`), so the same rules bind whichever assistant is in use. Install steps are in the appendix §7.
 
-**Review is a separate pass from accuracy review.** This playbook checks register. The [documentation review playbook](documentation-review.md) checks structure, navigation, and agent-readability. Run both on a docs audit: documentation review first for structure and stale content, then this one for wording. Where they disagree on voice, this one wins in Sigma repos, because the standard names it.
+**Review is a separate pass from accuracy review.** This playbook checks register. The [documentation review playbook](https://github.com/sigmadigitalza/engineering-playbook/blob/main/docs/playbooks/documentation-review.md) checks structure, navigation, and agent-readability. Run both on a docs audit: documentation review first for structure and stale content, then this one for wording. Where they disagree on voice, this one wins in Sigma repos, because the standard names it.
 
 **Voice survives where it breaks no rule.** The rules forbid metaphor, hedging, and padding. They do not forbid a dry aside, a short sentence, or a direct second-person address. A reviewer who rewrites every sentence into the same shape has broken the "uniform sentence length" tell. Change wording where a rule is broken; leave the rest.
 
@@ -113,7 +113,7 @@ When asked to review a file, a PR, or a diff for style:
 
 ## Reference Material
 
-- [Writing appendix](../standards/appendix-writing.md) — the rules, the phrase list, the checklist.
-- [Version Control appendix](../standards/appendix-version-control.md) — commit and PR format.
+- [Writing appendix](https://github.com/sigmadigitalza/engineering-playbook/blob/main/docs/standards/appendix-writing.md) — the rules, the phrase list, the checklist.
+- [Version Control appendix](https://github.com/sigmadigitalza/engineering-playbook/blob/main/docs/standards/appendix-version-control.md) — commit and PR format.
 - [Google developer documentation style guide](https://developers.google.com/style) — active voice, present tense, second person.
 - [George Orwell — Politics and the English Language](https://www.orwellfoundation.com/the-orwell-foundation/orwell/essays-and-other-works/politics-and-the-english-language/) — the metaphor rule's origin.

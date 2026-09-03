@@ -18,6 +18,8 @@
  *  - .github/instructions/<name>.instructions.md
  *  - plugins/sigma-engineering/output-styles/<style>.md  (only for skills whose
  *    metadata declares `outputStyle`; the body is the same prompt body)
+ *  - .claude/output-styles/<style>.md  (the repo-pinned copy that
+ *    .claude/settings.json selects, so it cannot drift from the plugin's)
  *
  * Run
  * ---
@@ -42,12 +44,12 @@ const PLUGIN_SKILLS_DIR = join(
   "skills",
 );
 const COPILOT_DIR = join(REPO_ROOT, ".github", "instructions");
-const OUTPUT_STYLES_DIR = join(
-  REPO_ROOT,
-  "plugins",
-  "sigma-engineering",
-  "output-styles",
-);
+const OUTPUT_STYLES_DIRS = [
+  join(REPO_ROOT, "plugins", "sigma-engineering", "output-styles"),
+  // This repo pins the style in .claude/settings.json; the copy Claude Code
+  // reads there is generated too so build:skills:check catches drift.
+  join(REPO_ROOT, ".claude", "output-styles"),
+];
 
 const REFERENCE_LINE =
   "**Reference**: The full Sigma Digital playbook is in `playbook.md` next to this file. Load it for the complete checklist, threat model, and rationale behind each check.";
@@ -220,6 +222,18 @@ async function writeIfChanged(
   await Deno.writeTextFile(path, content);
 }
 
+async function writeOutputStyle(
+  style: OutputStyleMeta,
+  body: string,
+  report: ChangeReport,
+  check: boolean,
+): Promise<void> {
+  const content = buildOutputStyleMd(style, body);
+  for (const dir of OUTPUT_STYLES_DIRS) {
+    await writeIfChanged(join(dir, `${style.name}.md`), content, report, check);
+  }
+}
+
 async function main(): Promise<void> {
   const args = new Set(Deno.args);
   const check = args.has("--check");
@@ -329,12 +343,7 @@ async function main(): Promise<void> {
       check,
     );
     if (meta.outputStyle) {
-      await writeIfChanged(
-        join(OUTPUT_STYLES_DIR, `${meta.outputStyle.name}.md`),
-        buildOutputStyleMd(meta.outputStyle, body),
-        report,
-        check,
-      );
+      await writeOutputStyle(meta.outputStyle, body, report, check);
     }
   }
 
@@ -363,12 +372,7 @@ async function main(): Promise<void> {
       check,
     );
     if (meta.outputStyle) {
-      await writeIfChanged(
-        join(OUTPUT_STYLES_DIR, `${meta.outputStyle.name}.md`),
-        buildOutputStyleMd(meta.outputStyle, body),
-        report,
-        check,
-      );
+      await writeOutputStyle(meta.outputStyle, body, report, check);
     }
   }
 

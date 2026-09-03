@@ -17,7 +17,7 @@ The Sigma Engineering Standards and the review playbooks/prompts, published two 
 The plugin skills and Copilot instructions are **built**, not authored:
 
 - **Source of truth:** `docs/prompts/<name>.md` + `docs/playbooks/<name>.md` + `scripts/skills-meta.json`.
-- **Generated (never edit directly):** `plugins/sigma-engineering/skills/<name>/{SKILL.md,playbook.md}`, `.github/instructions/<name>.instructions.md`, and `plugins/sigma-engineering/output-styles/<style>.md`.
+- **Generated (never edit directly):** `plugins/sigma-engineering/skills/<name>/{SKILL.md,playbook.md}`, `.github/instructions/<name>.instructions.md`, `plugins/sigma-engineering/output-styles/<style>.md`, and the repo-pinned copy `.claude/output-styles/<style>.md`.
 - After changing any source, run `deno task build:skills`. CI runs `deno task build:skills:check` and fails on drift.
 
 The one hand-maintained skill is **[`sigma-feature-run`](plugins/sigma-engineering/skills/sigma-feature-run/SKILL.md)** — it has no `docs/` pair because it is an orchestration skill, not a generated review skill. Edit it in place; the generator leaves it alone.

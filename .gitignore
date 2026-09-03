@@ -9,6 +9,7 @@
 # per-checkout state (agents links, permissions, worktrees).
 !.claude/settings.json
 !.claude/output-styles/
+!.claude/output-styles/**
 
 # Lume
 dist/
