@@ -1,6 +1,5 @@
 {
-  "_comment": "Source of truth for per-skill metadata. The build-skills.ts generator reads this and emits both the Claude plugin (plugins/sigma-engineering/skills/<name>/) and the GitHub Copilot instructions (.github/instructions/<name>.instructions.md). The body of every skill comes from docs/prompts/<name>.md; this file owns the description, the optional Copilot applyTo override, and the optional tier. `tier: author-or-above` marks a review as judgement work that must not be dispatched below the author's tier — the generator renders a Tier line into the skill for it. Reviews that are rubric- or measurement-driven (repo-setup-review, web-performance) omit it and may run lower. See docs/standards/appendix-working-with-ai.md#4-tiered-orchestration.",
-
+  "_comment": "Source of truth for per-skill metadata. The build-skills.ts generator reads this and emits both the Claude plugin (plugins/sigma-engineering/skills/<name>/) and the GitHub Copilot instructions (.github/instructions/<name>.instructions.md). The body of every skill comes from docs/prompts/<name>.md; this file owns the description, the optional Copilot applyTo override, and the optional tier. `tier: author-or-above` marks a review as judgement work that must not be dispatched below the author's tier — the generator renders a Tier line into the skill for it. Reviews that are rubric- or measurement-driven (repo-setup-review, web-performance) omit it and may run lower. See docs/standards/appendix-working-with-ai.md#4-tiered-orchestration. A skill may also declare `outputStyle` ({name, description, keepCodingInstructions}); the generator then emits plugins/sigma-engineering/output-styles/<name>.md from the same prompt body, so the Claude Code output style never drifts from the skill.",
   "skills": {
     "api-design-review": {
       "description": "Reviews REST and GraphQL API designs for contract quality, error shape, idempotency, versioning, pagination, and backwards-compatibility risk. Use this whenever the user is designing a new API, modifying an existing endpoint, reviewing an OpenAPI or GraphQL schema diff, or asks for an API design review — even if they don't explicitly mention 'the API design playbook'.",
@@ -45,6 +44,15 @@
     "web-sre": {
       "description": "Reviews release readiness, verifies post-release deployments, and diagnoses production incidents for web services with hypothesis-driven, approval-gated probing and upstream-status-first checks. Use this whenever the user is shipping a release, verifying a deploy, investigating a production issue, asks 'is something broken in production', or asks for an SRE or incident review — even if they only describe symptoms like '5xx spiked'.",
       "tier": "author-or-above"
+    },
+    "writing-style": {
+      "description": "Applies Sigma's writing style to everything the agent writes and reviews prose against it — literal, active, one idea per sentence, one term per concept, no metaphor or filler. Use this whenever the user is writing or editing a README, docs, a PR description, a commit message, a code comment, a plan, or a handoff note, or asks to tighten, terse-ify, de-fluff, or review the wording of any text — even if they don't say 'writing style'.",
+      "applyTo": "**",
+      "outputStyle": {
+        "name": "sigma-terse",
+        "description": "Sigma house style: literal, active, one idea per sentence, one term per concept. Category rules, not a word blocklist.",
+        "keepCodingInstructions": true
+      }
     }
   }
 }

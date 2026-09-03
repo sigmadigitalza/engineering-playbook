@@ -25,7 +25,12 @@ If you're using Copilot, copy from `.github/instructions/`, not from this direct
 - **web-performance** — Core Web Vitals audit, quick wins, change-impact prediction
 - **web-security** — frontend security review (XSS, CSP, auth, supply chain, framework footguns)
 - **web-sre** — release readiness, post-release verification, incident diagnosis
+- **writing-style** — the house prose style (literal, active, one idea per sentence) applied to everything the agent writes, plus a review mode
 - **sigma-feature-run** — *(orchestration, not review)* running a feature end-to-end across tiered Claude models with delegated verification, recon, and review-gathering
+
+## Output style
+
+`output-styles/sigma-terse.md` is the same writing-style prompt packaged as a Claude Code output style, so it applies to every reply in the main session. Select it in `/config` → Output style, or pin it per repo with `"outputStyle": "sigma-terse"` in `.claude/settings.json`. It is generated from `docs/prompts/writing-style.md` like the skill; do not edit it here.
 
 ## Commands
 
@@ -36,4 +41,4 @@ Two slash commands install with the plugin, namespaced under `sigma-engineering`
 
 ## Source
 
-Canonical playbooks and prompts live in [`docs/`](../../docs) at the repo root. The review skill folders here are generated copies — open issues or PRs against `docs/` and the plugin will be regenerated. The exceptions are the `sigma-feature-run` skill and the two `commands/`, hand-maintained in place (no `docs/` pair) — edit them under `skills/sigma-feature-run/` and `commands/` directly.
+Canonical playbooks and prompts live in [`docs/`](../../docs) at the repo root. The review skill folders and `output-styles/` here are generated copies — open issues or PRs against `docs/` and the plugin will be regenerated. The exceptions are the `sigma-feature-run` skill and the two `commands/`, hand-maintained in place (no `docs/` pair) — edit them under `skills/sigma-feature-run/` and `commands/` directly.

@@ -16,6 +16,10 @@
  *  - plugins/sigma-engineering/skills/<name>/SKILL.md
  *  - plugins/sigma-engineering/skills/<name>/playbook.md
  *  - .github/instructions/<name>.instructions.md
+ *  - plugins/sigma-engineering/output-styles/<style>.md  (only for skills whose
+ *    metadata declares `outputStyle`; the body is the same prompt body)
+ *  - .claude/output-styles/<style>.md  (the repo-pinned copy that
+ *    .claude/settings.json selects, so it cannot drift from the plugin's)
  *
  * Run
  * ---
@@ -40,6 +44,12 @@ const PLUGIN_SKILLS_DIR = join(
   "skills",
 );
 const COPILOT_DIR = join(REPO_ROOT, ".github", "instructions");
+const OUTPUT_STYLES_DIRS = [
+  join(REPO_ROOT, "plugins", "sigma-engineering", "output-styles"),
+  // This repo pins the style in .claude/settings.json; the copy Claude Code
+  // reads there is generated too so build:skills:check catches drift.
+  join(REPO_ROOT, ".claude", "output-styles"),
+];
 
 const REFERENCE_LINE =
   "**Reference**: The full Sigma Digital playbook is in `playbook.md` next to this file. Load it for the complete checklist, threat model, and rationale behind each check.";
@@ -55,10 +65,20 @@ const TIER_LINES: Record<string, string> = {
     "**Tier**: This review performs judgement work. Run it at the author's tier or above — never dispatch it below the tier that produced the code under review. See the [tiered orchestration standard](https://github.com/sigmadigitalza/engineering-playbook/blob/main/docs/standards/appendix-working-with-ai.md#4-tiered-orchestration).",
 };
 
+// A skill that is also a house style ships as a Claude Code output style. The
+// style body is the prompt body verbatim, so the three artefacts (skill, Copilot
+// instructions, output style) cannot drift from each other.
+interface OutputStyleMeta {
+  name: string;
+  description: string;
+  keepCodingInstructions?: boolean;
+}
+
 interface SkillMeta {
   description: string;
   applyTo?: string;
   tier?: string;
+  outputStyle?: OutputStyleMeta;
 }
 
 interface MetaFile {
@@ -158,6 +178,21 @@ function buildCopilotInstructionsMd(
   ].join("\n");
 }
 
+function buildOutputStyleMd(style: OutputStyleMeta, body: string): string {
+  // Claude Code output-style frontmatter: `name` overrides the file name,
+  // `description` shows in the /config picker, and `keep-coding-instructions`
+  // keeps the built-in software-engineering guidance alongside the style.
+  return [
+    "---",
+    `name: ${style.name}`,
+    `description: ${style.description}`,
+    `keep-coding-instructions: ${style.keepCodingInstructions ?? false}`,
+    "---",
+    "",
+    body,
+  ].join("\n");
+}
+
 async function writeIfChanged(
   path: string,
   content: string,
@@ -185,6 +220,18 @@ async function writeIfChanged(
 
   await ensureDir(dirname(path));
   await Deno.writeTextFile(path, content);
+}
+
+async function writeOutputStyle(
+  style: OutputStyleMeta,
+  body: string,
+  report: ChangeReport,
+  check: boolean,
+): Promise<void> {
+  const content = buildOutputStyleMd(style, body);
+  for (const dir of OUTPUT_STYLES_DIRS) {
+    await writeIfChanged(join(dir, `${style.name}.md`), content, report, check);
+  }
 }
 
 async function main(): Promise<void> {
@@ -295,6 +342,9 @@ async function main(): Promise<void> {
       report,
       check,
     );
+    if (meta.outputStyle) {
+      await writeOutputStyle(meta.outputStyle, body, report, check);
+    }
   }
 
   // Generate one prompt-only skill if any (Copilot only — no playbook).
@@ -321,6 +371,9 @@ async function main(): Promise<void> {
       report,
       check,
     );
+    if (meta.outputStyle) {
+      await writeOutputStyle(meta.outputStyle, body, report, check);
+    }
   }
 
   // Report.

@@ -17,7 +17,7 @@ The Sigma Engineering Standards and the review playbooks/prompts, published two 
 The plugin skills and Copilot instructions are **built**, not authored:
 
 - **Source of truth:** `docs/prompts/<name>.md` + `docs/playbooks/<name>.md` + `scripts/skills-meta.json`.
-- **Generated (never edit directly):** `plugins/sigma-engineering/skills/<name>/{SKILL.md,playbook.md}` and `.github/instructions/<name>.instructions.md`.
+- **Generated (never edit directly):** `plugins/sigma-engineering/skills/<name>/{SKILL.md,playbook.md}`, `.github/instructions/<name>.instructions.md`, `plugins/sigma-engineering/output-styles/<style>.md`, and the repo-pinned copy `.claude/output-styles/<style>.md`.
 - After changing any source, run `deno task build:skills`. CI runs `deno task build:skills:check` and fails on drift.
 
 The one hand-maintained skill is **[`sigma-feature-run`](plugins/sigma-engineering/skills/sigma-feature-run/SKILL.md)** — it has no `docs/` pair because it is an orchestration skill, not a generated review skill. Edit it in place; the generator leaves it alone.
@@ -28,6 +28,7 @@ For any task large enough to span planning, implementation and verification in o
 
 ## Conventions
 
+- **Writing.** Prose follows the Sigma [Writing appendix](docs/standards/appendix-writing.md): literal, active, one idea per sentence, one term per concept. Applies to replies, PR bodies, commits, docs, comments, plans and handoffs. The `sigma-terse` output style in `.claude/settings.json` applies it to the main session.
 - **Commits & PR titles:** Conventional Commits — CI gates both ([validate-pr](.github/workflows/validate-pr.yml)).
 - **Formatting:** run `deno fmt` before committing (scope in `deno.json`).
 - **Build check:** `deno task build` must stay green (Lume smoke test in CI).

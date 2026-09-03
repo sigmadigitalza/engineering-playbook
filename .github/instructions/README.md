@@ -12,7 +12,7 @@ This directory is **generated** by `deno task build:skills` from `docs/prompts/`
 - **Description / `applyTo`** — edit `scripts/skills-meta.json`.
 - Then run `deno task build:skills` to regenerate every skill (Claude plugin + Copilot instructions) in one pass.
 
-The same generator emits `plugins/sigma-engineering/skills/<name>/SKILL.md` for the Claude Code / Claude Desktop plugin. Both formats stay byte-identical in body content; only the frontmatter schema differs.
+The same generator emits `plugins/sigma-engineering/skills/<name>/SKILL.md` for the Claude Code / Claude Desktop plugin, and `plugins/sigma-engineering/output-styles/sigma-terse.md` from the writing-style prompt. Both formats stay byte-identical in body content; only the frontmatter schema differs.
 
 ## Using these in another repo
 

@@ -10,6 +10,8 @@ The playbooks ship in two formats so the same review prompts auto-activate regar
 
 In every install path below, skills auto-activate by description match — say "review this PR for security issues" and the `web-security` skill fires automatically.
 
+The plugin also ships the **`sigma-terse` output style** — the house writing style from the [Writing appendix](docs/standards/appendix-writing.md). Select it in `/config` → Output style, or pin it for a repo with `"outputStyle": "sigma-terse"` in `.claude/settings.json`. Output styles apply to the main session only; the `writing-style` skill and the `AGENTS.md` pointer in the appendix's §8 cover subagents.
+
 ### Claude Code (the CLI)
 
 Install as a plugin via our marketplace:
@@ -36,9 +38,10 @@ The plugin source is checked in at [`plugins/sigma-engineering/`](plugins/sigma-
 Claude Desktop and Claude.ai don't have the `/plugin` command, but they read skills from `~/.claude/skills/` directly. Install with one shell command:
 
 ```bash
-mkdir -p ~/.claude/skills && \
+mkdir -p ~/.claude/skills ~/.claude/output-styles && \
   git clone --depth 1 https://github.com/sigmadigitalza/engineering-playbook /tmp/sigma-eng-pb && \
   cp -R /tmp/sigma-eng-pb/plugins/sigma-engineering/skills/. ~/.claude/skills/ && \
+  cp -R /tmp/sigma-eng-pb/plugins/sigma-engineering/output-styles/. ~/.claude/output-styles/ && \
   rm -rf /tmp/sigma-eng-pb
 ```
 
@@ -120,6 +123,7 @@ Long-form guides describing how we approach a discipline, what "good" looks like
 | [Web performance](docs/playbooks/web-performance.md) | Core Web Vitals audit, lab-vs-field discipline, and quick-win optimisations for web applications. |
 | [Web security](docs/playbooks/web-security.md) | Threat model, hardening checklist, and review procedure for web applications. |
 | [Web SRE](docs/playbooks/web-sre.md) | Reliability, observability, and incident-response practices for web services. |
+| [Writing style](docs/playbooks/writing-style.md) | The house prose style — literal, active, one idea per sentence — and how to apply and review it. |
 
 ### Prompts — [`docs/prompts`](docs/prompts)
 
@@ -138,6 +142,7 @@ Each playbook has a paired prompt designed to be handed to an LLM (Claude, ChatG
 | [Web performance](docs/prompts/web-performance.md) | [Web performance playbook](docs/playbooks/web-performance.md) |
 | [Web security](docs/prompts/web-security.md) | [Web security playbook](docs/playbooks/web-security.md) |
 | [Web SRE](docs/prompts/web-sre.md) | [Web SRE playbook](docs/playbooks/web-sre.md) |
+| [Writing style](docs/prompts/writing-style.md) | [Writing style playbook](docs/playbooks/writing-style.md) |
 
 ### Engineering standards — [`docs/standards`](docs/standards)
 
@@ -154,6 +159,7 @@ Our shared engineering foundation — the principles and defaults we build from.
 | [CI/CD appendix](docs/standards/appendix-ci-cd.md) | Pipeline, automated releases and notes, push-vs-pull deploys, observability, small-team DevOps. |
 | [Accessibility appendix](docs/standards/appendix-accessibility.md) | Accessible by default — WCAG 2.2 AA and inclusive practice. |
 | [Working With AI appendix](docs/standards/appendix-working-with-ai.md) | Using AI agents responsibly, plus a kickoff prompt that maps the playbook. |
+| [Writing appendix](docs/standards/appendix-writing.md) | The house prose style for replies, PRs, docs, comments and plans; the banned-phrase list; install steps. |
 | [Good Ideas appendix](docs/standards/appendix-good-ideas.md) | Annotated reading list — the influences behind the standard. |
 
 ## How to use this repo
@@ -166,9 +172,10 @@ Our shared engineering foundation — the principles and defaults we build from.
 
 1. Branch from `main`.
 2. Keep playbooks and prompts in sync — if you add a check to a playbook, update the corresponding prompt (and vice versa).
-3. If you change a skill's body (`docs/prompts/`, `docs/playbooks/`) or metadata (`scripts/skills-meta.json`), run `deno task build:skills` to regenerate the plugin and Copilot instructions, and bump `version` in [`plugins/sigma-engineering/.claude-plugin/plugin.json`](plugins/sigma-engineering/.claude-plugin/plugin.json) so installed plugins pick up the change.
-4. Use Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:` …) for commit messages.
-5. Open a PR and request review from the engineering team.
+3. If you change a skill's body (`docs/prompts/`, `docs/playbooks/`) or metadata (`scripts/skills-meta.json`), run `deno task build:skills` to regenerate the plugin skills, the Copilot instructions, and the `sigma-terse` output style. The release workflow bumps the plugin version.
+4. Write prose in the house style — the [Writing appendix](docs/standards/appendix-writing.md) applies to this repo's docs, PR bodies, and commits.
+5. Use Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:` …) for commit messages.
+6. Open a PR and request review from the engineering team.
 
 ## Roadmap
 

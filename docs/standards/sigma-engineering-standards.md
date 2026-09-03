@@ -28,12 +28,13 @@ This standard is deliberately small. It is the spine. Stack-specific translation
 - **[CI/CD](./appendix-ci-cd.md)** — pipelines, releases, observability.
 - **[Accessibility](./appendix-accessibility.md)** — inclusive by default; WCAG AA.
 - **[Working With AI](./appendix-working-with-ai.md)** — agents, responsibly; a kickoff prompt, and running features across model tiers (the `sigma-feature-run` skill).
+- **[Writing](./appendix-writing.md)** — the house prose style for replies, PRs, docs, comments and plans: literal, active, one idea per sentence.
 
 ### Cultural appendix
 - **[Good Ideas](./appendix-good-ideas.md)** — annotated reading list. The influences behind this standard.
 
 ### Companion review playbooks
-The standard says what "good" is; the **review playbooks** are how we check it — each a human guide with a paired AI prompt: [code review](../playbooks/code-review.md), [API design](../playbooks/api-design-review.md), [database](../playbooks/database-review.md), [web security](../playbooks/web-security.md), [web performance](../playbooks/web-performance.md), [frontend accessibility](../playbooks/frontend-accessibility-review.md), [GitHub Actions](../playbooks/github-actions-review.md), [repo setup](../playbooks/repo-setup-review.md), [web SRE](../playbooks/web-sre.md), [documentation](../playbooks/documentation-review.md), and [incident postmortems](../playbooks/incident-postmortem.md).
+The standard says what "good" is; the **review playbooks** are how we check it — each a human guide with a paired AI prompt: [code review](../playbooks/code-review.md), [API design](../playbooks/api-design-review.md), [database](../playbooks/database-review.md), [web security](../playbooks/web-security.md), [web performance](../playbooks/web-performance.md), [frontend accessibility](../playbooks/frontend-accessibility-review.md), [GitHub Actions](../playbooks/github-actions-review.md), [repo setup](../playbooks/repo-setup-review.md), [web SRE](../playbooks/web-sre.md), [documentation](../playbooks/documentation-review.md), [incident postmortems](../playbooks/incident-postmortem.md), and [writing style](../playbooks/writing-style.md).
 
 ---
 
@@ -246,7 +247,8 @@ These rules apply to Claude Code, Claude in Chrome, and any other AI agent opera
 6. **Respect the dependency stance.** Before adding any dependency, check the relevant stack appendix's criteria. In the JS/TS appendix, the default is to *not* add one. Surface the addition explicitly with justification — never sneak it in.
 7. **Always write tests for new logic at Tier 1+.** Even if the operator did not ask. Mention it; do not skip silently.
 8. **Never commit secrets** or what could plausibly be one. If a secret is needed for a task, stop and ask.
-9. **Treat `// TODO`, `// FIXME`, `// HACK` (and equivalents) as load-bearing.** Don't remove them without resolving the underlying issue.
+9. **Treat `// TODO`, `// FIXME`, `// HACK` (and equivalents) as binding.** Don't remove them without resolving the underlying issue.
+10. **Write in the house style.** Replies, PR bodies, commit messages, comments, docs and plans follow the [Writing appendix](./appendix-writing.md): literal, active, one idea per sentence, one term per concept.
 
 ### Agents must not
 - Disable lint, type, or test checks to make a build pass. Fix the underlying issue.
@@ -321,5 +323,5 @@ PRODUCTION ADDS
 
 *Sigma Engineering Standards — v1.3*
 *Stack appendices: [JS/TS](./appendix-javascript-typescript.md) · [Go](./appendix-golang.md) · [Android/Kotlin](./appendix-android-kotlin.md) · [Godot](./appendix-godot.md)*
-*Practice appendices: [Version Control](./appendix-version-control.md) · [CI/CD](./appendix-ci-cd.md) · [Accessibility](./appendix-accessibility.md) · [Working With AI](./appendix-working-with-ai.md)*
+*Practice appendices: [Version Control](./appendix-version-control.md) · [CI/CD](./appendix-ci-cd.md) · [Accessibility](./appendix-accessibility.md) · [Working With AI](./appendix-working-with-ai.md) · [Writing](./appendix-writing.md)*
 *Cultural appendix: [Good Ideas](./appendix-good-ideas.md)*
