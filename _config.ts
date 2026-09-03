@@ -159,9 +159,11 @@ site.preprocess([".md"], (pages) => {
         ? 7
         : url.includes("working-with-ai")
         ? 8
-        : url.includes("good-ideas")
+        : url.includes("appendix-writing")
         ? 9
-        : 10;
+        : url.includes("good-ideas")
+        ? 10
+        : 11;
     }
   }
 });

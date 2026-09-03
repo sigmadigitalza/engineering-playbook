@@ -3,7 +3,12 @@
 *.swo
 .idea/
 .vscode/
-.claude/
+.claude/*
+# Shared Claude Code config that ships with the repo: the house output style
+# and the settings.json that selects it. Everything else under .claude/ is
+# per-checkout state (agents links, permissions, worktrees).
+!.claude/settings.json
+!.claude/output-styles/
 
 # Lume
 dist/

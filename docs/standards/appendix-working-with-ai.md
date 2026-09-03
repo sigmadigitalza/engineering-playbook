@@ -10,6 +10,7 @@
 - **Same standards, no exceptions.** AI-written code meets the Sigma Ten, the appendices, and the security baseline like any other. "The AI did it" is never an explanation in review.
 - **Verify, don't trust.** Run it, read it, test it. Agents are confidently wrong sometimes — confirm behaviour and watch for hallucinated APIs, subtle errors, and silent scope creep.
 - **Small, reviewable changes.** Keep agent-assisted work to focused PRs a human can actually review. A 2,000-line AI diff is a liability, not productivity.
+- **House style for prose.** An agent's replies, PR bodies, commit messages, comments and plans follow the [Writing appendix](./appendix-writing.md). The `sigma-terse` output style and the `writing-style` skill install with the plugin; the appendix's §7 has the install steps and §8 the `AGENTS.md` pointer.
 
 ## 2. Responsible Use
 
@@ -60,6 +61,7 @@ The rule that matters most: capability flows down, evidence flows up — nothing
 - [ ] No secrets, customer data, or proprietary code went into a prompt
 - [ ] Change is small and focused enough for a human to review
 - [ ] Meets the same standards as hand-written code; deviations are called out
+- [ ] PR body, commits and comments follow the [Writing appendix](./appendix-writing.md)
 
 ---
 
@@ -71,4 +73,4 @@ The rule that matters most: capability flows down, evidence flows up — nothing
 
 ---
 
-*Sigma Working With AI Appendix — v1.1 · pairs with [main standard](./sigma-engineering-standards.md) v1.3*
+*Sigma Working With AI Appendix — v1.2 · pairs with [main standard](./sigma-engineering-standards.md) v1.3*

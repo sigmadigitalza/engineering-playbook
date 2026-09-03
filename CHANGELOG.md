@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Writing appendix (`docs/standards/appendix-writing.md`): the house prose style, the banned-phrase list, install steps.
+- `writing-style` skill, Copilot instruction, and the `sigma-terse` Claude Code output style, all generated from one prompt.
+
 ### Changed
 
 ### Fixed
